@@ -8,18 +8,15 @@ export type Categoria = {
 
 
 
-
 export type Cliente = {
-    clienteId:      string;
-    nombre?:        string;
-    identidad?:     string;
-    apellido?:      string;
-    correo?:        string;
-    telefono?:      string;
-    direccion?:     string;
-    activo:         boolean;
-    fechaRegistro:  Date;
+    id:       string;
+    nombre:   string;
+    correo:   string;
+    telefono: string;
+    genero:   string;
+    activo:   boolean;
 }
+
 
 export type Rol = {
     rolId:         string;
