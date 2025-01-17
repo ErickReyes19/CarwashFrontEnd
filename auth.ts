@@ -85,7 +85,6 @@ export const getSessionPermisos = async (): Promise<string[] | null> => {
         return null;
     }
     const usuario = await decrypt(session);
-    console.log(usuario);
     return usuario.Permiso; // Esto ahora debería ser correcto
 };
 

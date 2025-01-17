@@ -14,33 +14,34 @@ export async function getClientes() {
   }
 }
 
-// export async function putCliente({ data }: { data: Cliente }) {
-//   try {
-//     const response = await apiService.put(`/clientes/${data.clienteId}`, data);
+export async function putCliente({ cliente }: { cliente: Cliente }) {
+  console.log(cliente)
+  try {
+    const response = await apiService.put(`/Cliente/${cliente.id}`, cliente);
 
-//     return response.data;
-//   } catch (error) {
-//     console.error("Error:", error);
-//     return [];
-//   }
-// }
+    return response.data;
+  } catch (error) {
+    console.error("Error:", error);
+    return [];
+  }
+}
 
-// export async function getClienteById(id: string) {
-//   try {
-//     const response = await apiService.get<Cliente>(`/clientes/${id}`);
-//     return response.data;
-//   } catch (error) {
-//     console.error("Error al obtener el cliente:", error);
-//     return null;
-//   }
-// }
+export async function getClienteById(id: string) {
+  try {
+    const response = await apiService.get<Cliente>(`/cliente/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error al obtener el cliente:", error);
+    return null;
+  }
+}
 
-// export async function postCliente({ cliente }: { cliente: Cliente }) {
-//   try {
-//     const response = await apiService.post("/clientes", cliente);
-//     return response.data;
-//   } catch (error) {
-//     console.error("Error al crear cliente:", error);
-//     throw error;
-//   }
-// }
+export async function postCliente({ cliente }: { cliente: Cliente }) {
+  try {
+    const response = await apiService.post("/cliente", cliente);
+    return response.data;
+  } catch (error) {
+    console.error("Error al crear cliente:", error);
+    throw error;
+  }
+}

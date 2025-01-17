@@ -1,5 +1,6 @@
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar"
+import { Toaster } from "@/components/ui/toaster"
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -8,6 +9,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <main className="w-full p-8">
         <SidebarTrigger />
         {children}
+        <Toaster />
       </main>
     </SidebarProvider>
   )

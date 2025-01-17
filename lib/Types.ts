@@ -9,7 +9,7 @@ export type Categoria = {
 
 
 export type Cliente = {
-    id:       string;
+    id?:       string;
     nombre:   string;
     correo:   string;
     telefono: string;
