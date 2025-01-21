@@ -41,6 +41,21 @@ export type Empleado = {
 
 
 
+export type Rol = {
+    id?:          string;
+    nombre:      string;
+    descripcion: string;
+    activo:      boolean;
+    permisosRol: PermisosRol[];
+}
+
+export type PermisosRol = {
+    id:     string;
+    nombre: string;
+}
+
+
+
 
 
 

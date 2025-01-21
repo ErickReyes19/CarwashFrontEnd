@@ -54,6 +54,11 @@ const items = [
     url: "/permisos",
     icon: ListCheck,
   },
+  {
+    title: "Roles",
+    url: "/roles",
+    icon: ListCheck,
+  },
 ];
 
 export async function AppSidebar() {
