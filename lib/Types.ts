@@ -1,9 +1,8 @@
-export type Categoria = {
-    categoriaId:   string;
-    nombre:        string;
-    descripcion:   string;
-    fechaCreacion: Date;
-    activo:        boolean;
+export type EstadoServicio = {
+    id?:          string;
+    nombre:      string;
+    descripcion: string;
+    activo:      boolean;
 }
 
 
@@ -18,25 +17,12 @@ export type Cliente = {
 }
 
 
-export type Rol = {
-    rolId:         string;
-    nombre:        string;
-    descripcion:   string;
-    fechaCreacion: Date;
-    activo:        boolean;
-    permisosIds:   string[];
-}
 
 export type Permiso = {
-    permisoId:     string;
-    nombre:        string;
-    fechaCreacion: Date;
-    activo:        boolean;
-}
-
-export type RolPermisos = {
-    RolId:       string;
-    PermisosIds: string[];
+    id?:          string;
+    nombre:      string;
+    descripcion: string;
+    activo:      boolean;
 }
 
 

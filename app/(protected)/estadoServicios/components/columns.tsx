@@ -1,6 +1,6 @@
 "use client";
-import { ArrowUpDown, Check, CheckCircleIcon, UserX } from "lucide-react";
-import {  Empleado } from "@/lib/Types";
+import { ArrowUpDown, CheckCircleIcon } from "lucide-react";
+import { EstadoServicio } from "@/lib/Types";
 import { FormateadorFecha } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal, CheckCircle, XCircleIcon } from "lucide-react";
@@ -16,87 +16,34 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
 
-export const columns: ColumnDef<Empleado>[] = [
+export const columns: ColumnDef<EstadoServicio>[] = [
 
   {
-    accessorKey: "nombre", // La columna principal, que será 'nombre'
+    accessorKey: "nombre",
     header: ({ column }) => (
       <Button
         variant="ghost"
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        className="text-left"
+        className="text-left" 
       >
         Nombre
         <ArrowUpDown className="ml-2 h-4 w-4" />
       </Button>
     ),
-    cell: ({ row }) => {
-      // Concatenar 'nombre' y 'apellido' usando row.original
-      const nombre = row.original.nombre || "";
-      const apellido = row.original.apellido || ""; // Acceder al apellido desde row.original
-      const nombreCompleto = `${nombre} ${apellido}`.trim(); // Concatenar y eliminar espacios extras
-      return nombreCompleto; // Mostrar el nombre completo
-    },
-  },
-  
-  
-  {
-    accessorKey: "edad",
-    header: ({ column }) => (
-      <Button
-        variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        className="text-center" 
-      >
-        Edad
-        <ArrowUpDown className="ml-2 h-4 w-4" />
-      </Button>
-    ),
   },
   {
-    accessorKey: "usuarioNombre",
+    accessorKey: "descripcion",
     header: ({ column }) => (
       <Button
         variant="ghost"
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         className="text-left"
       >
-        Usuario
-        <ArrowUpDown className="ml-2 h-4 w-4" />
-      </Button>
-    ),
-    cell: ({ row }) => {
-      const usuarioNombre = row.getValue("usuarioNombre");
-      return usuarioNombre ? usuarioNombre : <UserX className="text-gray-500 w-5 h-5" />;
-    },
-  }, 
-  {
-    accessorKey: "correo",
-    header: ({ column }) => (
-      <Button
-        variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        className="text-left"
-      >
-        Correo
+        Descripción
         <ArrowUpDown className="ml-2 h-4 w-4" />
       </Button>
     ),
   },
-  {
-    accessorKey: "genero",
-    header: ({ column }) => (
-      <Button
-        variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        className="text-left"
-      >
-        Genero
-        <ArrowUpDown className="ml-2 h-4 w-4" />
-      </Button>
-    ),
-  },
-
   {
     accessorKey: "activo",
     header: ({ column }) => (
@@ -130,7 +77,7 @@ export const columns: ColumnDef<Empleado>[] = [
     id: "actions",
     header: "Acciones",
     cell: ({ row }) => {
-      const empleado = row.original;
+      const cliente = row.original;
 
       return (
         <DropdownMenu>
@@ -142,7 +89,7 @@ export const columns: ColumnDef<Empleado>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-            <Link href={`/empleados/${empleado.id}/edit`}>
+            <Link href={`/estadoServicios/${cliente.id}/edit`}>
               <DropdownMenuItem>Editar</DropdownMenuItem>
             </Link>
           </DropdownMenuContent>

@@ -1,11 +1,7 @@
 import {
-  Calendar,
   ChevronUp,
   Home,
-  Inbox,
-  Search,
-  Settings,
-  User2,
+  ListCheck,
   Users2,
 } from "lucide-react";
 import { getSessionUsuario } from "@/auth"; // Asegúrate de que esta función exista y retorne el nombre del usuario
@@ -45,6 +41,11 @@ const items = [
     title: "Empleados",
     url: "/empleados",
     icon: Users2,
+  },
+  {
+    title: "Estado Servicio",
+    url: "/estadoServicios",
+    icon: ListCheck,
   },
 ];
 
