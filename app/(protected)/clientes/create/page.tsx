@@ -15,7 +15,7 @@ export default async function Create() {
     redirect("/");
   }
 
-  if (!permisos?.includes("Crear vehiculo")) {
+  if (!permisos?.includes("Crear Clientes")) {
     return <NoAcceso />;
   }
 

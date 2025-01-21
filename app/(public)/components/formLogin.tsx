@@ -19,17 +19,20 @@ function Login() {
     });
 
     const onSubmit = async (data: TSchemaSignIn) => {
-        startTransition(async () => {
-            const response = await login(data);
-            if (response.error) {
-                formSignIn.setError("contrasena", { message: response.error });
-                return;
-            }
-            router.push("/clientes");
-
-
-        });
+        try {
+            startTransition(async () => {
+                const response = await login(data);
+                if (response.error) {
+                    formSignIn.setError("contrasena", { message: response.error });
+                    return;
+                }
+                router.push("/clientes");
+            });
+        } catch (error) {
+            console.error("Error en el envío del formulario:", error);
+        }
     };
+    
 
     return (
         <Form {...formSignIn}>

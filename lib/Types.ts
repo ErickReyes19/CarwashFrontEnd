@@ -40,6 +40,21 @@ export type RolPermisos = {
 }
 
 
+export type Empleado = {
+    id?:            string;
+    nombre:        string;
+    apellido:      string;
+    edad:          number;
+    genero:        string;
+    correo:        string;
+    activo:        boolean;
+    createdAt?:     Date;
+    updatedAt?:     Date;
+    usuarioNombre?: string;
+}
+
+
+
 
 
 

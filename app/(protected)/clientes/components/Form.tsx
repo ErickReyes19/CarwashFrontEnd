@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form"; // Importamos useForm
 import { zodResolver } from "@hookform/resolvers/zod"; // Usamos el resolutor de Zod
 import { z } from "zod";
-import { Cliente, ClienteSchema } from "../schema"; // Tu esquema de Zod
+import {  ClienteSchema } from "../schema"; // Tu esquema de Zod
 import { postCliente, putCliente } from "../actions"; // Tu función para enviar datos
 import {
   Form,

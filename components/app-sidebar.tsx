@@ -6,6 +6,7 @@ import {
   Search,
   Settings,
   User2,
+  Users2,
 } from "lucide-react";
 import { getSessionUsuario } from "@/auth"; // Asegúrate de que esta función exista y retorne el nombre del usuario
 import {
@@ -32,28 +33,18 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 const items = [
   {
     title: "Inicio",
-    url: "#",
+    url: "/dashboard",
     icon: Home,
   },
   {
-    title: "Mensajes",
-    url: "#",
-    icon: Inbox,
+    title: "Clientes",
+    url: "/clientes",
+    icon: Users2,
   },
   {
-    title: "Calendario",
-    url: "#",
-    icon: Calendar,
-  },
-  {
-    title: "Buscador",
-    url: "#",
-    icon: Search,
-  },
-  {
-    title: "Configuración",
-    url: "#",
-    icon: Settings,
+    title: "Empleados",
+    url: "/empleados",
+    icon: Users2,
   },
 ];
 
@@ -91,7 +82,7 @@ export async function AppSidebar() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton className="h-full">
-                  <Avatar >
+                  <Avatar className="p-0 m-0">
                     <AvatarImage  src="https://avatars.githubusercontent.com/u/55272642?v=4" />
                   </Avatar>
                   {usuario?.usuario}
