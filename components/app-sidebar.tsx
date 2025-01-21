@@ -2,6 +2,7 @@ import {
   ChevronUp,
   Home,
   ListCheck,
+  StepForward,
   Users2,
 } from "lucide-react";
 import { getSessionUsuario } from "@/auth"; // Asegúrate de que esta función exista y retorne el nombre del usuario
@@ -24,6 +25,7 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import LogoutButton from "./signOut";
 
 // Menu items.
 const items = [
@@ -45,6 +47,11 @@ const items = [
   {
     title: "Estado Servicio",
     url: "/estadoServicios",
+    icon: StepForward,
+  },
+  {
+    title: "Permisos",
+    url: "/permisos",
     icon: ListCheck,
   },
 ];
@@ -95,7 +102,7 @@ export async function AppSidebar() {
                 className="w-[--radix-popper-anchor-width]"
               >
                 <DropdownMenuItem>
-                  <span>Cerrar Sesión</span>
+                <LogoutButton/>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

@@ -121,4 +121,9 @@ export const getToken = async () => {
     return token as string;
 };
 
+export const signOut = async () => {
+    cookies().delete("session");
+    return { success: "Sesión cerrada correctamente" };
+};
+
 

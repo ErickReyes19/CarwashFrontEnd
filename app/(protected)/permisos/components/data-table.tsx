@@ -71,10 +71,6 @@ export function DataTable<TData, TValue>({
           onChange={(event) => setGlobalFilter(event.target.value)}
           className="max-w-sm"
         />
-        <Button>
-          <Link href={`/clientes/create`}>Nuevo cliente</Link>
-          <Plus />
-        </Button>
       </div>
       <div className="rounded-md border">
         <Table>
