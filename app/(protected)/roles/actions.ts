@@ -13,6 +13,15 @@ export async function getRolesPermisos() {
     return [];
   }
 }
+export async function getRolesActivos() {
+  try {
+    const response = await apiService.get<Rol[]>("/Role/active");
+    return response.data;
+  } catch (error) {
+    console.error("Error al obtener los roles y permisos:", error);
+    return [];
+  }
+}
 
 export async function putRol({ rol }: { rol: Rol }) {
   const permisosIds = rol.permisosRol.map((permiso: PermisosRol) => permiso.id);

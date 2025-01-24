@@ -27,6 +27,7 @@ export default async function Create() {
     genero: "Masculino",  // Valor por defecto
     activo: true,
     edad: 18,  // Asumiendo que es un campo requerido para la creación de un empleado
+    nombreUsuario: "",
   };
 
   return (

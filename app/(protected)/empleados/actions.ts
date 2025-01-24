@@ -13,6 +13,15 @@ export async function getEmpleados() {
     return [];
   }
 }
+export async function getEmpleadosSinUsuario() {
+  try {
+    const response = await apiService.get<Empleado[]>("/Empleado/disponibles");
+    return response.data;
+  } catch (error) {
+    console.error("Error al obtener los clientes:", error);
+    return [];
+  }
+}
 
 export async function putEmpleado({ empleado }: { empleado: Empleado }) {
   console.log("ENtró al put")

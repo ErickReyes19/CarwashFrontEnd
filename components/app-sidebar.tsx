@@ -3,6 +3,7 @@ import {
   Home,
   ListCheck,
   StepForward,
+  User,
   Users2,
 } from "lucide-react";
 import { getSessionUsuario } from "@/auth"; // Asegúrate de que esta función exista y retorne el nombre del usuario
@@ -58,6 +59,11 @@ const items = [
     title: "Roles",
     url: "/roles",
     icon: ListCheck,
+  },
+  {
+    title: "Usuarios",
+    url: "/usuarios",
+    icon: User,
   },
 ];
 
