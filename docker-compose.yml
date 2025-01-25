@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "8082:8082"   # Exponer el puerto 8082 en el contenedor al puerto 8082 en tu máquina local
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - .:/app        # Montar el directorio de trabajo del proyecto al contenedor
+    command: npm run start   # Comando para iniciar el servidor de Next.js

@@ -27,7 +27,8 @@ export default async function Edit({ params }: { params: { id: string } }) {
   const usuario = await getUsuarioById(params.id);
   const empleados = await getEmpleadosSinUsuario();
   const roles = await getRolesActivos();
-  const empleadoAsignado = await getEmpleadoId(usuario?.empleado_id!);
+  const empleadoAsignado = await getEmpleadoId(usuario?.empleado_id ?? "");
+
 
   if (!usuario) {
     redirect("/usuarios");
