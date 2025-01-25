@@ -4,9 +4,11 @@ services:
   app:
     build: .
     ports:
-      - "8082:8082"   # Exponer el puerto 8082 en el contenedor al puerto 8082 en tu máquina local
+      - "8082:3000"
     environment:
-      - NODE_ENV=production
+      - URLLOGIN=http://localhost:5048/api/Login
+      - URLBASE=http://localhost:5048/api
+      - AUTH_SECRET=YHLQMDLGzZ4pW9t2uFj8XQ1kNz5yJmD8L
     volumes:
-      - .:/app        # Montar el directorio de trabajo del proyecto al contenedor
-    command: npm run start   # Comando para iniciar el servidor de Next.js
+      - .:/app
+    command: npm run start
