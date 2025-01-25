@@ -7,8 +7,8 @@ WORKDIR /app
 # Copiar los archivos de tu proyecto al contenedor
 COPY . .
 
-# Instalar las dependencias del proyecto
-RUN npm install
+# Eliminar node_modules anteriores (si existen) y reinstalar las dependencias
+RUN rm -rf node_modules && npm install
 
 # Construir el proyecto Next.js
 RUN npm run build
