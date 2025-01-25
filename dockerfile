@@ -13,8 +13,8 @@ RUN rm -rf node_modules && npm install
 # Construir el proyecto Next.js
 RUN npm run build
 
-# Exponer el puerto 8082
-EXPOSE 8082
+# Exponer el puerto 3000
+EXPOSE 3000
 
 # Comando para ejecutar el servidor de Next.js en producción
 CMD ["npm", "start"]

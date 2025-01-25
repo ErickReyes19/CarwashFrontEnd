@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   app:
     build: .
@@ -11,4 +9,3 @@ services:
       - AUTH_SECRET=YHLQMDLGzZ4pW9t2uFj8XQ1kNz5yJmD8L
     volumes:
       - .:/app
-    command: npm run start  # Inicia la aplicación después de construirla
