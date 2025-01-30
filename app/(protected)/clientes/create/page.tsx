@@ -33,8 +33,8 @@ export default async function Create() {
     <div>
       <HeaderComponent
         Icon={PlusCircle}
-        description="En este apartado podrá crear una categoria de un producto"
-        screenName="Categorías"
+        description="En este apartado podrá crear un nuevo Cliente"
+        screenName="Cliente"
       />
       <Formulario
         isUpdate={false}

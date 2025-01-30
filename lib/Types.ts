@@ -58,19 +58,62 @@ export type Usuario = {
 // UsuarioBase: Campos comunes para ambos casos (creación y actualización)
 // UsuarioBase: Contiene todos los campos comunes para un usuario
 export type UsuarioBase = {
-    usuario1: string; // Asegúrate de que este campo esté definido como 'usuario' si así lo estás usando
-    contrasena?: string; // Es opcional, solo para actualización o si se necesita cambiar
-    empleado_id: string;
-    role_id: string;
-    id?: string; // Solo para actualización
-    activo?: boolean; // Solo para actualización
-  };
-  
-  // UsuarioCreate: Para la creación de un nuevo usuario
-  export type UsuarioCreate = Omit<UsuarioBase, 'id' | 'activo'> & { contrasena: string };
-  
-  // UsuarioUpdate: Para actualizar un usuario existente (requiere 'id' y 'activo')
-  export type UsuarioUpdate = Required<UsuarioBase> & { usuario: string };
-  
-  
-  
+  usuario1: string; // Asegúrate de que este campo esté definido como 'usuario' si así lo estás usando
+  contrasena?: string; // Es opcional, solo para actualización o si se necesita cambiar
+  empleado_id: string;
+  role_id: string;
+  id?: string; // Solo para actualización
+  activo?: boolean; // Solo para actualización
+};
+
+// UsuarioCreate: Para la creación de un nuevo usuario
+export type UsuarioCreate = Omit<UsuarioBase, "id" | "activo"> & {
+  contrasena: string;
+};
+
+// UsuarioUpdate: Para actualizar un usuario existente (requiere 'id' y 'activo')
+export type UsuarioUpdate = Required<UsuarioBase> & { usuario: string };
+
+export type Vehiculo = {
+  id: string;
+  placa: string;
+  modelo: string;
+  marca: string;
+  color: string;
+  activo: boolean;
+  created_at: Date;
+  updated_at: Date;
+  clientes: ClienteVehiculo[];
+};
+
+export type ClienteVehiculo = {
+  id: string;
+  nombre: string;
+};
+
+export type Marca = {
+  id: string;
+  nombre: string;
+  modelos: Modelo[];
+};
+
+export type Modelo = {
+  id: string;
+  nombre: string;
+};
+
+// Tipo para los colores de vehículos
+export type Color = {
+  id: string;
+  nombre: string;
+};
+
+export type VehiculoCreate = {
+  id?: string;
+  clienteVehiculo: ClienteVehiculo[];
+  placa: string;
+  modelo: string;
+  marca: string;
+  color: string;
+  activo: boolean;
+};

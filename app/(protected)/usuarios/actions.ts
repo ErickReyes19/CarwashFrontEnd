@@ -1,6 +1,6 @@
 "use server";
 
-import { Cliente, Empleado, Usuario, UsuarioCreate, UsuarioUpdate } from "@/lib/Types";
+import {  Usuario, UsuarioCreate, UsuarioUpdate } from "@/lib/Types";
 import apiService from "../../../lib/server";
 // import { ClienteElementSchema } from "./schema";
 

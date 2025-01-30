@@ -22,7 +22,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Plus } from "lucide-react";
+import {  Plus } from "lucide-react";
 import Link from "next/link";
 
 interface DataTableProps<TData, TValue> {
@@ -38,7 +38,7 @@ export function DataTable<TData, TValue>({
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
-  const [globalFilter, setGlobalFilter] = React.useState<string>("");
+  const [globalFilter, setGlobalFilter] = React.useState<string>(""); 
 
   const table = useReactTable({
     data,
@@ -71,11 +71,11 @@ export function DataTable<TData, TValue>({
           onChange={(event) => setGlobalFilter(event.target.value)}
           className="max-w-sm"
         />
-        <Link href={`/clientes/create`}>
-          <Button>
-            Nuevo cliente
-            <Plus />
-          </Button>
+        <Link href={`/vehiculos/create`}>
+        <Button>
+          Nuevo Vehiculo
+          <Plus />
+        </Button>
         </Link>
       </div>
       <div className="rounded-md border">
@@ -105,6 +105,7 @@ export function DataTable<TData, TValue>({
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id} className="">
+                      
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
@@ -115,7 +116,10 @@ export function DataTable<TData, TValue>({
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 ">
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 "
+                >
                   Sin resultados.
                 </TableCell>
               </TableRow>

@@ -35,8 +35,8 @@ export default async function Create() {
     <div>
       <HeaderComponent
         Icon={PlusCircle}
-        description="En este apartado podrá crear un nuevo estado de servicio."
-        screenName="Crear Estado" // Cambié la pantalla a "Crear Empleado"
+        description="En este apartado podrá crear un rol y asignarle permisos."
+        screenName="Crear Rol" // Cambié la pantalla a "Crear Empleado"
       />
       <FormularioRol
         isUpdate={false} // Esto es para indicar que estamos creando, no actualizando

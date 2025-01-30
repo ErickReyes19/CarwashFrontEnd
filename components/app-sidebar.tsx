@@ -1,4 +1,5 @@
 import {
+  Car,
   ChevronUp,
   Home,
   ListCheck,
@@ -27,6 +28,7 @@ import {
 } from "./ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import LogoutButton from "./signOut";
+import Link from "next/link";
 
 // Menu items.
 const items = [
@@ -65,6 +67,12 @@ const items = [
     url: "/usuarios",
     icon: User,
   },
+  {
+    title: "Vehiculos",
+    url: "/vehiculos",
+    icon: Car,
+  },
+
 ];
 
 export async function AppSidebar() {
@@ -84,10 +92,7 @@ export async function AppSidebar() {
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </a>
+                  <Link href={item.url}> <item.icon />{item.title}</Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
