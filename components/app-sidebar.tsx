@@ -3,6 +3,7 @@ import {
   ChevronUp,
   Home,
   ListCheck,
+  NotebookText,
   StepForward,
   User,
   Users2,
@@ -46,6 +47,11 @@ const items = [
     title: "Empleados",
     url: "/empleados",
     icon: Users2,
+  },
+  {
+    title: "Servicios",
+    url: "/servicios",
+    icon: NotebookText,
   },
   {
     title: "Estado Servicio",

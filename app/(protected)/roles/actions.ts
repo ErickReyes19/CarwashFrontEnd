@@ -7,7 +7,7 @@ import apiService from "../../../lib/server";
 export async function getRolesPermisos() {
   try {
     const response = await apiService.get<Rol[]>("/Role");
-    return response.data;
+    return response;
   } catch (error) {
     console.error("Error al obtener los roles y permisos:", error);
     return [];
@@ -58,7 +58,6 @@ export async function postRol({ rol }: { rol: Rol }) {
       permisosRol: permisosIds, 
     };
 
-    console.log(rolData); // Imprime el rol con los IDs de permisos
 
     const response = await apiService.post("/Role", rolData); // Envía el rol con los IDs
     return response.data;

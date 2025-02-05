@@ -117,3 +117,11 @@ export type VehiculoCreate = {
   color: string;
   activo: boolean;
 };
+
+export type Servicio = {
+  id?:          string;
+  nombre:      string;
+  descripcion: string;
+  precio:      number;
+  activo:      boolean;
+}

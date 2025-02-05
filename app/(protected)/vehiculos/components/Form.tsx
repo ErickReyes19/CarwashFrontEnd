@@ -102,8 +102,6 @@ export function Formulario({
         router.push("/vehiculos");
         router.refresh();
       } else if (response.status === 409) {
-        console.log("Error:", response.data.message);
-
         setErrorData({
           message: response.data.message,
           clienteNombre: response.data.clienteNombre,

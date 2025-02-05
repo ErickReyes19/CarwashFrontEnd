@@ -25,7 +25,6 @@ export default async function Edit({ params }: { params: { id: string } }) {
     redirect("/empleados"); // Redirige si no se encuentra el cliente
   }
 
-  console.log(empleado)
 
   return (
     <div>

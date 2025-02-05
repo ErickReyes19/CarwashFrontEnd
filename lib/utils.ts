@@ -14,3 +14,11 @@ export function FormateadorFecha(dateString : string) {
   return fecha;
 }
 
+export function formatLempiras(amount: number): string {
+  return new Intl.NumberFormat("es-HN", {
+    style: "currency",
+    currency: "HNL",
+    minimumFractionDigits: 2,
+  }).format(amount);
+}
+

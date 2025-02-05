@@ -44,18 +44,17 @@ export function EmpleadoFormulario({
 
   // Verificación de validez antes del submit
   const { formState } = form;
-  const isValid = formState.errors;
-  console.log("isValid");
-  console.log(isValid);
+  //forma de saber si un form esta valido o no
+  // const isValid = formState.errors;
+  // console.log("isValid");
+  // console.log(isValid);
   async function onSubmit(data: z.infer<typeof EmpleadoSchema>) {
-    console.log("Errores de validación:", form.formState.errors);
 
     const empleadoData = {
       id: initialData?.id, // Aquí pasamos el ID si es actualización
       empleado: data,
     };
 
-    console.log(empleadoData); // Verifica que el objeto empleadoData sea correcto
 
     try {
       if (isUpdate) {

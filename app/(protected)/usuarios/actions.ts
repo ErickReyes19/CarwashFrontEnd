@@ -30,7 +30,6 @@ export async function postUsuario({ usuario }: { usuario: UsuarioCreate }): Prom
 // Función para actualizar usuario
 export async function putUsuario({ usuario }: { usuario: UsuarioUpdate }): Promise<UsuarioUpdate> {
   try {
-    console.log(usuario)
     const response = await apiService.put<UsuarioUpdate>(`/Usuario/${usuario.id}`, usuario);
     return response.data; // Retorna la data del usuario actualizado
   } catch (error) {

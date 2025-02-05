@@ -24,10 +24,9 @@ export async function getEmpleadosSinUsuario() {
 }
 
 export async function putEmpleado({ empleado }: { empleado: Empleado }) {
-  console.log("ENtró al put")
+
   try {
 
-    console.log(empleado)
     const response = await apiService.put(`/Empleado/${empleado.id}`, empleado);
 
     return response.data;

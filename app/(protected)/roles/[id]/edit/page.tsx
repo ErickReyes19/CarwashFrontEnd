@@ -26,7 +26,6 @@ export default async function Edit({ params }: { params: { id: string } }) {
     redirect("/roles"); // Redirige si no se encuentra el cliente
   }
 
-  console.log(roles)
   const permisosData = await getPermisosActivos();
 
   return (

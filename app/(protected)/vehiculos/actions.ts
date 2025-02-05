@@ -50,13 +50,11 @@ export async function AsignarVehiculoACliente({
   clientes: ClienteVehiculo[];
 }) {
   const clientesId = clientes.map((cliente) => cliente.id);
-  console.log("🚀 ~ AsignarVehiculoACliente ~ clientes:", clientes);
   try {
     const response = await apiService.put(
       `/vehiculo/${idVehiculo}/agregar-clientes`,
       clientesId
     );
-    console.log("🚀 ~ AsignarVehiculoACliente ~ response:", response);
     return { status: response.status, data: response.data };
   } catch (error: any) {
     return {
@@ -80,7 +78,6 @@ export async function putVehiculo({
       clientes: clienteVehiculo?.map((cliente) => ({ id: cliente.id })) || [],
     };
 
-    console.log("🚀 ~ vehiculo:", vehiculo);
 
     const response = await apiService.put(
       `/Vehiculo/${vehiculoCreate.id}`,
