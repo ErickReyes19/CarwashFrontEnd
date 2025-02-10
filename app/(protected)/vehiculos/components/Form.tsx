@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { Cliente, ClienteVehiculo, Color, Marca } from "@/lib/Types";
+import { ClienteVehiculo, Color, Marca } from "@/lib/Types";
 import {
   Command,
   CommandInput,
@@ -155,7 +155,7 @@ export function Formulario({
             />
             <FormField
               control={form.control}
-              name="clienteVehiculo"
+              name="clientes"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Selecciona Clientes</FormLabel>
@@ -428,7 +428,7 @@ export function Formulario({
         isOpen={open}
         onClose={() => setOpen(false)}
         errorData={errorData}
-        clientes={form.getValues("clienteVehiculo") || ""}
+        clientes={form.getValues("clientes") || ""}
       />
     </div>
   );

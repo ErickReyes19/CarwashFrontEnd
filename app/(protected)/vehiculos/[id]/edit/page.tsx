@@ -29,7 +29,7 @@ export default async function Edit({ params }: { params: { id: string } }) {
 
   const initialData = {
     ...vehiculo,
-    cliente_id: vehiculo.clientes[0].id,
+    // cliente_id: vehiculo.clientes[0].id,
     clienteVehiculo: vehiculo.clientes.map(cliente => ({
       id: cliente.id,
       nombre: cliente.nombre,

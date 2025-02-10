@@ -13,7 +13,7 @@ export const VehiculoSchema = z.object({
   color: z.string(),
   id: z.string().optional(),
   activo: z.boolean().default(true),
-  clienteVehiculo: z.array(ClientesVehiculoSchema)// Array de permisos, obligatorio
+  clientes: z.array(ClientesVehiculoSchema)// Array de permisos, obligatorio
 });
 
 export type clienteVehiculo = z.infer<typeof ClientesVehiculoSchema>;

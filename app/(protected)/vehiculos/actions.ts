@@ -71,11 +71,11 @@ export async function putVehiculo({
 }) {
   try {
     // Desestructuración para quitar clienteVehiculo
-    const { clienteVehiculo, ...vehiculoSinClientes } = vehiculoCreate;
+    const { clientes, ...vehiculoSinClientes } = vehiculoCreate;
 
     const vehiculo = {
       ...vehiculoSinClientes,
-      clientes: clienteVehiculo?.map((cliente) => ({ id: cliente.id })) || [],
+      clientes: clientes?.map((cliente) => ({ id: cliente.id })) || [],
     };
 
 

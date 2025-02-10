@@ -110,7 +110,7 @@ export type Color = {
 
 export type VehiculoCreate = {
   id?: string;
-  clienteVehiculo: ClienteVehiculo[];
+  clientes: ClienteVehiculo[];
   placa: string;
   modelo: string;
   marca: string;
