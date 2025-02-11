@@ -52,3 +52,36 @@ export type VehiculoVehiculo = {
     modelo: string;
     color:  string;
 }
+
+
+
+
+
+
+// Definición de los tipos CREAYE
+export type ClienteRegistro = {
+    id: string;
+    nombre: string;
+  };
+  
+  export type EstadoRegistro = {
+    id: string;
+    nombre: string;
+  };
+  
+  export type EmpleadoRegistro = {
+    id: string;
+    nombre: string;
+  };
+  
+  export type VehiculoRegistro = {
+    id: string;
+    nombre: string;
+  };
+  
+  export type ServicioRegistro = {
+    id: string;
+    nombre: string;
+    precio: number;
+  };
+  
