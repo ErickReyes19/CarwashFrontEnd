@@ -1,6 +1,7 @@
 "use client";
 import { ArrowUpDown, Check, CheckCircleIcon } from "lucide-react";
-import { Cliente } from "@/lib/Types";
+import { RegistroServicio } from "@/lib/Types";
+// import { FormateadorFecha } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal, CheckCircle, XCircleIcon } from "lucide-react";
 
@@ -10,27 +11,29 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
+import { format } from "date-fns";
 
-export const columns: ColumnDef<Cliente>[] = [
+export const columns: ColumnDef<RegistroServicio>[] = [
 
   {
-    accessorKey: "nombre",
+    accessorKey: "clienteNombre",
     header: ({ column }) => (
       <Button
         variant="ghost"
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        className="text-left" 
+        className="text-left"
       >
-        Nombre
+        Cliente
         <ArrowUpDown className="ml-2 h-4 w-4" />
       </Button>
     ),
   },
   {
-    accessorKey: "correo",
+    accessorKey: "clienteCorreo",
     header: ({ column }) => (
       <Button
         variant="ghost"
@@ -43,79 +46,42 @@ export const columns: ColumnDef<Cliente>[] = [
     ),
   },
   {
-    accessorKey: "telefono",
+    accessorKey: "estadoServicioNombre",
     header: ({ column }) => (
       <Button
         variant="ghost"
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         className="text-left"
       >
-        Telefono
+        Estado
         <ArrowUpDown className="ml-2 h-4 w-4" />
       </Button>
     ),
   },
   {
-    accessorKey: "correo",
-    header: ({ column }) => (
-      <Button
-        variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        className="text-left "
-      >
-        Correo
-        <ArrowUpDown className="ml-2 h-4 w-4" />
-      </Button>
-    ),
-  },
-  {
-    accessorKey: "genero",
+    accessorKey: "fecha",
     header: ({ column }) => (
       <Button
         variant="ghost"
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         className="text-left"
       >
-        Genero
-        <ArrowUpDown className="ml-2 h-4 w-4" />
-      </Button>
-    ),
-  },
-
-  {
-    accessorKey: "activo",
-    header: ({ column }) => (
-      <Button
-        variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        className="text-left"
-      >
-        Activo
+        Fecha
         <ArrowUpDown className="ml-2 h-4 w-4" />
       </Button>
     ),
     cell: ({ row }) => {
-      const isActive = row.getValue("activo");
-      return (
-        <div className="">
-          {isActive ? (
-            <div className="flex gap-2">
-              <CheckCircleIcon color="green" /> Activo{" "}
-            </div>
-          ) : (
-            <div className="flex gap-2">
-              <XCircleIcon color="red" /> Inactivo{" "}
-            </div>
-          )}
-        </div>
-      );
-    },
+      const fecha = row.original.fecha; // Asegúrate de que `fecha` está en formato Date o ISO string
+      return fecha ? format(new Date(fecha), "dd/MM/yyyy HH:mm") : "Fecha no disponible";
+    }
   },
+
+
   {
     id: "actions",
     header: "Acciones",
     cell: ({ row }) => {
-      const cliente = row.original;
+      const registro = row.original;
 
       return (
         <DropdownMenu>
@@ -127,7 +93,7 @@ export const columns: ColumnDef<Cliente>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-            <Link href={`/clientes/${cliente.id}/edit`}>
+            <Link href={`/registros/${registro.id}/view`}>
               <DropdownMenuItem>Editar</DropdownMenuItem>
             </Link>
           </DropdownMenuContent>

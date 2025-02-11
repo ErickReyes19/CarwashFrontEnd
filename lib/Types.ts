@@ -125,3 +125,13 @@ export type Servicio = {
   precio:      number;
   activo:      boolean;
 }
+
+
+export type RegistroServicio = {
+  id:                   string;
+  clienteNombre:        string;
+  clienteCorreo:        string;
+  usuarioNombre:        null;
+  estadoServicioNombre: string;
+  fecha:                Date;
+}

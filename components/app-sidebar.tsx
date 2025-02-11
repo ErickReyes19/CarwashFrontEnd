@@ -2,6 +2,7 @@ import {
   Car,
   ChevronUp,
   Home,
+  List,
   ListCheck,
   NotebookText,
   StepForward,
@@ -34,9 +35,14 @@ import Link from "next/link";
 // Menu items.
 const items = [
   {
-    title: "Inicio",
+    title: "Dashboard",
     url: "/dashboard",
     icon: Home,
+  },
+  {
+    title: "Registros",
+    url: "/registros",
+    icon: List,
   },
   {
     title: "Clientes",
@@ -78,6 +84,7 @@ const items = [
     url: "/vehiculos",
     icon: Car,
   },
+
 
 ];
 
