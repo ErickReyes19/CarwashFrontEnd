@@ -3,21 +3,12 @@ import { z } from "zod";
 export const CarwashSchema = z.object({
   clienteId: z.string().uuid({ message: "Cliente inválido" }),
   estadoServicioId: z.string().uuid({ message: "Estado de servicio inválido" }),
-  Empleados: z.preprocess(
-    (val) => {
-      if (Array.isArray(val)) {
-        return val.map((v) => ({ EmpleadoId: v }));
-      }
-      return val;
-    },
-    z
-      .array(
-        z.object({
-          EmpleadoId: z.string().uuid({ message: "Empleado inválido" }),
-        })
-      )
-      .min(1, "Se debe seleccionar al menos un empleado")
-  ),
+  // Agregar el campo UsuarioId con opción de ser nulo
+  UsuarioId: z.string().default("").nullable(), // Esto permite que sea null o una cadena válida
+  Empleados: z
+    .array(z.string().uuid({ message: "Empleado inválido" }))
+    .min(1, "Se debe seleccionar al menos un empleado"),
+    
   vehiculos: z
     .array(
       z.object({

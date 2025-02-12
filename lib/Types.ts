@@ -4,6 +4,10 @@ export type EstadoServicio = {
   descripcion: string;
   activo: boolean;
 };
+export type EstadoServicioRegistro = {
+  id: string;
+  nombre: string;
+};
 
 export type Cliente = {
   id?: string;

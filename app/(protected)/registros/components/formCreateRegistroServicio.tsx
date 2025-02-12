@@ -1,4 +1,3 @@
-// CarwashForm.tsx
 "use client";
 
 import { useRouter } from "next/navigation";
@@ -23,6 +22,7 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { useState, useEffect } from "react";
 import { CarwashSchema } from "../schema";
 import { z } from "zod";
 import {
@@ -32,8 +32,10 @@ import {
   ServicioRegistro,
   VehiculoRegistro,
 } from "./types";
-import { CheckboxEmpleados } from "../../vehiculos/components/CheckBoxEmpleados"; // Asegúrate de ajustar la ruta según corresponda
 import { VehiculoItem } from "./vehiculoForm";
+import { obtenerVehiculoPorCliente } from "../../vehiculos/actions";
+import { CheckboxEmpleados } from "./CheckBoxEmpleados";
+import { postRegistroServicio } from "../actions";
 
 interface CarwashFormProps {
   isUpdate?: boolean;
@@ -41,7 +43,6 @@ interface CarwashFormProps {
   clientes: ClienteRegistro[];
   estados: EstadoRegistro[];
   empleados: EmpleadoRegistro[];
-  vehiculos: VehiculoRegistro[];
   servicios: ServicioRegistro[];
 }
 
@@ -51,7 +52,6 @@ export function CarwashForm({
   clientes,
   estados,
   empleados,
-  vehiculos,
   servicios,
 }: CarwashFormProps) {
   const router = useRouter();
@@ -67,6 +67,31 @@ export function CarwashForm({
     },
   });
 
+  // Estado local para almacenar los vehículos del cliente seleccionado
+  const [vehiculos, setVehiculos] = useState<VehiculoRegistro[]>([]);
+
+  // Observamos el valor del campo "clienteId"
+  const selectedClientId = form.watch("clienteId");
+
+  // Cada vez que cambie el cliente seleccionado:
+  // 1. Se borran los vehículos seleccionados en el formulario.
+  // 2. Se actualiza la lista de vehículos mediante obtenerVehiculoPorCliente.
+  useEffect(() => {
+    // Reiniciamos el array de vehículos en el formulario
+    form.setValue("vehiculos", []);
+
+    if (selectedClientId) {
+      obtenerVehiculoPorCliente(selectedClientId)
+        .then((data) => setVehiculos(data))
+        .catch((err) => {
+          console.error("Error al obtener vehículos:", err);
+          setVehiculos([]);
+        });
+    } else {
+      setVehiculos([]);
+    }
+  }, [selectedClientId, form]);
+
   // Field Array para manejar los vehículos dinámicos
   const {
     fields: vehiculosFields,
@@ -78,16 +103,16 @@ export function CarwashForm({
   });
 
   async function onSubmit(data: z.infer<typeof CarwashSchema>) {
-    console.log("Data enviada:", data);
-    // Aquí iría la llamada a tu API (postCarwash o putCarwash)
+    const result = await postRegistroServicio( {data} );
+    
     toast({
       title: isUpdate ? "Actualización exitosa" : "Registro exitoso",
       description: isUpdate
         ? "El registro ha sido actualizado."
         : "El registro ha sido creado.",
     });
-    router.push("/carwash");
-    router.refresh();
+    // router.push("/carwash");
+    // router.refresh();
   }
 
   return (
@@ -158,30 +183,24 @@ export function CarwashForm({
             <FormField
               control={form.control}
               name="Empleados"
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <FormItem>
                   <FormLabel>Empleados</FormLabel>
                   <FormControl>
                     <CheckboxEmpleados
                       empleados={empleados}
-                      selectedEmpleados={
-                        field.value
-                          ? field.value.map(
-                              (emp: { EmpleadoId: string }) => emp.EmpleadoId
-                            )
-                          : []
-                      }
-                      onChange={(selectedIds) =>
-                        field.onChange(
-                          selectedIds.map((id) => ({ EmpleadoId: id }))
-                        )
-                      }
+                      selectedEmpleados={field.value || []} // Aseguramos que el valor sea un array de strings
+                      onChange={(selectedIds: string[]) =>
+                        field.onChange(selectedIds)
+                      } // Pasamos el array de IDs al campo del formulario
                     />
                   </FormControl>
                   <FormDescription>
                     Selecciona uno o varios empleados.
                   </FormDescription>
-                  <FormMessage />
+                  {fieldState.error && (
+                    <FormMessage>{fieldState.error.message}</FormMessage>
+                  )}
                 </FormItem>
               )}
             />
@@ -196,7 +215,7 @@ export function CarwashForm({
                 control={form.control}
                 index={vehiculoIndex}
                 vehiculo={vehiculoField}
-                vehiculos={vehiculos}
+                vehiculos={vehiculos} // Usamos la lista dinámica de vehículos
                 servicios={servicios}
                 removeVehiculo={removeVehiculo}
               />
@@ -204,9 +223,7 @@ export function CarwashForm({
 
             <Button
               type="button"
-              onClick={() =>
-                appendVehiculo({ vehiculoId: "", servicios: [] })
-              }
+              onClick={() => appendVehiculo({ vehiculoId: "", servicios: [] })}
             >
               Agregar Vehículo
             </Button>

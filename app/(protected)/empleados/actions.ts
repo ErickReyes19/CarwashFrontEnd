@@ -2,6 +2,7 @@
 
 import { Empleado } from "@/lib/Types";
 import apiService from "../../../lib/server";
+import { EmpleadoRegistro } from "../registros/components/types";
 // import { ClienteElementSchema } from "./schema";
 
 export async function getEmpleados() {
@@ -9,7 +10,16 @@ export async function getEmpleados() {
     const response = await apiService.get<Empleado[]>("/Empleado");
     return response.data;
   } catch (error) {
-    console.error("Error al obtener los clientes:", error);
+    console.error("Error al obtener los empleados:", error);
+    return [];
+  }
+}
+export async function getEmpeleadosActivos() {
+  try {
+    const response = await apiService.get<EmpleadoRegistro[]>("/Empleado/active");
+    return response.data;
+  } catch (error) {
+    console.error("Error al obtener los empleados:", error);
     return [];
   }
 }
@@ -18,7 +28,7 @@ export async function getEmpleadosSinUsuario() {
     const response = await apiService.get<Empleado[]>("/Empleado/disponibles");
     return response.data;
   } catch (error) {
-    console.error("Error al obtener los clientes:", error);
+    console.error("Error al obtener los empleados:", error);
     return [];
   }
 }

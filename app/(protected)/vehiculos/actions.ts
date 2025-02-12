@@ -7,6 +7,7 @@ import {
   VehiculoCreate,
 } from "@/lib/Types";
 import apiService from "../../../lib/server";
+import { VehiculoRegistro } from "../registros/components/types";
 // import { ClienteElementSchema } from "./schema";
 
 export async function getVehiculos() {
@@ -18,6 +19,7 @@ export async function getVehiculos() {
     return [];
   }
 }
+
 export async function getVehiculoById(id: string) {
   try {
     const response = await apiService.get<Vehiculo>(`/Vehiculo/${id}`);
@@ -27,6 +29,28 @@ export async function getVehiculoById(id: string) {
     return null;
   }
 }
+export const obtenerVehiculoPorCliente = async (id: string): Promise<VehiculoRegistro[] > => {
+  try {
+    const response = await apiService.get<Vehiculo[]>(`/Vehiculo/cliente/${id}`);
+    
+    // Verifica si los datos existen y luego transforma
+    if (response.data) {
+      return transformarVehiculo(response.data);
+    } else {
+      return [];
+    }
+  } catch (error) {
+    console.error("Error al obtener el vehículo:", error);
+    return [];
+  }
+};
+const transformarVehiculo = (data: any[]): VehiculoRegistro[] => {
+  return data.map((vehiculo) => ({
+    id: vehiculo.id,
+    nombre: `${vehiculo.marca} - ${vehiculo.modelo} - ${vehiculo.color}`,
+  }));
+};
+
 export async function postVehiculo({
   vehiculoCreate,
 }: {

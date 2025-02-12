@@ -1,12 +1,21 @@
 "use server";
 
-import { EstadoServicio } from "@/lib/Types";
+import { EstadoServicio, EstadoServicioRegistro } from "@/lib/Types";
 import apiService from "../../../lib/server";
 // import { ClienteElementSchema } from "./schema";
 
 export async function getEstadoServicios() {
   try {
     const response = await apiService.get<EstadoServicio[]>("/EstadosServicio");
+    return response.data;
+  } catch (error) {
+    console.error("Error al obtener los Estados de Servicio:", error);
+    return [];
+  }
+}
+export async function getEstadoServiciosActivos() {
+  try {
+    const response = await apiService.get<EstadoServicioRegistro[]>("/EstadosServicio/active");
     return response.data;
   } catch (error) {
     console.error("Error al obtener los Estados de Servicio:", error);
