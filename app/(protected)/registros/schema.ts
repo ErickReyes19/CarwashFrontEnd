@@ -1,11 +1,12 @@
 import { z } from "zod";
 
 export const CarwashSchema = z.object({
+  registroServicioId: z.string().default("").nullable(), // Esto permite que sea null o una cadena válida
   clienteId: z.string().uuid({ message: "Cliente inválido" }),
   estadoServicioId: z.string().uuid({ message: "Estado de servicio inválido" }),
   // Agregar el campo UsuarioId con opción de ser nulo
   UsuarioId: z.string().default("").nullable(), // Esto permite que sea null o una cadena válida
-  Empleados: z
+  empleados: z
     .array(z.string().uuid({ message: "Empleado inválido" }))
     .min(1, "Se debe seleccionar al menos un empleado"),
     

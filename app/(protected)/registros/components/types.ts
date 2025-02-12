@@ -106,6 +106,30 @@ export type RegistroServicioPost = {
   clienteId: string;
   estadoServicioId: string;
   UsuarioId: string | null;
-  Empleados: string[]; // ID de los empleados seleccionados
+  empleados: string[]; // ID de los empleados seleccionados
   vehiculos: VehiculoPost[]; // Lista de vehículos y servicios asociados
 }
+
+
+
+
+export type RegistroServicioEdit = {
+  registroServicioId: string;
+  clienteId: string;
+  estadoServicioId: string;
+  UsuarioId: string | null; // Se cambió de usuarioId → UsuarioId (respetando la API)
+  empleados: string[]; // Se cambió de empleados → Empleados (respetando la API)
+  vehiculos: VehiculoEdit[];
+};
+
+export type VehiculoEdit = {
+  vehiculoId: string;
+  servicios: ServicioEdit[];
+};
+
+export type ServicioEdit = {
+  servicioId: string;
+  precio: number;
+};
+
+
