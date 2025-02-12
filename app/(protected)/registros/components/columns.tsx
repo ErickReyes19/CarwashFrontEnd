@@ -94,6 +94,9 @@ export const columns: ColumnDef<RegistroServicio>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Acciones</DropdownMenuLabel>
             <Link href={`/registros/${registro.id}/view`}>
+              <DropdownMenuItem>Ver Detalles</DropdownMenuItem>
+            </Link>
+            <Link href={`/registros/${registro.id}/edit`}>
               <DropdownMenuItem>Editar</DropdownMenuItem>
             </Link>
           </DropdownMenuContent>
