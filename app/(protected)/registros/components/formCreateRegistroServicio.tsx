@@ -107,7 +107,6 @@ const form = useForm<z.infer<typeof CarwashSchema>>({
       if (isUpdate) {
         // Si es actualización, llamamos a la acción PUT
         await putRegistroServicio({ data });
-        console.log({data})
         toast({
           title: "Actualización Exitosa",
           description: "El registro ha sido actualizado.",

@@ -109,6 +109,10 @@ export type RegistroServicioPost = {
   empleados: string[]; // ID de los empleados seleccionados
   vehiculos: VehiculoPost[]; // Lista de vehículos y servicios asociados
 }
+export type CambiarEstadoType = {
+  RegistroServicioId: string;
+  EstadoServicioId: string;
+}
 
 
 

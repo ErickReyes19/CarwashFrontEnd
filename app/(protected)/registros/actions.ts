@@ -1,7 +1,7 @@
 "use server";
 import { getSessionUsuario } from "@/auth";
 import apiService from "../../../lib/server";
-import { RegistroServicioEdit, RegistroServicioPost, RegistroServicioView } from "./components/types";
+import { CambiarEstadoType, RegistroServicioEdit, RegistroServicioPost, RegistroServicioView } from "./components/types";
 import { RegistroServicio } from "@/lib/Types";
 
 
@@ -95,6 +95,20 @@ export async function putRegistroServicio({
     };
     console.log("🚀 ~ registroConUsuarioId:", registroConUsuarioId)
     const response = await apiService.put("/RegistroServicio/multiple", registroConUsuarioId);
+    return response?.data;
+  } catch (error) {
+    console.error("Error al crear el registro de servicio:", error);
+    throw error;
+  }
+}
+export async function putCambiarEstado({
+  data,
+}: {
+  data: CambiarEstadoType;
+}) {
+  try {
+
+    const response = await apiService.put("/RegistroServicio/actualizar-estado", data);
     return response?.data;
   } catch (error) {
     console.error("Error al crear el registro de servicio:", error);

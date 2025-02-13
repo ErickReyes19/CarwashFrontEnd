@@ -16,9 +16,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
 import { format } from "date-fns";
+import EstadoDialog from "./dialogCambioEstado";
 
 export const columns: ColumnDef<RegistroServicio>[] = [
-
   {
     accessorKey: "clienteNombre",
     header: ({ column }) => (
@@ -72,10 +72,11 @@ export const columns: ColumnDef<RegistroServicio>[] = [
     ),
     cell: ({ row }) => {
       const fecha = row.original.fecha; // Asegúrate de que `fecha` está en formato Date o ISO string
-      return fecha ? format(new Date(fecha), "dd/MM/yyyy HH:mm") : "Fecha no disponible";
-    }
+      return fecha
+        ? format(new Date(fecha), "dd/MM/yyyy HH:mm")
+        : "Fecha no disponible";
+    },
   },
-
 
   {
     id: "actions",
@@ -99,6 +100,7 @@ export const columns: ColumnDef<RegistroServicio>[] = [
             <Link href={`/registros/${registro.id}/edit`}>
               <DropdownMenuItem>Editar</DropdownMenuItem>
             </Link>
+            <EstadoDialog registroId={registro.id} />
           </DropdownMenuContent>
         </DropdownMenu>
       );
