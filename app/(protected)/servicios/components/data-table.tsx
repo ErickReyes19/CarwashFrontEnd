@@ -64,20 +64,21 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="rounded-md border p-4">
-      <div className="flex items-center py-4 justify-between">
+      <div className="flex flex-col md:flex-row items-center py-4 justify-between space-y-2 md:space-y-0 md:space-x-4">
         <Input
           placeholder="Filtrar Datos"
           value={globalFilter}
           onChange={(event) => setGlobalFilter(event.target.value)}
-          className="max-w-sm"
+          className="w-full md:max-w-sm"
         />
-        <Link href={`/servicios/create`}>
-          <Button>
+        <Link href={`/servicios/create`} className="w-full md:w-auto">
+          <Button className="w-full md:w-auto flex items-center gap-2">
             Nuevo Servicio
             <Plus />
           </Button>
         </Link>
       </div>
+
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -88,9 +89,9 @@ export function DataTable<TData, TValue>({
                     {header.isPlaceholder
                       ? null
                       : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
                   </TableHead>
                 ))}
               </TableRow>
