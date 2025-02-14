@@ -64,7 +64,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="rounded-md border p-4">
-      <div className="flex items-center py-4 justify-between">
+      <div className="flex flex-col md:flex-row items-start md:items-center py-4 justify-between space-y-4 md:space-y-0">
         {/* Aquí hemos integrado el DatePickerWithRange */}
         <DatePickerWithRange className="mr-4" />
 
@@ -75,7 +75,7 @@ export function DataTable<TData, TValue>({
           className="max-w-sm"
         />
         <Link href={`/registros/create`}>
-          <Button>
+          <Button >
             Nuevo registro
             <Plus />
           </Button>
@@ -87,7 +87,7 @@ export function DataTable<TData, TValue>({
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id} className="">
+                  <TableHead key={header.id}>
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -107,7 +107,7 @@ export function DataTable<TData, TValue>({
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="">
+                    <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
@@ -118,7 +118,7 @@ export function DataTable<TData, TValue>({
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 ">
+                <TableCell colSpan={columns.length} className="h-24">
                   Sin resultados.
                 </TableCell>
               </TableRow>
