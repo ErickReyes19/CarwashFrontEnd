@@ -3,13 +3,16 @@ version: '3.8'
 services:
   app:
     build: .
+    container_name: carwashfrontend-app
     ports:
-      - "8082:3000"
+      - "8082:3000"  # Mapea el puerto 3000 del contenedor al puerto 8082 en el host
     environment:
       - URLLOGIN=http://18.190.176.188:8081/api/Login
       - URLBASE=http://18.190.176.188:8081/api
       - AUTH_SECRET=YHLQMDLGzZ4pW9t2uFj8XQ1kNz5yJmD8L
-    volumes:
-      - .:/app   # Mapea tu código fuente al contenedor
-      - /app/node_modules  # Mapea node_modules para evitar problemas con el sistema operativo host
-      - .next:/app/.next   # Volumen para persistir la carpeta .next
+    networks:
+      - carwash-network
+
+networks:
+  carwash-network:
+    driver: bridge
