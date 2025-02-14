@@ -29,6 +29,7 @@ export default async function Create() {
     marca: "",
     modelo: "",
     activo: true,
+    clientes: []
   };
 
   return (
