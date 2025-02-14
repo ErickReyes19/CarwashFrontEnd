@@ -16,6 +16,9 @@ COPY . .
 # Construir el proyecto Next.js
 RUN npm run build
 
+# Verificar si la carpeta .next fue creada
+RUN ls -alh .next
+
 # Exponer el puerto 3000
 EXPOSE 3000
 
