@@ -15,7 +15,7 @@ export default async function EstadoServicio() {
     redirect("/");
   }
 
-  const {data} = await getRolesPermisos();
+  const data = await getRolesPermisos();
 
   if (!permisos?.includes("Ver Clientes")) {
     return <NoAcceso />;
