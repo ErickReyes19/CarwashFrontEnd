@@ -4,11 +4,14 @@ FROM node:20-alpine
 # Establecer el directorio de trabajo dentro del contenedor
 WORKDIR /app
 
-# Copiar los archivos de tu proyecto al contenedor
-COPY . .
+# Copiar los archivos de configuración de dependencias (package.json y package-lock.json)
+COPY package*.json ./
 
-# Eliminar node_modules anteriores (si existen) y reinstalar las dependencias
-RUN rm -rf node_modules && npm install
+# Instalar las dependencias
+RUN npm install
+
+# Copiar todo el resto del código al contenedor
+COPY . .
 
 # Construir el proyecto Next.js
 RUN npm run build
