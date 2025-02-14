@@ -2,6 +2,7 @@
 
 import { Cliente, ClienteVehiculo } from "@/lib/Types";
 import apiService from "../../../lib/server";
+import { ClienteView } from "./components/types";
 // import { ClienteElementSchema } from "./schema";
 
 export async function getClientes() {
@@ -37,6 +38,15 @@ export async function putCliente({ cliente }: { cliente: Cliente }) {
 export async function getClienteById(id: string) {
   try {
     const response = await apiService.get<Cliente>(`/cliente/${id}`);
+    return response?.data;
+  } catch (error) {
+    console.error("Error al obtener el cliente:", error);
+    return null;
+  }
+}
+export async function getClienteByIdView(id: string) {
+  try {
+    const response = await apiService.get<ClienteView>(`/cliente/${id}/vista`);
     return response?.data;
   } catch (error) {
     console.error("Error al obtener el cliente:", error);

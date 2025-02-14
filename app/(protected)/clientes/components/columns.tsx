@@ -130,6 +130,9 @@ export const columns: ColumnDef<Cliente>[] = [
             <Link href={`/clientes/${cliente.id}/edit`}>
               <DropdownMenuItem>Editar</DropdownMenuItem>
             </Link>
+            <Link href={`/clientes/${cliente.id}/view`}>
+              <DropdownMenuItem>Ver Detalle</DropdownMenuItem>
+            </Link>
           </DropdownMenuContent>
         </DropdownMenu>
       );
