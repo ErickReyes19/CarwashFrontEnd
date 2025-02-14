@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   app:
     build: .
@@ -8,4 +10,6 @@ services:
       - URLBASE=http://18.190.176.188:8081/api
       - AUTH_SECRET=YHLQMDLGzZ4pW9t2uFj8XQ1kNz5yJmD8L
     volumes:
-      - .:/app
+      - .:/app   # Mapea tu código fuente al contenedor
+      - /app/node_modules  # Mapea node_modules para evitar problemas con el sistema operativo host
+      - .next:/app/.next   # Volumen para persistir la carpeta .next
