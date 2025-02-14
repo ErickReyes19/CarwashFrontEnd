@@ -23,4 +23,4 @@ RUN ls -alh .next
 EXPOSE 3000
 
 # Comando para ejecutar el servidor de Next.js en producción
-CMD ["npm", "start"]
+CMD ["npm", "run", "start"]
