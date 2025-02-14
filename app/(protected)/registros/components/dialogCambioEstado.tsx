@@ -53,7 +53,7 @@ export default function EstadoDialog({ registroId }: EstadoDialogProps) {
         description: "El registro ha sido actualizado.",
       });
       setOpen(false);
-      router.push("/registros"); // Redirige después de la acción
+      router.push("/registros"); 
       router.refresh();
     } catch (error) {
         toast({
