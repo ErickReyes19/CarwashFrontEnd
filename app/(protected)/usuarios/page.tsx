@@ -6,6 +6,7 @@ import { DataTable } from "./components/data-table";
 import { columns } from "./components/columns";
 import HeaderComponent from "@/components/HeaderComponent";
 import NoAcceso from "@/components/noAccess";
+import UserListMobile from "./components/usuario-list-mobile";
 
 export default async function EstadoServicio() {
   const sesion = await getSession();
@@ -28,7 +29,13 @@ export default async function EstadoServicio() {
         description="En este apartado podrá ver todos los usuarios"
         screenName="Usuarios"
       />
-      <DataTable columns={columns} data={data} />
+      <div className="hidden md:block">
+        <DataTable columns={columns} data={data} />
+      </div>
+      <div className="block md:hidden">
+        <UserListMobile usuarios={data} />
+      </div>
+
     </div>
   );
 }

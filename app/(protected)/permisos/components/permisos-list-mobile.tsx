@@ -20,28 +20,27 @@ export default function PermissionListMobile({ permisos }: PermissionListProps) 
   );
 
   return (
-    <ScrollArea className="h-[500px]">
-      <div className="space-y-4 p-4">
-        {/* Buscador */}
-        <div className="relative">
-          <Input
-            type="text"
-            placeholder="Buscar permiso..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10"
-          />
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-        </div>
 
+    <div className="space-y-4 p-4">
+      {/* Buscador */}
+      <div className="relative">
+        <Input
+          type="text"
+          placeholder="Buscar permiso..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="pl-10"
+        />
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+      </div>
+      <ScrollArea className="h-[500px]">
         {/* Listado de permisos */}
         {filteredPermisos.map((permiso) => (
-          <div key={permiso.id} className="p-4 rounded-lg shadow border">
+          <div key={permiso.id} className="p-4 rounded-lg shadow border my-2">
             <div className="flex items-center">
               <span
-                className={`w-2 h-2 rounded-full mr-2 ${
-                  permiso.activo ? "bg-green-500" : "bg-red-500"
-                }`}
+                className={`w-2 h-2 rounded-full mr-2 ${permiso.activo ? "bg-green-500" : "bg-red-500"
+                  }`}
               ></span>
               <h3 className="text-sm font-medium truncate">{permiso.nombre}</h3>
             </div>
@@ -53,7 +52,8 @@ export default function PermissionListMobile({ permisos }: PermissionListProps) 
             No se encontraron permisos.
           </p>
         )}
-      </div>
-    </ScrollArea>
+      </ScrollArea>
+    </div>
+
   );
 }

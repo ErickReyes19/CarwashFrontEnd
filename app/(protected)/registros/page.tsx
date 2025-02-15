@@ -7,6 +7,7 @@ import HeaderComponent from "@/components/HeaderComponent";
 import NoAcceso from "@/components/noAccess";
 import { DataTable } from "./components/data-table";
 import ServiceRequestListMobile from "./components/registro-list-mobile";
+import { DatePickerWithRange } from "./components/datePicker";
 
 // Este es un Server Component que obtiene los parámetros del query directamente en el servidor
 export default async function Clientes({
@@ -42,6 +43,7 @@ export default async function Clientes({
         <DataTable columns={columns} data={data} />
       </div>
       <div className="block md:hidden">
+        <DatePickerWithRange className="mb-2" />
         <ServiceRequestListMobile RegistroServicio={data} />
       </div>
     </div>

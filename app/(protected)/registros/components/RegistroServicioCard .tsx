@@ -67,7 +67,7 @@ const TotalesServiciosCard: React.FC<{ registro: RegistroServicioView }> = ({ re
         <Separator className="my-2" />
         <div className="flex justify-between font-bold">
           <span>Total General:</span>
-          <span>HNL {totalGeneral.toFixed(2)}</span>
+          <span className="text-green-600">HNL {totalGeneral.toFixed(2)}</span>
         </div>
       </CardContent>
     </Card>
@@ -102,15 +102,16 @@ const RegistroServicioCard: React.FC<{ registro: RegistroServicioView }> = ({ re
           <CardDescription>ID: {registro.id}</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-2 gap-4">
+          {/* Usamos grid con clases responsivas */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <h3 className="font-semibold">Cliente</h3>
+              <h3 className="font-semibold text-lg">Cliente</h3>
               <p>{registro.cliente.nombre} {registro.cliente.apellido}</p>
               <p>{registro.cliente.correo}</p>
               {registro.cliente.telefono && <p>{registro.cliente.telefono}</p>}
             </div>
             <div>
-              <h3 className="font-semibold">Detalles del Servicio</h3>
+              <h3 className="font-semibold text-lg">Detalles del Servicio</h3>
               <p>Fecha: {format(new Date(registro.fecha), "dd/MM/yyyy HH:mm")}</p>
               <Badge variant="outline">{registro.estadoServicio.nombre}</Badge>
               <p className="text-sm text-muted-foreground mt-1">{registro.estadoServicio.descripcion}</p>
@@ -118,6 +119,7 @@ const RegistroServicioCard: React.FC<{ registro: RegistroServicioView }> = ({ re
           </div>
         </CardContent>
       </Card>
+
 
 
 

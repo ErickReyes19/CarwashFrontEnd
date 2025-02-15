@@ -53,7 +53,7 @@ export type PermisosRol = {
 
 export type Usuario = {
   id?: string;
-  usuario1: string;
+  usuario: string;
   empleadoNombre: string;
   roleNombre: string;
   activo: boolean;
