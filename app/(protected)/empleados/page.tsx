@@ -6,6 +6,7 @@ import { DataTable } from "./components/data-table";
 import { columns } from "./components/columns";
 import HeaderComponent from "@/components/HeaderComponent";
 import NoAcceso from "@/components/noAccess";
+import EmployeeListMobile from "./components/employee-list-mobile";
 
 export default async function Empleados() {
   const sesion = await getSession();
@@ -16,7 +17,6 @@ export default async function Empleados() {
   }
 
   const data = await getEmpleados();
-
 
   if (!permisos?.includes("ver_empleados")) {
     return <NoAcceso />;
@@ -29,7 +29,13 @@ export default async function Empleados() {
         description="En este apartado podrá ver todos los empleados"
         screenName="Empleados"
       />
-      <DataTable columns={columns} data={data} />
+
+      <div className="hidden md:block">
+        <DataTable columns={columns} data={data} />
+      </div>
+      <div className="block md:hidden">
+        <EmployeeListMobile empleados={data} />
+      </div>
     </div>
   );
 }

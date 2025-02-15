@@ -6,6 +6,7 @@ import { DataTable } from "./components/data-table";
 import { columns } from "./components/columns";
 import HeaderComponent from "@/components/HeaderComponent";
 import NoAcceso from "@/components/noAccess";
+import ClientListMobile from "./components/client-list-mobile";
 
 export default async function Clientes() {
   const sesion = await getSession();
@@ -28,7 +29,13 @@ export default async function Clientes() {
         description="En este apartado podrá ver todos los clientes"
         screenName="Clientes"
       />
-      <DataTable columns={columns} data={data} />
+
+      <div className="hidden md:block">
+        <DataTable columns={columns} data={data} />
+      </div>
+      <div className="block md:hidden">
+        <ClientListMobile clientes={data} />
+      </div>
     </div>
   );
 }
