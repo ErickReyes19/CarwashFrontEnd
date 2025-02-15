@@ -96,7 +96,7 @@ export async function AppSidebar() {
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel className="flex justify-between items-center">
-            <span>Sistema ACD</span>
+            <span>Sistema Carwash</span>
             <ToggleThemeButton />
           </SidebarGroupLabel>
 

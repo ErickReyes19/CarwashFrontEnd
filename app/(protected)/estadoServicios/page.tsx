@@ -6,6 +6,7 @@ import { DataTable } from "./components/data-table";
 import { columns } from "./components/columns";
 import HeaderComponent from "@/components/HeaderComponent";
 import NoAcceso from "@/components/noAccess";
+import EstadoServicioListMobile from "./components/estado-servicio-list-mobile";
 
 export default async function EstadoServicio() {
   const sesion = await getSession();
@@ -28,7 +29,12 @@ export default async function EstadoServicio() {
         description="En este apartado podrá ver todos los estados del servicio"
         screenName="Estados de servicio"
       />
-      <DataTable columns={columns} data={data} />
+      <div className="hidden md:block">
+        <DataTable columns={columns} data={data} />
+      </div>
+      <div className="block md:hidden">
+        <EstadoServicioListMobile estadosServicio={data} />
+      </div>
     </div>
   );
 }
