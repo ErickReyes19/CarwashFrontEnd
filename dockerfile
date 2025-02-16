@@ -1,37 +1,49 @@
-# 1️⃣ Usamos una imagen base más pequeña para producción
-FROM node:20-alpine AS builder
+# -------------------------------
+# Etapa 1: Compilación (builder)
+# -------------------------------
+    FROM node:20-alpine AS builder
 
-# 2️⃣ Establecemos el directorio de trabajo
-WORKDIR /app
-
-# 3️⃣ Copiamos solo package.json y package-lock.json (evita copiar archivos innecesarios)
-COPY package*.json ./
-
-# 4️⃣ Instalamos solo dependencias de producción para reducir el tamaño
-RUN npm install --only=production
-
-# 5️⃣ Copiamos el código fuente
-COPY . .
-
-# 6️⃣ Construimos la aplicación Next.js
-RUN npm run build
-
-# -------------------------------------------
-
-# 7️⃣ Usamos una nueva imagen más ligera para el entorno de producción
-FROM node:20-alpine AS runner
-
-# 8️⃣ Establecemos el directorio de trabajo
-WORKDIR /app
-
-# 9️⃣ Copiamos solo los archivos necesarios desde la imagen `builder`
-COPY --from=builder /app/package*.json ./
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/public ./public
-
-# 1️⃣0️⃣ Exponemos el puerto 3000
-EXPOSE 3000
-
-# 1️⃣1️⃣ Ejecutamos la aplicación en modo producción
-CMD ["npm", "run", "start"]
+    # Establecer el directorio de trabajo
+    WORKDIR /app
+    
+    # Copiar únicamente los archivos de dependencias para aprovechar la caché
+    COPY package*.json ./
+    
+    # Instalar todas las dependencias (usamos npm ci si tienes package-lock.json)
+    RUN npm ci
+    
+    # Copiar el resto de los archivos del proyecto
+    # (Asegúrate de que tu .dockerignore no excluya archivos necesarios, como tsconfig.json)
+    COPY . .
+    
+    # Compilar la aplicación Next.js
+    RUN npm run build
+    
+    # Opcional: Verificar que la carpeta .next fue creada
+    RUN ls -alh .next
+    
+    # -------------------------------
+    # Etapa 2: Producción (runner)
+    # -------------------------------
+    FROM node:20-alpine AS runner
+    
+    # Establecer el directorio de trabajo
+    WORKDIR /app
+    
+    # Configurar la variable de entorno a producción
+    ENV NODE_ENV=production
+    
+    # Copiar solo lo necesario desde la etapa builder
+    COPY --from=builder /app/package*.json ./
+    COPY --from=builder /app/node_modules ./node_modules
+    COPY --from=builder /app/.next ./.next
+    COPY --from=builder /app/public ./public
+    # Si usas archivos de configuración adicionales (por ejemplo, next.config.js), cópialos también:
+    # COPY --from=builder /app/next.config.js ./
+    
+    # Exponer el puerto en el que corre la aplicación
+    EXPOSE 3000
+    
+    # Comando para ejecutar la aplicación en producción
+    CMD ["npm", "run", "start"]
+    
