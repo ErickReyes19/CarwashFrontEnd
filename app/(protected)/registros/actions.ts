@@ -46,7 +46,6 @@ export async function getRegistroServicioId(id: string) {
 }
 
 export async function getRegistroServicioIdGet(id: string) {
-  console.log("🚀 ~ getRegistroServicioIdGet ~ id:", id)
   try {
     const response = await apiService.get<RegistroServicioEdit>(`/RegistroServicio/${id}/edit`);
     return response?.data;
@@ -74,7 +73,6 @@ export async function postRegistroServicio({
       ...data,
       UsuarioId: usuarioId,
     };
-    console.log("🚀 ~ registroConUsuarioId:", registroConUsuarioId)
     const response = await apiService.post("/RegistroServicio/multiple", registroConUsuarioId);
     return response?.data;
   } catch (error) {
@@ -100,7 +98,6 @@ export async function putRegistroServicio({
       ...data,
       UsuarioId: usuarioId,
     };
-    console.log("🚀 ~ registroConUsuarioId:", registroConUsuarioId)
     const response = await apiService.put("/RegistroServicio/multiple", registroConUsuarioId);
     return response?.data;
   } catch (error) {

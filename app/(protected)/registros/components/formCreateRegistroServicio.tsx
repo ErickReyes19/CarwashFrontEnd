@@ -112,8 +112,6 @@ const form = useForm<z.infer<typeof CarwashSchema>>({
           description: "El registro ha sido actualizado.",
         });
       } else {
-        // Si es creación, llamamos a la acción POST
-        console.log("🚀 ~ onSubmit ~ data:", data)
         await postRegistroServicio({ data });
         toast({
           title: "Creación Exitosa",

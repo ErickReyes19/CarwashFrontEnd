@@ -2,17 +2,18 @@ version: '3.8'
 
 services:
   app:
-    build: .
+    build:
+      context: .  # Especifica el directorio del Dockerfile
+      target: runner  # Usa la etapa de producción del Dockerfile optimizado
     container_name: carwashfrontend-app
+    restart: unless-stopped  # Asegura que el contenedor se reinicie si falla
     ports:
-      - "8082:3000"  # Mapea el puerto 3000 del contenedor al puerto 8082 en el host
+      - "8082:3000"  # Mapea el puerto 3000 del contenedor al 8082 en el host
     environment:
-      - URLLOGIN=http://18.190.176.188:8081/api/Login
-      - URLBASE=http://18.190.176.188:8081/api
-      - AUTH_SECRET=YHLQMDLGzZ4pW9t2uFj8XQ1kNz5yJmD8L
-      - TZ=America/Tegucigalpa  # Configurar la zona horaria en UTC-6
-    volumes:
-      - /etc/localtime:/etc/localtime:ro  # Sincroniza la zona horaria con el host
+      URLLOGIN: "http://18.190.176.188:8081/api/Login"
+      URLBASE: "http://18.190.176.188:8081/api"
+      AUTH_SECRET: "YHLQMDLGzZ4pW9t2uFj8XQ1kNz5yJmD8L"
+      TZ: "America/Tegucigalpa"  # Configura la zona horaria
     networks:
       - carwash-network
 
