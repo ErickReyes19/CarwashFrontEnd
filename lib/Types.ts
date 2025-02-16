@@ -139,3 +139,11 @@ export type RegistroServicio = {
   estadoServicioNombre: string;
   fecha:                Date;
 }
+
+
+
+
+export type EarningsData = {
+  fecha: string
+  ganancias: number
+}
