@@ -8,13 +8,20 @@ import { RegistroServicio } from "@/lib/Types";
 export async function getRegistros(fechaDesde?: string, fechaHasta?: string): Promise<RegistroServicio[]> {
   try {
     const params: Record<string, string> = {};
-    if (fechaDesde) {
-      params.fechaDesde = fechaDesde;
-    }
 
-    if (fechaHasta) {
-      params.fechaHasta = fechaHasta;
+    // Si no se pasa fechaDesde, usar la fecha actual
+    if (!fechaDesde) {
+      const today = new Date();
+      fechaDesde = today.toISOString().split('T')[0]; // Formato yyyy-MM-dd
     }
+    params.fechaDesde = fechaDesde;
+
+    // Si no se pasa fechaHasta, usar la fecha actual
+    if (!fechaHasta) {
+      const today = new Date();
+      fechaHasta = today.toISOString().split('T')[0]; // Formato yyyy-MM-dd
+    }
+    params.fechaHasta = fechaHasta;
 
     const response = await apiService.get<RegistroServicio[]>("/RegistroServicio/summary", {
       params,
