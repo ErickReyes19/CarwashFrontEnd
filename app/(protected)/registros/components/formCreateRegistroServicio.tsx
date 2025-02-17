@@ -140,13 +140,14 @@ const form = useForm<z.infer<typeof CarwashSchema>>({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {/* Cliente */}
             <FormField
+            disabled={isUpdate}
               control={form.control}
               name="clienteId"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Cliente</FormLabel>
                   <FormControl>
-                    <Select onValueChange={field.onChange} value={field.value}>
+                    <Select onValueChange={field.onChange} value={field.value} disabled={isUpdate}>
                       <SelectTrigger>
                         <SelectValue placeholder="Selecciona un cliente" />
                       </SelectTrigger>

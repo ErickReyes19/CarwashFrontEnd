@@ -2,7 +2,40 @@
 import { getSessionUsuario } from "@/auth";
 import apiService from "../../../lib/server";
 import { CambiarEstadoType, RegistroServicioEdit, RegistroServicioPost, RegistroServicioView } from "./components/types";
-import { RegistroServicio } from "@/lib/Types";
+import { RegistroServicio } from "@/lib/Types";  // Asegúrate de importar el template de correo
+import { Resend } from 'resend';
+import { EmailTemplate } from "./components/facturaPDF";
+
+export async function sendInvoice(registro: any, emailCliente: string) {
+  console.log("EN´tro mamalon")
+  try {
+    // Generar el contenido del correo usando el template
+    const emailContent = EmailTemplate({
+      firstName: registro.cliente.nombre,
+      registro,
+    });
+
+    // Enviar el correo con Resend
+    const resend = new Resend(process.env.RESEND_API_KEY);
+    const { data, error } = await resend.emails.send({
+      from: 'Acme <onboarding@resend.dev>',
+      // to: [emailCliente],
+      to: 'erickjosepineda33@gmail.com',
+      subject: `Factura - ${registro.id}`,
+      react: emailContent,
+    });
+
+    if (error) {
+      console.error("Error al enviar el correo:", error);
+      throw new Error('No se pudo enviar el correo');
+    }
+
+    console.log('Correo enviado con éxito:', data);
+  } catch (error) {
+    console.error("Error al generar o enviar el correo:", error);
+    throw error;
+  }
+}
 
 
 export async function getRegistros(fechaDesde?: string, fechaHasta?: string): Promise<RegistroServicio[]> {

@@ -1,61 +1,95 @@
-'use client';
-import { Bar, BarChart, XAxis, YAxis, ResponsiveContainer } from "recharts";
-import { format, parseISO } from "date-fns";
+'use client'
 
+import { TrendingUp } from "lucide-react"
+import { Line, LineChart, XAxis, YAxis, CartesianGrid } from "recharts"
 import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@/components/ui/card"
 import {
-  ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart";
-import { EarningsData } from "@/lib/Types";
-
-interface EarningsChartProps {
-  data: EarningsData[];
-}
+} from "@/components/ui/chart"
+import { EarningsData } from "@/lib/Types"
+import { formatLempiras } from "@/lib/utils"
+import { format, parseISO } from "date-fns"
 
 const chartConfig = {
   ganancias: {
     label: "Ganancias",
-    color: "#4CAF50", // Color verde para las ganancias
+    color: "hsl(var(--chart-1))",
   },
-} satisfies ChartConfig;
+} 
 
-export default function EarningsChart({ data }: EarningsChartProps) {
+interface EarningsChartProps {
+  data: EarningsData[]
+}
+
+export function EarningsChart({ data }: EarningsChartProps) {
   return (
-    <Card className="w-full max-w-3xl mx-auto">
+    <Card className="w-full">
       <CardHeader>
-        <CardTitle>Ganancias Diarias</CardTitle>
-        <CardDescription>Visualización de ganancias por fecha</CardDescription>
+        <CardTitle>Ganancias por Fecha</CardTitle>
+        <CardDescription>Ingresos diarios</CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig}>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={data}>
-              <XAxis
-                dataKey="fecha"
-                tickFormatter={(value) => format(parseISO(value), "dd MMM")}
-                tickLine={false}
-                axisLine={false}
-              />
-              <YAxis tickFormatter={(value) => `HNL${value}`} tickLine={false} axisLine={false} />
-              <Bar
-                dataKey="ganancias"
-                fill={chartConfig.ganancias.color} // Color verde para las barras
-                radius={[4, 4, 0, 0]}
-              />
-              <ChartTooltip content={<ChartTooltipContent />} />
-            </BarChart>
-          </ResponsiveContainer>
+        <ChartContainer className="w-full"
+        style={{ height: "200px" }} // Altura fija igual al primer gráfico
+        config={chartConfig}>
+          <LineChart
+
+            data={data}
+            margin={{
+              top: 10,
+              left: 12,
+              right: 12,
+              bottom: 5,
+            }}
+          >
+            <CartesianGrid strokeDasharray="3 3" vertical={true} />
+            <XAxis
+              dataKey="fecha"
+              tickLine={false}
+              axisLine={false}
+              tickMargin={8}
+              tickFormatter={(value) => format(parseISO(value), "dd MMM")}
+            />
+            <YAxis
+              tickLine={false}
+              axisLine={false}
+              tickFormatter={(value) => formatLempiras(value)}
+            />
+            <ChartTooltip
+              cursor={{ strokeDasharray: "3 3" }}
+              content={
+                <ChartTooltipContent
+                  formatter={(value) => formatLempiras(value as number)}
+                />
+              }
+            />
+            <Line
+              type="linear"
+              dataKey="ganancias"
+              stroke={chartConfig.ganancias.color}
+              strokeWidth={2}
+              dot={false}
+            />
+          </LineChart>
         </ChartContainer>
       </CardContent>
+      <CardFooter className="flex-col items-start gap-2 text-sm">
+        <div className="flex gap-2 font-medium leading-none">
+          Trending up by 5.2% este mes <TrendingUp className="h-4 w-4" />
+        </div>
+        <div className="leading-none text-muted-foreground">
+          Muestra ganancias diarias
+        </div>
+      </CardFooter>
     </Card>
-  );
+  )
 }

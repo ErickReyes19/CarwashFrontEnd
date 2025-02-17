@@ -147,3 +147,25 @@ export type EarningsData = {
   fecha: string
   ganancias: number
 }
+
+export type GananciasDia = {
+  message: string;
+  total:   number;
+}
+export type GananciaRango = {
+  message: string;
+  total:   number;
+}
+
+
+
+export type ServicioGanancias = {
+  message: string;
+  data:    ServicioGanancia[];
+}
+
+export type ServicioGanancia = {
+  nombreServicio: string;
+  cantidad:       number;
+  ganancias:      number;
+}

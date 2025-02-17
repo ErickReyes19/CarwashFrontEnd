@@ -1,9 +1,12 @@
+'use client';
 import { format } from "date-fns"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Separator } from "@/components/ui/separator"
 import { RegistroServicioView } from "./types"
+import {sendInvoice} from "../actions";
+import { Button } from "@/components/ui/button";
 
 // Helper para obtener iniciales
 const getInitials = (name: string) => {
@@ -94,8 +97,25 @@ const VehiculoCard: React.FC<{ vehiculo: RegistroServicioView["vehiculos"][0] }>
 
 // Componente principal
 const RegistroServicioCard: React.FC<{ registro: RegistroServicioView }> = ({ registro }) => {
+
+  const handleEnviarCorreo = async () => {
+    try {
+      // Enviar el correo a la dirección del cliente
+      await sendInvoice(registro, registro.cliente.correo);
+      alert("Correo enviado con éxito");
+    } catch (error) {
+      console.error("Error al enviar el correo:", error);
+      alert("Hubo un problema al enviar el correo");
+    }
+  };
+
   return (
     <div className="space-y-6">
+      <div className="mt-4">
+        <Button onClick={handleEnviarCorreo} className="btn btn-primary">
+          Enviar Factura por Correo
+        </Button>
+      </div>
       <Card>
         <CardHeader>
           <CardTitle>Registro de Servicio</CardTitle>

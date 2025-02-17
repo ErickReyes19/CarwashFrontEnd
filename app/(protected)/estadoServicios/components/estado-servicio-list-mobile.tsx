@@ -4,7 +4,7 @@ import { useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Pencil, FileText, Search } from "lucide-react"
+import { Pencil, FileText, Search, Plus } from "lucide-react"
 import { EstadoServicio } from "@/lib/Types"
 
 
@@ -23,6 +23,12 @@ export default function EstadoServicioListMobile({ estadosServicio  }: EstadoSer
 
   return (
     <div className="space-y-4">
+      <Link href={`/estadoServicios/create`} className="w-full md:w-auto">
+        <Button className="w-full md:w-auto flex items-center gap-2">
+          Nuevo estado
+          <Plus />
+        </Button>
+      </Link>
       <div className="relative">
         <Input
           type="text"

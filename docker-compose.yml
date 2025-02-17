@@ -8,6 +8,7 @@ services:
       - URLLOGIN=http://18.190.176.188:8081/api/Login
       - URLBASE=http://18.190.176.188:8081/api
       - AUTH_SECRET=YHLQMDLGzZ4pW9t2uFj8XQ1kNz5yJmD8L
+      - RESEND_API_KEY=re_VJcbJ8tV_MQjvz15tPZYLxKkhacAKYTv2
     networks:
       - carwash-network
 

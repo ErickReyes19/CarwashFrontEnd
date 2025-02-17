@@ -82,7 +82,7 @@ export type ClienteRegistro = {
   export type ServicioRegistro = {
     id: string;
     nombre: string;
-    precio: number;
+    precio: string;
   };
   
 
@@ -92,7 +92,7 @@ export type ClienteRegistro = {
   // Tipos para los servicios de cada vehículo
 export type ServicioPost = {
   servicioId: string;
-  precio: number;
+  precio: string;
 }
 
 // Tipo para los vehículos que serán parte del registro de servicio
@@ -133,7 +133,7 @@ export type VehiculoEdit = {
 
 export type ServicioEdit = {
   servicioId: string;
-  precio: number;
+  precio: string;
 };
 
 

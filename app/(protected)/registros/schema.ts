@@ -19,7 +19,7 @@ export const CarwashSchema = z.object({
             z.object({
               servicioId: z.string().uuid({ message: "Servicio inválido" }),
               precio: z
-                .number({ invalid_type_error: "El precio debe ser un número" })
+                .string({ invalid_type_error: "El precio debe ser un número" })
                 .min(0, "El precio debe ser mayor o igual a 0"),
             })
           )
