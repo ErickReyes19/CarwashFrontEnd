@@ -10,17 +10,17 @@ import ClientListMobile from "./components/client-list-mobile";
 
 export default async function Clientes() {
   const sesion = await getSession();
-  const permisos = await getSessionPermisos();
-
+  
   if (!sesion) {
     redirect("/");
   }
-
-  const data = await getClientes();
-
+  
+  const permisos = await getSessionPermisos();
+  
   if (!permisos?.includes("ver_clientes")) {
     return <NoAcceso />;
   }
+  const data = await getClientes();
 
   return (
     <div className="container mx-auto py-2">

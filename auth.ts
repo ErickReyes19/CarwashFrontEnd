@@ -123,7 +123,6 @@ export const getToken = async () => {
 
 export const signOut = async () => {
     cookies().delete("session");
-    return { success: "Sesión cerrada correctamente" };
 };
 
 

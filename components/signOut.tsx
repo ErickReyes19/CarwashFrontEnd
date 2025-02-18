@@ -5,7 +5,6 @@ import { signOut } from "@/auth";
 const LogoutButton = () => {
     const handleLogout = async () => {
         await signOut();
-        window.location.href = "/";  // Redirigir al login después del logout
     };
 
     return (
