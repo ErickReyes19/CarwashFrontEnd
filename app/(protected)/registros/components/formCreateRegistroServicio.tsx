@@ -29,6 +29,7 @@ import {
   ClienteRegistro,
   EmpleadoRegistro,
   EstadoRegistro,
+  PagoPost,
   ServicioRegistro,
   VehiculoRegistro,
 } from "./types";
@@ -36,6 +37,7 @@ import { VehiculoItem } from "./vehiculoForm";
 import { obtenerVehiculoPorCliente } from "../../vehiculos/actions";
 import { CheckboxEmpleados } from "./CheckBoxEmpleados";
 import { postRegistroServicio, putRegistroServicio } from "../actions";
+import { PagoItem } from "./selectPagot";
 
 interface CarwashFormProps {
   isUpdate?: boolean;
@@ -44,6 +46,7 @@ interface CarwashFormProps {
   estados: EstadoRegistro[];
   empleados: EmpleadoRegistro[];
   servicios: ServicioRegistro[];
+  pagos: PagoPost[];
 }
 
 export function CarwashForm({
@@ -53,22 +56,23 @@ export function CarwashForm({
   estados,
   empleados,
   servicios,
+  pagos,
 }: CarwashFormProps) {
-
   const router = useRouter();
   const { toast } = useToast();
 
-const form = useForm<z.infer<typeof CarwashSchema>>({
-  resolver: zodResolver(CarwashSchema),
-  defaultValues: initialData
-    ? { ...initialData, empleados: initialData.empleados  } 
-    : {
-        clienteId: "",
-        estadoServicioId: "",
-        empleados: [],
-        vehiculos: [],
-      },
-});
+  const form = useForm<z.infer<typeof CarwashSchema>>({
+    resolver: zodResolver(CarwashSchema),
+    defaultValues: initialData
+      ? { ...initialData, pagos: initialData.pagos || [] }
+      : {
+          clienteId: "",
+          estadoServicioId: "",
+          empleados: [],
+          vehiculos: [],
+          pagos: [],
+        },
+  });
 
   const [vehiculos, setVehiculos] = useState<VehiculoRegistro[]>([]);
 
@@ -100,6 +104,16 @@ const form = useForm<z.infer<typeof CarwashSchema>>({
   } = useFieldArray({
     control: form.control,
     name: "vehiculos",
+  });
+
+  // Dentro del componente CarwashForm, después de la sección de vehículos:
+  const {
+    fields: pagosFields,
+    append: appendPago,
+    remove: removePago,
+  } = useFieldArray({
+    control: form.control,
+    name: "pagos",
   });
 
   async function onSubmit(data: z.infer<typeof CarwashSchema>) {
@@ -140,14 +154,18 @@ const form = useForm<z.infer<typeof CarwashSchema>>({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {/* Cliente */}
             <FormField
-            disabled={isUpdate}
+              disabled={isUpdate}
               control={form.control}
               name="clienteId"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Cliente</FormLabel>
                   <FormControl>
-                    <Select onValueChange={field.onChange} value={field.value} disabled={isUpdate}>
+                    <Select
+                      onValueChange={field.onChange}
+                      value={field.value}
+                      disabled={isUpdate}
+                    >
                       <SelectTrigger>
                         <SelectValue placeholder="Selecciona un cliente" />
                       </SelectTrigger>
@@ -211,7 +229,9 @@ const form = useForm<z.infer<typeof CarwashSchema>>({
                       }
                     />
                   </FormControl>
-                  <FormDescription>Selecciona uno o varios empleados.</FormDescription>
+                  <FormDescription>
+                    Selecciona uno o varios empleados.
+                  </FormDescription>
                   {fieldState.error && (
                     <FormMessage>{fieldState.error.message}</FormMessage>
                   )}
@@ -240,6 +260,25 @@ const form = useForm<z.infer<typeof CarwashSchema>>({
               onClick={() => appendVehiculo({ vehiculoId: "", servicios: [] })}
             >
               Agregar Vehículo
+            </Button>
+          </div>
+
+          {/* Sección de Pagos */}
+          <div className="space-y-6 mt-8">
+            <h3 className="text-lg font-semibold">Pagos</h3>
+            {pagosFields.map((pagoField, pagoIndex) => (
+              <PagoItem
+                key={pagoField.id}
+                control={form.control}
+                index={pagoIndex}
+                removePago={removePago}
+              />
+            ))}
+            <Button
+              type="button"
+              onClick={() => appendPago({ metodo_pago: "", monto: 0 })}
+            >
+              Agregar Pago
             </Button>
           </div>
 

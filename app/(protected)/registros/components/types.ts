@@ -90,30 +90,40 @@ export type ClienteRegistro = {
 
 
   // Tipos para los servicios de cada vehículo
-export type ServicioPost = {
-  servicioId: string;
-  precio: string;
-}
+  export type ServicioPost = {
+    servicioId: string;
+    precio: number;
+  }
+  
+  // Tipo para los vehículos que serán parte del registro de servicio
+  export type VehiculoPost = {
+    vehiculoId: string;
+    servicios: ServicioPost[];
+  }
+  
+  // Tipo para los pagos
+  export type PagoPost = {
+    metodo_pago: string;
+    monto: number;
+  }
+  
+  // Tipo para el DTO que será enviado con la acción
+  export type RegistroServicioPost = {
+    clienteId: string;
+    estadoServicioId: string;
+    UsuarioId: string | null;
+    empleados: string[]; // ID de los empleados seleccionados
+    vehiculos: VehiculoPost[]; // Lista de vehículos y servicios asociados
+    pagos: PagoPost[]; // Lista de pagos asociados
+  }
 
-// Tipo para los vehículos que serán parte del registro de servicio
-export type VehiculoPost = {
-  vehiculoId: string;
-  servicios: ServicioPost[];
-}
 
-// Tipo para el DTO que será enviado con la acción
-export type RegistroServicioPost = {
-  clienteId: string;
-  estadoServicioId: string;
-  UsuarioId: string | null;
-  empleados: string[]; // ID de los empleados seleccionados
-  vehiculos: VehiculoPost[]; // Lista de vehículos y servicios asociados
-}
-export type CambiarEstadoType = {
-  RegistroServicioId: string;
-  EstadoServicioId: string;
-}
-
+  
+  export type CambiarEstadoType = {
+    RegistroServicioId: string;
+    EstadoServicioId: string;
+  }
+  
 
 
 
