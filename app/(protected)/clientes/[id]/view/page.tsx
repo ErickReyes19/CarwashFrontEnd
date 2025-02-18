@@ -1,8 +1,22 @@
+import { getSession, getSessionPermisos } from "@/auth";
 import { getClienteByIdView } from "../../actions";
 import ClientInfoComponent from "../../components/clienteView";
+import { redirect } from "next/navigation";
+import NoAcceso from "@/components/noAccess";
 
 
 export default async function ClientInfoPage({ params }: { params: { id: string } }) {
+  const sesion = await getSession();
+  const permisos = await getSessionPermisos();
+  if (!sesion) {
+    redirect("/");
+  }
+
+  if (!permisos?.includes("view_cliente")) {
+    return <NoAcceso />;
+  }
+
+
   const clientInfo = await getClienteByIdView(params.id);
 
   if (!clientInfo) {

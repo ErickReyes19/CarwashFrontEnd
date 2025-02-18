@@ -10,16 +10,16 @@ import { getRolesActivos } from "../../roles/actions";
 
 export default async function Create() {
   const sesion = await getSession();
-  const permisos = await getSessionPermisos();
-
+  
   if (!sesion) {
     redirect("/");
   }
-
+  
+  const permisos = await getSessionPermisos();
   if (!permisos?.includes("crear_usuario")) {
     return <NoAcceso />;
   }
-
+  
   const initialData = {
     usuario: "",
     contrasena: "",

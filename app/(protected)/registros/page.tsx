@@ -16,10 +16,13 @@ export default async function Clientes({
   searchParams: { from: string; to: string };
 }) {
   const sesion = await getSession();
-  const permisos = await getSessionPermisos();
-
+  
   if (!sesion) {
     redirect("/");
+  }
+  const permisos = await getSessionPermisos();
+  if (!permisos?.includes("ver_registros")) {
+    return <NoAcceso />;
   }
 
   const from = searchParams.from || new Date().toISOString().split("T")[0];
@@ -27,9 +30,7 @@ export default async function Clientes({
 
   const data = await getRegistros(from, to);
 
-  if (!permisos?.includes("Ver_registros")) {
-    return <NoAcceso />;
-  }
+
 
   return (
     <div className="container mx-auto py-2">

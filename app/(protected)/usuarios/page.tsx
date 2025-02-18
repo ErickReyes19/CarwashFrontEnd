@@ -10,18 +10,18 @@ import UserListMobile from "./components/usuario-list-mobile";
 
 export default async function EstadoServicio() {
   const sesion = await getSession();
-  const permisos = await getSessionPermisos();
-
+  
   if (!sesion) {
     redirect("/");
   }
-
-  const data = await getUsuarios();
-
-  if (!permisos?.includes("Ver_usuarios")) {
+  
+  const permisos = await getSessionPermisos();
+  
+  if (!permisos?.includes("ver_usuarios")) {
     return <NoAcceso />;
   }
-
+  
+  const data = await getUsuarios();
   return (
     <div className="container mx-auto py-2">
       <HeaderComponent

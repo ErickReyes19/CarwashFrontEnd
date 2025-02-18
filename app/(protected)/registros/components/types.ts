@@ -6,6 +6,12 @@ export type RegistroServicioView = {
     fecha:          Date;
     vehiculos:      VehiculoElement[];
     empleados:      Empleado[];
+    pagos:           Pagos[];
+}
+
+export type Pagos = {
+  metodo_pago: string;
+  monto:       number;
 }
 
 export type Cliente = {
@@ -134,6 +140,7 @@ export type RegistroServicioEdit = {
   UsuarioId: string | null; // Se cambió de usuarioId → UsuarioId (respetando la API)
   empleados: string[]; // Se cambió de empleados → Empleados (respetando la API)
   vehiculos: VehiculoEdit[];
+  pagos: PagoPost[];
 };
 
 export type VehiculoEdit = {

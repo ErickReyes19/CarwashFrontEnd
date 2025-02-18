@@ -73,7 +73,7 @@ export function EarningsChart({ data }: EarningsChartProps) {
               }
             />
             <Line
-              type="linear"
+              type="basis"
               dataKey="ganancias"
               stroke={chartConfig.ganancias.color}
               strokeWidth={2}
@@ -82,14 +82,6 @@ export function EarningsChart({ data }: EarningsChartProps) {
           </LineChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="flex gap-2 font-medium leading-none">
-          Trending up by 5.2% este mes <TrendingUp className="h-4 w-4" />
-        </div>
-        <div className="leading-none text-muted-foreground">
-          Muestra ganancias diarias
-        </div>
-      </CardFooter>
     </Card>
   )
 }

@@ -41,7 +41,7 @@ export function PieChartServicios({ servicioGanancia }: PieChartServiciosProps) 
           config={{}}
         >
           <PieChart>
-            <ChartTooltip content={<ChartTooltipContent hideLabel />} />
+            <ChartTooltip content={<ChartTooltipContent hideLabel />}  />
             <Pie 
               data={chartData} 
               dataKey="value" 

@@ -18,7 +18,7 @@ export default async function EstadoServicio() {
 
   const data = await getEstadoServicios();
 
-  if (!permisos?.includes("Ver Clientes")) {
+  if (!permisos?.includes("ver_estados_servicios")) {
     return <NoAcceso />;
   }
 

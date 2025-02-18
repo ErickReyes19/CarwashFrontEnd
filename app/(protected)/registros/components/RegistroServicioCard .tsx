@@ -1,13 +1,14 @@
 'use client';
 import { format } from "date-fns"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Separator } from "@/components/ui/separator"
 import { RegistroServicioView } from "./types"
 import {sendInvoice} from "../actions";
 import { Button } from "@/components/ui/button";
-
+import { useToast } from "@/hooks/use-toast";
+import { formatLempiras } from "@/lib/utils";
 // Helper para obtener iniciales
 const getInitials = (name: string) => {
   return name
@@ -29,13 +30,13 @@ const ServiciosList: React.FC<{ servicios: Array<{ id: string; servicioNombre: s
         {servicios.map((servicio) => (
           <li key={servicio.id} className="flex justify-between">
             <span>{servicio.servicioNombre}</span>
-            <span className="font-semibold">HNL {servicio.precio.toFixed(2)}</span>
+            <span className="font-semibold"> {formatLempiras(Number(servicio.precio))}</span>
           </li>
         ))}
       </ul>
       <div className="mt-2 border-t pt-2 flex justify-between font-bold">
         <span>Total:</span>
-        <span>HNL {total.toFixed(2)}</span>
+        <span> {formatLempiras(Number(total))}</span>
       </div>
     </div>
   );
@@ -63,14 +64,14 @@ const TotalesServiciosCard: React.FC<{ registro: RegistroServicioView }> = ({ re
           {Object.entries(totalesPorServicio).map(([servicio, total]) => (
             <li key={servicio} className="flex justify-between">
               <span>{servicio}</span>
-              <span className="font-semibold">HNL {total.toFixed(2)}</span>
+              <span className="font-semibold"> {formatLempiras(total)}</span>
             </li>
           ))}
         </ul>
         <Separator className="my-2" />
         <div className="flex justify-between font-bold">
           <span>Total General:</span>
-          <span className="text-green-600">HNL {totalGeneral.toFixed(2)}</span>
+          <span className="text-green-600"> {formatLempiras(totalGeneral)}</span>
         </div>
       </CardContent>
     </Card>
@@ -97,15 +98,21 @@ const VehiculoCard: React.FC<{ vehiculo: RegistroServicioView["vehiculos"][0] }>
 
 // Componente principal
 const RegistroServicioCard: React.FC<{ registro: RegistroServicioView }> = ({ registro }) => {
-
+  const { toast } = useToast();
   const handleEnviarCorreo = async () => {
     try {
       // Enviar el correo a la dirección del cliente
       await sendInvoice(registro, registro.cliente.correo);
-      alert("Correo enviado con éxito");
+      toast({
+        title: "Correo enviado con exito",
+        description:   `Se envio correctamente al correo ${registro.cliente.correo.substring(0,5)}****.`,
+      });
     } catch (error) {
       console.error("Error al enviar el correo:", error);
-      alert("Hubo un problema al enviar el correo");
+      toast({
+        title: "Error al enviar el correo",
+        description: "Ocurrió un error al enviar el correo, por favor intenta de nuevo.",
+      });
     }
   };
 
@@ -149,8 +156,22 @@ const RegistroServicioCard: React.FC<{ registro: RegistroServicioView }> = ({ re
           <VehiculoCard key={vehiculo.id} vehiculo={vehiculo} />
         ))}
       </div>
+      <Card className="border p-4">
+      <CardHeader>
+        <h3 className="text-lg font-bold">Detalles de Pagos</h3>
+      </CardHeader>
+      <CardContent>
+        {registro.pagos.map((pago, index) => (
+          <div key={index} className="flex justify-between border-b py-2">
+            <span className="font-bold">{pago.metodo_pago}</span>
+            <span className="font-bold">{formatLempiras(pago.monto)}</span>
+          </div>
+        ))}
+      </CardContent>
+    </Card>
       {/* Totales de Servicios */}
       <TotalesServiciosCard registro={registro} />
+      {/* Empleados */}
       {/* Empleados */}
       <Card>
         <CardHeader>

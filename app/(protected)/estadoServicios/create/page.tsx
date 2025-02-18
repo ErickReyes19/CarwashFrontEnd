@@ -15,7 +15,7 @@ export default async function Create() {
   }
 
   // Verifica permisos para crear empleados
-  if (!permisos?.includes("crear_empleados")) {  // Cambiado de "Crear Clientes" a "Crear Empleados"
+  if (!permisos?.includes("crear_estado_servicios")) {  // Cambiado de "Crear Clientes" a "Crear Empleados"
     return <NoAcceso />;
   }
 

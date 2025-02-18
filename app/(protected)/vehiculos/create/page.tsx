@@ -9,15 +9,15 @@ import { colores, marcas } from "@/lib/data";
 
 export default async function Create() {
   const sesion = await getSession();
-  const permisos = await getSessionPermisos();
-
+  
   // Redirige si no hay sesión
   if (!sesion) {
     redirect("/");
   }
-
+  
+  const permisos = await getSessionPermisos();
   // Verifica permisos para crear empleados
-  if (!permisos?.includes("crear_empleados")) {  // Cambiado de "Crear Clientes" a "Crear Empleados"
+  if (!permisos?.includes("crear_vehiculos")) {  // Cambiado de "Crear Clientes" a "Crear Empleados"
     return <NoAcceso />;
   }
   const clientes = await getClientesActivos();

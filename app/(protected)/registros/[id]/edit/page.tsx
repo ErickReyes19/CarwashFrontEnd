@@ -5,10 +5,21 @@ import { getClientesActivos } from "@/app/(protected)/clientes/actions";
 import { getEstadoServiciosActivos } from "@/app/(protected)/estadoServicios/actions";
 import { getEmpeleadosActivos } from "@/app/(protected)/empleados/actions";
 import { getServiciosActivos } from "@/app/(protected)/servicios/actions";
+import { getSession, getSessionPermisos } from "@/auth";
+import { redirect } from "next/navigation";
+import NoAcceso from "@/components/noAccess";
 
 export default async function EditCarwashPage({ params }: { params: { id: string } }) {
   try {
-    // Obtener datos necesarios para el formulario
+      const sesion = await getSession();
+      
+      if (!sesion) {
+        redirect("/");
+      }
+      const permisos = await getSessionPermisos();
+      if (!permisos?.includes("editar_registro")) {
+        return <NoAcceso />;
+      }
 
       const clientes    = await getClientesActivos();
       const estados     = await getEstadoServiciosActivos();
@@ -30,7 +41,16 @@ export default async function EditCarwashPage({ params }: { params: { id: string
         <h1 className="text-2xl font-bold mb-4">Editar Registro de Carwash</h1>
         <CarwashForm
           isUpdate={true}
-          initialData={initialData}
+          initialData={{
+            ...initialData,
+            vehiculos: initialData.vehiculos.map((vehiculo: any) => ({
+              ...vehiculo,
+              servicios: vehiculo.servicios.map((servicio: any) => ({
+                ...servicio,
+                precio: Number(servicio.precio)
+              }))
+            }))
+          }}
           clientes={clientes}
           estados={estados}
           empleados={empleados}

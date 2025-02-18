@@ -10,18 +10,17 @@ import RoleListMobile from "./components/roles-list-mobile";
 
 export default async function EstadoServicio() {
   const sesion = await getSession();
-  const permisos = await getSessionPermisos();
 
   if (!sesion) {
     redirect("/");
   }
 
-  const data = await getRolesPermisos();
-
-  if (!permisos?.includes("Ver Clientes")) {
+  const permisos = await getSessionPermisos();
+  if (!permisos?.includes("ver_roles")) {
     return <NoAcceso />;
   }
 
+  const data = await getRolesPermisos();
   return (
     <div className="container mx-auto py-2">
       <HeaderComponent

@@ -8,20 +8,20 @@ import { getPermisosActivos } from "../../permisos/actions";
 
 export default async function Create() {
   const sesion = await getSession();
-  const permisos = await getSessionPermisos();
-  const permisosData = await getPermisosActivos();
-
+  
   // Redirige si no hay sesión
   if (!sesion) {
     redirect("/");
   }
-
+  
   // Verifica permisos para crear empleados
-  if (!permisos?.includes("crear_rol")) {
+  const permisos = await getSessionPermisos();
+  if (!permisos?.includes("crear_roles")) {
     // Cambiado de "Crear Clientes" a "Crear Empleados"
     return <NoAcceso />;
   }
-
+  
+  const permisosData = await getPermisosActivos();
   // Inicializamos con un valor específico para genero
   const initialData = {
     nombre: "",

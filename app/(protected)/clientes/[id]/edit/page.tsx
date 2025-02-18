@@ -15,7 +15,7 @@ export default async function Edit({ params }: { params: { id: string } }) {
     redirect("/");
   }
 
-  if (!permisos?.includes("Editar Clientes")) {
+  if (!permisos?.includes("editar_cliente")) {
     return <NoAcceso />;
   }
 

@@ -9,14 +9,14 @@ import { describe } from "node:test";
 
 export default async function Create() {
   const sesion = await getSession();
-  const permisos = await getSessionPermisos();
-
+  
   // Redirige si no hay sesión
   if (!sesion) {
     redirect("/");
   }
-
-  if (!permisos?.includes("Crear_Servicio")) {
+  
+  const permisos = await getSessionPermisos();
+  if (!permisos?.includes("crear_servicios")) {
     return <NoAcceso />;
   }
 

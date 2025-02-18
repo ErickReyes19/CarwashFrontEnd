@@ -169,3 +169,16 @@ export type ServicioGanancia = {
   cantidad:       number;
   ganancias:      number;
 }
+
+
+export type Cierre = {
+  id:          string;
+  fecha:       Date;
+  total:       number;
+  metodosPago: MetodosPago[];
+}
+
+export type MetodosPago = {
+  metodoPago: string;
+  total:      number;
+}

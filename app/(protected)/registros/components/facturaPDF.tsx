@@ -17,7 +17,7 @@ export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({
                 {/* Encabezado */}
                 <div style={{ marginBottom: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <div>
-                        <h1 style={{ fontSize: '24px', fontWeight: 'bold', color: '#333' }}>Factura de Servicio</h1>
+                        <h1 style={{ fontSize: '24px', fontWeight: 'bold', color: '#333' }}>Recibo del servicio</h1>
                         <p style={{ fontSize: '12px', color: '#777' }}>
                             <strong>ID:</strong> {registro.id}
                         </p>

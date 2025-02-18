@@ -9,12 +9,12 @@ import RegistroServicioCard from "../../components/RegistroServicioCard "
 export default async function Edit({ params }: { params: { id: string } }) {
   // Verificar si hay una sesión activa
   const sesion = await getSession()
-  const permisos = await getSessionPermisos()
   if (!sesion) {
     redirect("/")
   }
-
-  if (!permisos?.includes("ver_Registro")) {
+  
+  const permisos = await getSessionPermisos()
+  if (!permisos?.includes("view_registro")) {
     return <NoAcceso />
   }
 

@@ -85,7 +85,6 @@ export async function getServiciosRango(fechaDesde?: string, fechaHasta?: string
     const response = await apiService.get<ServicioGanancias>("reporte/servicios-resumen", {
       params,
     });
-    console.log("🚀 ~ getServiciosRango ~ response:", response)
     return response?.data || [];
   } catch (error) {
     console.error("Error al obtener los registros:", error);

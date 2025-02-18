@@ -9,12 +9,12 @@ import NoAcceso from "@/components/noAccess";
 
 export default async function Edit({ params }: { params: { id: string } }) {
   const sesion = await getSession();
-  const permisos = await getSessionPermisos();
   if (!sesion) {
     redirect("/");
   }
-
-  if (!permisos?.includes("Editar_servicio")) {
+  
+  const permisos = await getSessionPermisos();
+  if (!permisos?.includes("editar_servicios")) {
     return <NoAcceso />;
   }
 

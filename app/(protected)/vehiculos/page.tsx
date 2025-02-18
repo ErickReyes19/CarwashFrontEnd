@@ -10,18 +10,18 @@ import VehicleListMobile from "./components/vehiculos-list-mobile";
 
 export default async function Clientes() {
   const sesion = await getSession();
-  const permisos = await getSessionPermisos();
-
+  
   if (!sesion) {
     redirect("/");
   }
-
-  const data = await getVehiculos();
-
-  if (!permisos?.includes("Ver Clientes")) {
+  
+  
+  const permisos = await getSessionPermisos();
+  if (!permisos?.includes("ver_vehiculos")) {
     return <NoAcceso />;
   }
-
+  
+  const data = await getVehiculos();
   return (
     <div className="container mx-auto py-2">
       <HeaderComponent

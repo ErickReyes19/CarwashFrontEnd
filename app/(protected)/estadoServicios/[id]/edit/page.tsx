@@ -15,7 +15,7 @@ export default async function Edit({ params }: { params: { id: string } }) {
     redirect("/");
   }
 
-  if (!permisos?.includes("crear_empleados")) {
+  if (!permisos?.includes("editar_estados_servicios")) {
     return <NoAcceso />;
   }
 

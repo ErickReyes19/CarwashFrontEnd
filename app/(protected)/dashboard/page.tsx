@@ -25,7 +25,7 @@ export default async function Clientes({
     redirect("/");
   }
 
-  if (!permisos?.includes("Ver_registros")) {
+  if (!permisos?.includes("ver_dashboard")) {
     return <NoAcceso />;
   }
 

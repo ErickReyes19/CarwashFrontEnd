@@ -16,7 +16,7 @@ export default async function Edit({ params }: { params: { id: string } }) {
     redirect("/");
   }
 
-  if (!permisos?.includes("editar_rol")) {
+  if (!permisos?.includes("editar_roles")) {
     return <NoAcceso />;
   }
 

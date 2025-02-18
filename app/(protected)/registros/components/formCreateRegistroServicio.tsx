@@ -46,7 +46,6 @@ interface CarwashFormProps {
   estados: EstadoRegistro[];
   empleados: EmpleadoRegistro[];
   servicios: ServicioRegistro[];
-  pagos: PagoPost[];
 }
 
 export function CarwashForm({
@@ -56,7 +55,6 @@ export function CarwashForm({
   estados,
   empleados,
   servicios,
-  pagos,
 }: CarwashFormProps) {
   const router = useRouter();
   const { toast } = useToast();
@@ -66,12 +64,12 @@ export function CarwashForm({
     defaultValues: initialData
       ? { ...initialData, pagos: initialData.pagos || [] }
       : {
-          clienteId: "",
-          estadoServicioId: "",
-          empleados: [],
-          vehiculos: [],
-          pagos: [],
-        },
+        clienteId: "",
+        estadoServicioId: "",
+        empleados: [],
+        vehiculos: [],
+        pagos: [],
+      },
   });
 
   const [vehiculos, setVehiculos] = useState<VehiculoRegistro[]>([]);
@@ -118,6 +116,8 @@ export function CarwashForm({
 
   async function onSubmit(data: z.infer<typeof CarwashSchema>) {
     try {
+
+      console.log("Errores de validación:", form.formState.errors);
       if (isUpdate) {
         // Si es actualización, llamamos a la acción PUT
         await putRegistroServicio({ data });
@@ -281,6 +281,12 @@ export function CarwashForm({
               Agregar Pago
             </Button>
           </div>
+          {/* Muestra el mensaje de error asociado al total de pagos */}
+          {form.formState.errors.pagos && (
+            <p className="text-red-600 text-sm">
+              {form.formState.errors.pagos.message}
+            </p>
+          )}
 
           <div className="flex justify-end gap-4">
             <Button type="submit" className="w-full sm:w-auto">
