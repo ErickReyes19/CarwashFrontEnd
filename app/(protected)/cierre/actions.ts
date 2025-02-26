@@ -12,3 +12,12 @@ export async function getClientes() {
     return [];
   }
 }
+export async function postCierre() {
+  try {
+    const response = await apiService.post("/cierre",{});
+    return response?.data;
+  } catch (error) {
+    console.error("Error al obtener los cierres:", error);
+    return [];
+  }
+}

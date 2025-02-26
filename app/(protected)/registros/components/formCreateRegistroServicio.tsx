@@ -38,6 +38,7 @@ import { obtenerVehiculoPorCliente } from "../../vehiculos/actions";
 import { CheckboxEmpleados } from "./CheckBoxEmpleados";
 import { postRegistroServicio, putRegistroServicio } from "../actions";
 import { PagoItem } from "./selectPagot";
+import { PaymentSummaryCard } from "./totalesServicio";
 
 interface CarwashFormProps {
   isUpdate?: boolean;
@@ -287,7 +288,7 @@ export function CarwashForm({
               {form.formState.errors.pagos.message}
             </p>
           )}
-
+          <PaymentSummaryCard />
           <div className="flex justify-end gap-4">
             <Button type="submit" className="w-full sm:w-auto">
               {isUpdate ? "Actualizar Registro" : "Registrar Registro"}

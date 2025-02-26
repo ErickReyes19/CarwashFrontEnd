@@ -23,14 +23,15 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Plus } from "lucide-react";
-import Link from "next/link";
+import Link from "next/link"; // Importa el diálogo de confirmación
+import { CierreConfirmationDialog } from "./dialogCrearCierre";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
 
-export function DataTable<TData, TValue, className >({
+export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
@@ -51,34 +52,29 @@ export function DataTable<TData, TValue, className >({
     state: {
       sorting,
       columnFilters,
-      globalFilter, // Agregar el estado del filtro global
+      globalFilter,
     },
-    // Aplicar el filtro global a todas las columnas
     globalFilterFn: (row) => {
-      const rowValues = Object.values(row.original as string); // Obtener todos los valores de la fila
+      const rowValues = Object.values(row.original as string);
       return rowValues.some((value) =>
         String(value).toLowerCase().includes(globalFilter.toLowerCase())
-      ); // Comprobar si alguno de los valores incluye el filtro
+      );
     },
   });
 
   return (
     <div className="rounded-md border p-4">
-<div className="flex flex-col md:flex-row items-center py-4 justify-between space-y-2 md:space-y-0 md:space-x-4">
-  <Input
-    placeholder="Filtrar Datos"
-    value={globalFilter}
-    onChange={(event) => setGlobalFilter(event.target.value)}
-    className="w-full md:max-w-sm"
-  />
-  <Link href={`/clientes/create`} className="w-full md:w-auto">
-    <Button className="w-full md:w-auto flex items-center gap-2">
-      Nuevo cliente
-      <Plus />
-    </Button>
-  </Link>
-</div>
-
+      <div className="flex flex-col md:flex-row items-center py-4 justify-between space-y-2 md:space-y-0 md:space-x-4">
+        <Input
+          placeholder="Filtrar Datos"
+          value={globalFilter}
+          onChange={(event) => setGlobalFilter(event.target.value)}
+          className="w-full md:max-w-sm"
+        />
+        <div className="flex gap-2">
+          <CierreConfirmationDialog /> {/* Llamar al diálogo aquí */}
+        </div>
+      </div>
 
       <div className="rounded-md border">
         <Table>
@@ -86,13 +82,13 @@ export function DataTable<TData, TValue, className >({
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id} className="">
+                  <TableHead key={header.id}>
                     {header.isPlaceholder
                       ? null
                       : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                   </TableHead>
                 ))}
               </TableRow>
@@ -106,18 +102,15 @@ export function DataTable<TData, TValue, className >({
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="">
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
+                    <TableCell key={cell.id}>
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
                   ))}
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 ">
+                <TableCell colSpan={columns.length} className="h-24 text-center">
                   Sin resultados.
                 </TableCell>
               </TableRow>

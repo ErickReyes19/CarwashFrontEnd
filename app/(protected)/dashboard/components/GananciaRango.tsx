@@ -73,7 +73,7 @@ export function EarningsChart({ data }: EarningsChartProps) {
               }
             />
             <Line
-              type="basis"
+              type="monotone"
               dataKey="ganancias"
               stroke={chartConfig.ganancias.color}
               strokeWidth={2}

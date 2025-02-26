@@ -5,8 +5,12 @@ services:
     ports:
       - "8082:3000"  # Mapea el puerto 3000 del contenedor al puerto 8082 en el host
     environment:
-      - URLLOGIN=http://18.190.176.188:8081/api/Login
-      - URLBASE=http://18.190.176.188:8081/api
+      # - URLLOGIN=http://18.190.176.188:8081/api/Login
+      # - URLBASE=http://18.190.176.188:8081/api
+      - URLLOGIN=http://localhost:8081/api/Login
+      - URLBASE=http://localhost:8081/api
+      # - URLLOGIN=http://host.docker.internal:8081/api/Login
+      # - URLBASE=http://host.docker.internal:8081/api
       - AUTH_SECRET=YHLQMDLGzZ4pW9t2uFj8XQ1kNz5yJmD8L
       - RESEND_API_KEY=re_VJcbJ8tV_MQjvz15tPZYLxKkhacAKYTv2
     networks:

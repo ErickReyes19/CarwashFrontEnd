@@ -1,5 +1,5 @@
 import * as React from 'react';
-
+import Image from "next/image";
 interface EmailTemplateProps {
     firstName: string;
     registro: any; // Aquí puedes pasar los datos necesarios del registro
@@ -25,7 +25,9 @@ export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({
                             <strong>Fecha:</strong> {new Date(registro.fecha).toLocaleDateString()}
                         </p>
                     </div>
-                    <img src="public/images/logo.png" alt="Logo" style={{ width: '60px', height: '60px' }} />
+                    <img src="https://res.cloudinary.com/dspl3mzbp/image/upload/v1740592237/wuf3pl1unf21rskhp2wo.png" alt="Logo" style={{ width: '60px', height: '60px' }} />
+
+
                 </div>
 
                 {/* Cliente */}

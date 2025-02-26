@@ -1,6 +1,5 @@
-"use client";
+'use client';
 import { ArrowUpDown } from "lucide-react";
-import { Cierre } from "@/lib/Types";
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
 
@@ -12,7 +11,9 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import Link from "next/link";
+import { Cierre } from "@/lib/Types";
 
 export const columns: ColumnDef<Cierre>[] = [
   {
@@ -27,37 +28,50 @@ export const columns: ColumnDef<Cierre>[] = [
         <ArrowUpDown className="ml-2 h-4 w-4" />
       </Button>
     ),
+    cell: ({ row }) => {
+      // Se formatea la fecha para mostrarla de forma legible
+      const date = new Date(row.original.fecha);
+      return date.toLocaleDateString();
+    },
   },
   {
     accessorKey: "metodosPago",
-    header: ({ column }) => (
-      <Button
-        variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        className="text-left"
-      >
-        Métodos de Pago
-        <ArrowUpDown className="ml-2 h-4 w-4" />
-      </Button>
-    ),
+    header: "Métodos de Pago",
     cell: ({ row }) => {
       const metodosPago = row.original.metodosPago;
-      const totalPago = row.original.total; // Usar el total global enviado en la respuesta
-
+      const totalPago = row.original.total;
       return (
-        <div className="space-y-1">
-          {metodosPago.map((metodo, index) => (
-            <div key={index} className="flex justify-between">
-              <span className="font-semibold">{metodo.metodoPago}</span>
-              <span className="text-xl">${metodo.total}</span>
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button variant="outline" size="sm">
+              Ver Métodos
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-64 p-4">
+            <div className="space-y-2">
+              {metodosPago.map((metodo, index) => (
+                <div key={index} className="flex justify-between">
+                  <span className="font-medium">{metodo.metodoPago}</span>
+                  <span>
+                    {metodo.total.toLocaleString("es-HN", {
+                      style: "currency",
+                      currency: "HNL",
+                    })}
+                  </span>
+                </div>
+              ))}
+              <div className="border-t pt-2 flex justify-between font-bold">
+                <span>Total</span>
+                <span>
+                  {totalPago.toLocaleString("es-HN", {
+                    style: "currency",
+                    currency: "HNL",
+                  })}
+                </span>
+              </div>
             </div>
-          ))}
-          {/* Mostrar el total de todos los métodos de pago */}
-          <div className="flex justify-between font-bold">
-            <span>Total</span>
-            <span className="text-xl">${totalPago}</span>
-          </div>
-        </div>
+          </PopoverContent>
+        </Popover>
       );
     },
   },
@@ -66,12 +80,11 @@ export const columns: ColumnDef<Cierre>[] = [
     header: "Acciones",
     cell: ({ row }) => {
       const cierre = row.original;
-
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Abrir Menu</span>
+              <span className="sr-only">Abrir Menú</span>
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>

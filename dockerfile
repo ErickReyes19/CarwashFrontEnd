@@ -1,26 +1,21 @@
-# Usamos la imagen oficial de Node.js como base
-FROM node:20-alpine
-
-# Establecer el directorio de trabajo dentro del contenedor
+# === Etapa de construcción ===
+FROM node:20-alpine AS builder
 WORKDIR /app
 
-# Copiar el package.json y el package-lock.json (si existe)
 COPY package*.json ./
+RUN npm ci
 
-# Instalar las dependencias
-RUN npm install
-
-# Copiar el resto de los archivos del proyecto
 COPY . .
 
-# Construir el proyecto Next.js
 RUN npm run build
 
-# Verificar si la carpeta .next fue creada
-RUN ls -alh .next
+FROM node:20-alpine AS runner
+WORKDIR /app
 
-# Exponer el puerto 3000
+COPY package*.json ./
+COPY --from=builder /app/.next .next
+RUN npm ci --only=production
+
 EXPOSE 3000
 
-# Comando para ejecutar el servidor de Next.js en producción
 CMD ["npm", "run", "start"]
