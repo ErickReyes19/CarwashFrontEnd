@@ -3,7 +3,8 @@ services:
     build: .
     container_name: carwashfrontend-app
     ports:
-      - "8082:3000"  # Mapea el puerto 3000 del contenedor al puerto 8082 en el host
+      - "0.0.0.0:8082:3000"
+
     environment:
       # - URLLOGIN=http://18.190.176.188:8081/api/Login
       # - URLBASE=http://18.190.176.188:8081/api
