@@ -1,11 +1,9 @@
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
-import { AppSidebar } from "@/components/app-sidebar"
-import { Toaster } from "@/components/ui/toaster"
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/app-sidebar";
+import { Toaster } from "@/components/ui/toaster";
 import { getSession } from "@/auth";
 import { redirect } from "next/navigation";
-
-
-
+import { SignalRProvider } from "@/providers/signalProvider"; // Asegúrate de importar el SignalRProvider
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
   const sesion = await getSession();
@@ -13,14 +11,19 @@ export default async function Layout({ children }: { children: React.ReactNode }
   if (!sesion) {
     redirect("/");
   }
+
+  const employeeId = sesion.empleadoId;
+
   return (
-    <SidebarProvider>
-      <AppSidebar />
-      <main className="w-full p-2">
-        <SidebarTrigger />
-        {children}
-        <Toaster />
-      </main>
-    </SidebarProvider>
-  )
+    <SignalRProvider employeeId={employeeId}>
+      <SidebarProvider>
+        <AppSidebar />
+        <main className="w-full p-2">
+          <SidebarTrigger />
+          {children}
+          <Toaster />
+        </main>
+      </SidebarProvider>
+    </SignalRProvider>
+  );
 }

@@ -7,7 +7,8 @@ import { RedirectType, redirect } from "next/navigation";
 const key = new TextEncoder().encode(process.env.AUTH_SECRET);
 interface UsuarioSesion {
     usuario:   string;
-    usuarioId: string;
+    usuarioId: string; 
+    empleadoId: string; 
     Rol:       string;
     Permiso:   string[];
     exp:       number;
@@ -27,6 +28,7 @@ export const decrypt = async (input: string): Promise<UsuarioSesion> => {
     const usuarioSesion: UsuarioSesion = {
         usuarioId: payload.usuarioId as string,
         usuario: payload.usuario as string,
+        empleadoId: payload.empleadoId as string,
         Permiso: payload.Permiso as string[] || [],
         exp: payload.exp as number,
         aud: payload.aud as string,
