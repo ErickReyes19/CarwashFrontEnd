@@ -1,6 +1,6 @@
 "use client";
 import { ArrowUpDown, CheckCircleIcon } from "lucide-react";
-import { Producto } from "@/lib/Types";
+import { EstadoServicio } from "@/lib/Types";
 // import { FormateadorFecha } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal, CheckCircle, XCircleIcon } from "lucide-react";
@@ -11,11 +11,13 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
+import { formatLempiras } from "@/lib/utils";
 
-export const columns: ColumnDef<Producto>[] = [
+export const columns: ColumnDef<EstadoServicio>[] = [
 
   {
     accessorKey: "nombre",
@@ -43,6 +45,27 @@ export const columns: ColumnDef<Producto>[] = [
       </Button>
     ),
   },
+    {
+      accessorKey: "precio",
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="text-left"
+        >
+          Precio
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      ),
+      cell: ({ row }) => {
+        const precio = row.getValue("precio");
+        return (
+          <div className="text-right">
+           {formatLempiras(precio as number)}
+          </div>
+        );
+      },
+    },
   {
     accessorKey: "activo",
     header: ({ column }) => (
@@ -76,7 +99,7 @@ export const columns: ColumnDef<Producto>[] = [
     id: "actions",
     header: "Acciones",
     cell: ({ row }) => {
-      const cliente = row.original;
+      const producto = row.original;
 
       return (
         <DropdownMenu>
@@ -88,7 +111,7 @@ export const columns: ColumnDef<Producto>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-            <Link href={`/estadoServicios/${cliente.id}/edit`}>
+            <Link href={`/productos/${producto.id}/edit`}>
               <DropdownMenuItem>Editar</DropdownMenuItem>
             </Link>
           </DropdownMenuContent>

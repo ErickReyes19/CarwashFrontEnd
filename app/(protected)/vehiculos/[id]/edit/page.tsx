@@ -11,10 +11,7 @@ import { getClientesActivos } from "@/app/(protected)/clientes/actions";
 
 export default async function Edit({ params }: { params: { id: string } }) {
   // Verificar si hay una sesión activa
-  const sesion = await getSession();
-  if (!sesion) {
-    redirect("/");
-  }
+
   
   const permisos = await getSessionPermisos();
   if (!permisos?.includes("editar_vehiculo")) {

@@ -9,11 +9,8 @@ import { getEmpleadosSinUsuario } from "../../empleados/actions";
 import { getRolesActivos } from "../../roles/actions";
 
 export default async function Create() {
-  const sesion = await getSession();
+
   
-  if (!sesion) {
-    redirect("/");
-  }
   
   const permisos = await getSessionPermisos();
   if (!permisos?.includes("crear_usuario")) {

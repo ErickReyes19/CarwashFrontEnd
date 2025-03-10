@@ -6,13 +6,10 @@ import { Formulario } from "../components/Form";  // Asegúrate de que el formul
 import NoAcceso from "@/components/noAccess";
 
 export default async function Create() {
-  const sesion = await getSession();
+
   const permisos = await getSessionPermisos();
 
   // Redirige si no hay sesión
-  if (!sesion) {
-    redirect("/");
-  }
 
   // Verifica permisos para crear empleados
   if (!permisos?.includes("crear_estados_servicios")) {  // Cambiado de "Crear Clientes" a "Crear Empleados"

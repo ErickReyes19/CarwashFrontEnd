@@ -56,19 +56,6 @@ export const columns: ColumnDef<Cliente>[] = [
     ),
   },
   {
-    accessorKey: "correo",
-    header: ({ column }) => (
-      <Button
-        variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        className="text-left "
-      >
-        Correo
-        <ArrowUpDown className="ml-2 h-4 w-4" />
-      </Button>
-    ),
-  },
-  {
     accessorKey: "genero",
     header: ({ column }) => (
       <Button

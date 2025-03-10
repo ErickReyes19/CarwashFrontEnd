@@ -15,11 +15,8 @@ export default async function Clientes({
 }: {
   searchParams: { from: string; to: string };
 }) {
-  const sesion = await getSession();
+
   
-  if (!sesion) {
-    redirect("/");
-  }
   const permisos = await getSessionPermisos();
   if (!permisos?.includes("ver_registros")) {
     return <NoAcceso />;

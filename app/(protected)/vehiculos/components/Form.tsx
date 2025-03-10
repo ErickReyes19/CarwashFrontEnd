@@ -32,7 +32,7 @@ import {
   CommandEmpty,
   CommandGroup,
 } from "@/components/ui/command";
-import { ChevronsUpDown } from "lucide-react";
+import { ChevronsUpDown, Loader2 } from "lucide-react";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
@@ -418,9 +418,18 @@ export function Formulario({
             />
           )}
           <div className="flex justify-end gap-4">
-            <Button type="submit" className="w-full sm:w-auto">
-              {isUpdate ? "Actualizar vehículo" : "Registrar vehículo"}
-            </Button>
+          <Button type="submit" disabled={form.formState.isSubmitting}>
+            {form.formState.isSubmitting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Cargando...
+              </>
+            ) : isUpdate ? (
+              "Actualizar"
+            ) : (
+              "Crear"
+            )}
+          </Button>
           </div>
         </form>
       </Form>

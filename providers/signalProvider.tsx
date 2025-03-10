@@ -7,8 +7,8 @@ import { AlertDialog } from "@/components/alert";
 interface SignalRContextType {
   connection: HubConnection | null;
   connectionStatus: string;
-  order: any; // Aquí guardamos la orden recibida
-  setOrder: (order: any) => void; // Función para actualizar el estado de la orden
+  order: any; // Aquí se guarda la orden recibida
+  setOrder: (order: any) => void; // Función para actualizar la orden
 }
 
 const SignalRContext = createContext<SignalRContextType | undefined>(undefined);
@@ -24,28 +24,34 @@ export const useSignalRContext = () => {
 export const SignalRProvider = ({ employeeId, children }: { employeeId: string; children: React.ReactNode }) => {
   const [connection, setConnection] = useState<HubConnection | null>(null);
   const [connectionStatus, setConnectionStatus] = useState<string>("Connecting...");
-  const [order, setOrder] = useState<any>(null); // Aquí guardamos la orden recibida
+  const [order, setOrder] = useState<any>(null);
 
   useEffect(() => {
+    let activeConnection: HubConnection;
+
     const connectSignalR = async () => {
-        const hubUrl = `${process.env.NEXT_PUBLIC_SIGNALR_URL}/orderHub`;
+      const hubUrl = `${process.env.NEXT_PUBLIC_SIGNALR_URL}/orderHub`;
       const newConnection = new HubConnectionBuilder()
-        .withUrl(hubUrl)
+        .withUrl(hubUrl, { withCredentials: true })
         .build();
 
+      // Evento para recibir una nueva orden
       newConnection.on("newOrder", (receivedOrder: any) => {
         console.log("Nueva orden recibida:", receivedOrder);
-        setOrder(receivedOrder); // Actualizar la orden
+        setOrder(receivedOrder);
       });
 
       newConnection.onclose(() => setConnectionStatus("Disconnected"));
       newConnection.onreconnecting(() => setConnectionStatus("Reconnecting..."));
-      newConnection.onreconnected(() => setConnectionStatus("Reconnected"));
+      newConnection.onreconnected(() => setConnectionStatus("Connected"));
 
       try {
         await newConnection.start();
         setConnection(newConnection);
         setConnectionStatus("Connected");
+        activeConnection = newConnection;
+        // Invoca el método del Hub para unirse al grupo del empleado
+        await newConnection.invoke("JoinRoom", employeeId);
       } catch (err) {
         console.error("Error al conectar a SignalR", err);
         setConnectionStatus("Error");
@@ -54,18 +60,28 @@ export const SignalRProvider = ({ employeeId, children }: { employeeId: string; 
 
     connectSignalR();
 
+    // Cleanup: salir del grupo y detener la conexión
     return () => {
-      if (connection) {
-        connection.stop();
+      if (activeConnection) {
+        activeConnection.invoke("LeaveRoom", employeeId).catch((err) => console.error("Error al salir del grupo", err));
+        activeConnection.stop();
       }
     };
-  }, [employeeId]); // El efecto solo se ejecuta cuando employeeId cambia
+  }, [employeeId]);
+
+  // Efecto para reproducir sonido cuando llega una nueva orden
+  useEffect(() => {
+    if (order) {
+      const audio = new Audio("/notification.mp3"); // Asegúrate de tener el archivo en /public
+      audio.play().catch((err) => console.error("Error reproduciendo sonido:", err));
+    }
+  }, [order]);
 
   return (
     <SignalRContext.Provider value={{ connection, connectionStatus, order, setOrder }}>
       {children}
-      {/* Mostramos el AlertDialog si hay una nueva orden */}
-      {order && <AlertDialog order={order} />}
+      {/* Muestra el AlertDialog si hay una nueva orden */}
+      {order && <AlertDialog order={order} onClose={() => setOrder(null)} />}
     </SignalRContext.Provider>
   );
 };

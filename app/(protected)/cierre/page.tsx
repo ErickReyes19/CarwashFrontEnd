@@ -9,12 +9,9 @@ import NoAcceso from "@/components/noAccess";
 // import ClientListMobile from "./components/client-list-mobile
 
 export default async function Clientes() {
-  const sesion = await getSession();
+
   const permisos = await getSessionPermisos();
 
-  if (!sesion) {
-    redirect("/");
-  }
 
   const data = await getClientes();
 

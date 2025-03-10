@@ -39,6 +39,7 @@ import { CheckboxEmpleados } from "./CheckBoxEmpleados";
 import { postRegistroServicio, putRegistroServicio } from "../actions";
 import { PagoItem } from "./selectPagot";
 import { PaymentSummaryCard } from "./totalesServicio";
+import { Loader2 } from "lucide-react";
 
 interface CarwashFormProps {
   isUpdate?: boolean;
@@ -290,9 +291,18 @@ export function CarwashForm({
           )}
           <PaymentSummaryCard />
           <div className="flex justify-end gap-4">
-            <Button type="submit" className="w-full sm:w-auto">
-              {isUpdate ? "Actualizar Registro" : "Registrar Registro"}
-            </Button>
+          <Button type="submit" disabled={form.formState.isSubmitting}>
+            {form.formState.isSubmitting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Cargando...
+              </>
+            ) : isUpdate ? (
+              "Actualizar"
+            ) : (
+              "Crear"
+            )}
+          </Button>
           </div>
         </form>
       </Form>

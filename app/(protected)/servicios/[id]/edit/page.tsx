@@ -8,10 +8,7 @@ import { getServicioId } from "../../actions";
 import NoAcceso from "@/components/noAccess";
 
 export default async function Edit({ params }: { params: { id: string } }) {
-  const sesion = await getSession();
-  if (!sesion) {
-    redirect("/");
-  }
+
   
   const permisos = await getSessionPermisos();
   if (!permisos?.includes("editar_servicios")) {

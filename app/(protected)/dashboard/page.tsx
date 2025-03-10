@@ -18,12 +18,9 @@ export default async function Clientes({
   searchParams: { from: string; to: string };
 }) {
   // Verificar sesión y permisos
-  const sesion = await getSession();
+
   const permisos = await getSessionPermisos();
 
-  if (!sesion) {
-    redirect("/");
-  }
 
   if (!permisos?.includes("ver_dashboard")) {
     return <NoAcceso />;

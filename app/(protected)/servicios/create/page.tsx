@@ -8,12 +8,9 @@ import NoAcceso from "@/components/noAccess";
 import { describe } from "node:test";
 
 export default async function Create() {
-  const sesion = await getSession();
+
   
   // Redirige si no hay sesión
-  if (!sesion) {
-    redirect("/");
-  }
   
   const permisos = await getSessionPermisos();
   if (!permisos?.includes("crear_servicios")) {

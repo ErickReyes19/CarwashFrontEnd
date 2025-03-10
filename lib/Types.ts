@@ -182,3 +182,12 @@ export type MetodosPago = {
   metodoPago: string;
   total:      number;
 }
+
+export type Producto = {
+  id?:          string;
+  nombre:      string;
+  descripcion: string;
+  activo:      boolean;
+  precio:      number;
+}
+

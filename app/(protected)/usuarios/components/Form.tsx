@@ -26,6 +26,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Empleado, Rol, UsuarioCreate, UsuarioUpdate } from "@/lib/Types";
+import { Loader2 } from "lucide-react";
 
 export function Formulario({
   isUpdate,
@@ -221,7 +222,18 @@ export function Formulario({
 
         {/* Enviar */}
         <div className="flex justify-end">
-          <Button type="submit">{isUpdate ? "Actualizar Usuario" : "Crear Usuario"}</Button>
+        <Button type="submit" disabled={form.formState.isSubmitting}>
+            {form.formState.isSubmitting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Cargando...
+              </>
+            ) : isUpdate ? (
+              "Actualizar"
+            ) : (
+              "Crear"
+            )}
+          </Button>
         </div>
       </form>
     </Form>

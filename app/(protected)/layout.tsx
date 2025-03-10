@@ -3,15 +3,16 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { Toaster } from "@/components/ui/toaster";
 import { getSession } from "@/auth";
 import { redirect } from "next/navigation";
-import { SignalRProvider } from "@/providers/signalProvider"; // Asegúrate de importar el SignalRProvider
+import { SignalRProvider } from "@/providers/signalProvider";
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
+
+
   const sesion = await getSession();
 
   if (!sesion) {
     redirect("/");
   }
-
   const employeeId = sesion.empleadoId;
 
   return (

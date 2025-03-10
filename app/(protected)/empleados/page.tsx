@@ -9,12 +9,9 @@ import NoAcceso from "@/components/noAccess";
 import EmployeeListMobile from "./components/employee-list-mobile";
 
 export default async function Empleados() {
-  const sesion = await getSession();
+
   const permisos = await getSessionPermisos();
 
-  if (!sesion) {
-    redirect("/");
-  }
 
   const data = await getEmpleados();
 

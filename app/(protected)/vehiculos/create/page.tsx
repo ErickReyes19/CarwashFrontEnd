@@ -8,12 +8,9 @@ import { getClientesActivos } from "../../clientes/actions";
 import { colores, marcas } from "@/lib/data";
 
 export default async function Create() {
-  const sesion = await getSession();
+
   
   // Redirige si no hay sesión
-  if (!sesion) {
-    redirect("/");
-  }
   
   const permisos = await getSessionPermisos();
   // Verifica permisos para crear empleados

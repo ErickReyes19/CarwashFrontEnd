@@ -9,11 +9,8 @@ import NoAcceso from "@/components/noAccess";
 import RoleListMobile from "./components/roles-list-mobile";
 
 export default async function EstadoServicio() {
-  const sesion = await getSession();
 
-  if (!sesion) {
-    redirect("/");
-  }
+
 
   const permisos = await getSessionPermisos();
   if (!permisos?.includes("ver_roles")) {

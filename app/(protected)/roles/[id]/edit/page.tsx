@@ -10,11 +10,8 @@ import { getPermisosActivos } from "@/app/(protected)/permisos/actions";
 
 export default async function Edit({ params }: { params: { id: string } }) {
   // Verificar si hay una sesión activa
-  const sesion = await getSession();
+
   const permisos = await getSessionPermisos();
-  if (!sesion) {
-    redirect("/");
-  }
 
   if (!permisos?.includes("editar_roles")) {
     return <NoAcceso />;

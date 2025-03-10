@@ -7,12 +7,9 @@ import NoAcceso from "@/components/noAccess";
 import { getPermisosActivos } from "../../permisos/actions";
 
 export default async function Create() {
-  const sesion = await getSession();
+
   
   // Redirige si no hay sesión
-  if (!sesion) {
-    redirect("/");
-  }
   
   // Verifica permisos para crear empleados
   const permisos = await getSessionPermisos();

@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/select";
 import { PermisosRol } from "@/lib/Types";
 import { CheckboxPermisos } from "./checkboxForm";
+import { Loader2 } from "lucide-react";
 
 export function FormularioRol({
   isUpdate,
@@ -185,7 +186,18 @@ export function FormularioRol({
 
         {/* Enviar */}
         <div className="flex justify-end">
-          <Button type="submit">{isUpdate ? "Actualizar" : "Crear"}</Button>
+        <Button type="submit" disabled={form.formState.isSubmitting}>
+            {form.formState.isSubmitting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Cargando...
+              </>
+            ) : isUpdate ? (
+              "Actualizar"
+            ) : (
+              "Crear"
+            )}
+          </Button>
         </div>
       </form>
     </Form>

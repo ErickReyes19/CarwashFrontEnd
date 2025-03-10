@@ -13,11 +13,8 @@ import {
 import { getRolesActivos } from "@/app/(protected)/roles/actions";
 
 export default async function Edit({ params }: { params: { id: string } }) {
-  const sesion = await getSession();
+
   
-  if (!sesion) {
-    redirect("/");
-  }
   
   const permisos = await getSessionPermisos();
   if (!permisos?.includes("editar_usuario")) {

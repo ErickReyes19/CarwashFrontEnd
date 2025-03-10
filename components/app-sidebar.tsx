@@ -1,12 +1,12 @@
 
 import {
   Car,
-  ChevronUp,
   Home,
   List,
   ListCheck,
   ListChecks,
   NotebookText,
+  Package,
   StepForward,
   User,
   Users2,
@@ -24,15 +24,8 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import ToggleThemeButton from "./button-theme";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
-import { Avatar, AvatarImage } from "./ui/avatar";
-import LogoutButton from "./signOut";
 import Link from "next/link";
+import { NavUser } from "./nav-user";
 
 // Menu items con permisos necesarios
 const items = [
@@ -102,17 +95,21 @@ const items = [
     icon: Car,
     permiso: "ver_vehiculos",
   },
+  {
+    title: "Productos",
+    url: "/productos",
+    icon: Package,
+    permiso: "ver_productos",
+  },
 ];
 
 export async function AppSidebar() {
   const usuario = await getSessionUsuario(); // Obtiene el nombre del usuario
-  const permisosUsuario = usuario?.Permiso || []; // Supón que el usuario tiene un array de permisos
-
+  const permisosUsuario = usuario?.Permiso || []; 
   // Filtrar los ítems basados en los permisos del usuario
   const filteredItems = items.filter(item =>
     permisosUsuario.includes(item.permiso)
   );
-
   return (
     <Sidebar collapsible="icon" variant="floating">
       <SidebarContent>
@@ -139,26 +136,7 @@ export async function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <SidebarMenuButton className="h-full">
-                  <Avatar className="p-0 m-0">
-                    <AvatarImage src="https://avatars.githubusercontent.com/u/55272642?v=4" />
-                  </Avatar>
-                  {usuario?.usuario}
-                  <ChevronUp className="ml-auto" />
-                </SidebarMenuButton>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent side="top" className="w-[--radix-popper-anchor-width]">
-                <DropdownMenuItem>
-                  <LogoutButton />
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </SidebarMenuItem>
-        </SidebarMenu>
+      {usuario && <NavUser usuario={usuario} />}
       </SidebarFooter>
     </Sidebar>
   );

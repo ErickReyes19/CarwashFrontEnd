@@ -19,8 +19,8 @@ export async function sendInvoice(registro: any, emailCliente: string) {
     const resend = new Resend(process.env.RESEND_API_KEY);
     const { data, error } = await resend.emails.send({
       from: 'Acme <onboarding@resend.dev>',
-      // to: [emailCliente],
-      to: 'erickjosepineda33@gmail.com',
+      to: [emailCliente],
+      // to: 'erickjosepineda33@gmail.com',
       subject: `Factura - ${registro.id}`,
       react: emailContent,
     });

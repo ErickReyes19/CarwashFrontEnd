@@ -12,11 +12,8 @@ import NoAcceso from "@/components/noAccess";
 
 export default async function CarwashPage(){
 
-  const sesion = await getSession();
+
   
-  if (!sesion) {
-    redirect("/");
-  }
   const permisos = await getSessionPermisos();
   if (!permisos?.includes("crear_registro")) {
     return <NoAcceso />;

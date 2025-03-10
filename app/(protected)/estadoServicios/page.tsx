@@ -9,12 +9,9 @@ import NoAcceso from "@/components/noAccess";
 import EstadoServicioListMobile from "./components/estado-servicio-list-mobile";
 
 export default async function EstadoServicio() {
-  const sesion = await getSession();
+
   const permisos = await getSessionPermisos();
 
-  if (!sesion) {
-    redirect("/");
-  }
 
   const data = await getEstadoServicios();
 

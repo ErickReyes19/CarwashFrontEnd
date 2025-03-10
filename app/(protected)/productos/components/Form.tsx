@@ -4,8 +4,8 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form"; // Importamos useForm
 import { zodResolver } from "@hookform/resolvers/zod"; // Usamos el resolutor de Zod
 import { z } from "zod";
-import {  ClienteSchema } from "../schema"; // Tu esquema de Zod
-import { postCliente, putCliente } from "../actions"; // Tu función para enviar datos
+import { ProductosSchema } from "../schema"; // Tu esquema de Zod
+import { postProducto, putProducto } from "../actions"; // Tu función para enviar datos
 import {
   Form,
   FormControl,
@@ -32,38 +32,38 @@ export function Formulario({
   initialData,
 }: {
   isUpdate: boolean;
-  initialData?: z.infer<typeof ClienteSchema>;
+  initialData?: z.infer<typeof ProductosSchema>;
 }) {
   const { toast } = useToast();
   const router = useRouter();
 
   // Usamos Zod para resolver la validación
-  const form = useForm<z.infer<typeof ClienteSchema>>({
-    resolver: zodResolver(ClienteSchema), // Pasamos el esquema Zod al resolver
+  const form = useForm<z.infer<typeof ProductosSchema>>({
+    resolver: zodResolver(ProductosSchema), // Pasamos el esquema Zod al resolver
     defaultValues: initialData || {}, // Valores iniciales si es actualización
   });
 
-  async function onSubmit(data: z.infer<typeof ClienteSchema>) {
-    const clienteData = {
-      cliente: data,
+  async function onSubmit(data: z.infer<typeof ProductosSchema>) {
+    const productoData = {
+      producto: data,
     };
 
     try {
       if (isUpdate) {
-        await putCliente(clienteData);
+        await putProducto(productoData); // Actualizamos
       } else {
-        await postCliente(clienteData); 
+        await postProducto(productoData);
       }
 
       // Notificación de éxito
       toast({
         title: isUpdate ? "Actualización Exitosa" : "Creación Exitosa",
         description: isUpdate
-          ? "El cliente ha sido actualizado."
-          : "El cliente ha sido creado.",
+          ? "El producto ha sido actualizado."
+          : "El producto ha sido creado.",
       });
 
-      router.push("/clientes"); // Redirige después de la acción
+      router.push("/productos"); // Redirige después de la acción
       router.refresh();
     } catch (error) {
       // Manejo de error
@@ -102,14 +102,13 @@ export function Formulario({
         {/* Correo */}
         <FormField
           control={form.control}
-          name="correo"
+          name="descripcion"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Correo electrónico</FormLabel>
+              <FormLabel>Descripción</FormLabel>
               <FormControl>
                 <Input
-                  type="email"
-                  placeholder="Ingresa tu correo electrónico"
+                  placeholder="Ingresa ladescripción"
                   {...field}
                 />
               </FormControl>
@@ -120,50 +119,25 @@ export function Formulario({
             </FormItem>
           )}
         />
-
         {/* Teléfono */}
         <FormField
           control={form.control}
-          name="telefono"
+          name="precio"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Teléfono</FormLabel>
+              <FormLabel>Precio</FormLabel>
               <FormControl>
-                <Input placeholder="Ingresa tu teléfono" {...field} />
+                <Input
+                  type="number"
+                  placeholder="Ingresa tu teléfono "
+                  {...field}
+                />
               </FormControl>
-              <FormDescription>
-                Este número se usará para contacto.
-              </FormDescription>
+              <FormDescription>Ingresa el precio del servicio.</FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
-
-        {/* Género */}
-        <FormField
-          control={form.control}
-          name="genero"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Género</FormLabel>
-              <FormControl>
-                <Select onValueChange={field.onChange} value={field.value}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Selecciona un género" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Masculino">Masculino</SelectItem>
-                    <SelectItem value="Femenino">Femenino</SelectItem>
-                    <SelectItem value="Otro">Otro</SelectItem>
-                  </SelectContent>
-                </Select>
-              </FormControl>
-              <FormDescription>Indica tu género.</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
         {/* Estado Activo (solo si es actualización) */}
         {isUpdate && (
           <FormField

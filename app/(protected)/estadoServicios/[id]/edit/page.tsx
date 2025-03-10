@@ -9,11 +9,8 @@ import NoAcceso from "@/components/noAccess";
 
 export default async function Edit({ params }: { params: { id: string } }) {
   // Verificar si hay una sesión activa
-  const sesion = await getSession();
+
   const permisos = await getSessionPermisos();
-  if (!sesion) {
-    redirect("/");
-  }
 
   if (!permisos?.includes("editar_estados_servicios")) {
     return <NoAcceso />;

@@ -10,12 +10,9 @@ import PermissionListMobile from "./components/permisos-list-mobile";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 
 export default async function EstadoServicio() {
-  const sesion = await getSession();
+
   const permisos = await getSessionPermisos();
 
-  if (!sesion) {
-    redirect("/");
-  }
 
   const data = await getPermisos();
 

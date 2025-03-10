@@ -6,11 +6,8 @@ import NoAcceso from "@/components/noAccess";
 
 
 export default async function ClientInfoPage({ params }: { params: { id: string } }) {
-  const sesion = await getSession();
+
   const permisos = await getSessionPermisos();
-  if (!sesion) {
-    redirect("/");
-  }
 
   if (!permisos?.includes("view_cliente")) {
     return <NoAcceso />;

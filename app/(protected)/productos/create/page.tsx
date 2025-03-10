@@ -1,10 +1,9 @@
-// /pages/facturas/create/page.tsx
 import HeaderComponent from "@/components/HeaderComponent";
 import { PlusCircle } from "lucide-react";
 import { getSession, getSessionPermisos } from "@/auth";
 import { redirect } from "next/navigation";
-import { Formulario } from "../components/Form";
 import NoAcceso from "@/components/noAccess";
+import { Formulario } from "../components/Form";
 
 export default async function Create() {
 
@@ -12,30 +11,29 @@ export default async function Create() {
 
   // Redirige si no hay sesión
 
-  if (!permisos?.includes("crear_clientes")) {
+  // Verifica permisos para crear empleados
+  if (!permisos?.includes("crear_producto")) {  // Cambiado de "Crear Clientes" a "Crear Empleados"
     return <NoAcceso />;
   }
 
   // Inicializamos con un valor específico para genero
   const initialData = {
     nombre: "",
-    correo: "",
-    telefono: "",
-    genero: "Masculino",
+    descripcion: "",
     activo: true,
-    // Asumiendo que quieres que "Masculino" sea el valor por defecto
+    precio: 0.0
   };
 
   return (
     <div>
       <HeaderComponent
         Icon={PlusCircle}
-        description="En este apartado podrá crear un nuevo Cliente"
-        screenName="Cliente"
+        description="En este apartado podrá crear un nuevo producto."
+        screenName="Crear Producto"  // Cambié la pantalla a "Crear Empleado"
       />
       <Formulario
-        isUpdate={false}
-        initialData={initialData} // Aquí se pasan los datos iniciales para crear
+        isUpdate={false}  // Esto es para indicar que estamos creando, no actualizando
+        initialData={initialData}  // Datos iniciales para crear un nuevo empleado
       />
     </div>
   );

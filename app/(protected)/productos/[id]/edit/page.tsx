@@ -1,10 +1,10 @@
 // /pages/clientes/[id]/editar/page.tsx
 import HeaderComponent from "@/components/HeaderComponent";
 import { Pencil } from "lucide-react";
-import { getSession, getSessionPermisos } from "@/auth";
+import {  getSessionPermisos } from "@/auth";
 import { redirect } from "next/navigation";
-import { EmpleadoFormulario } from "../../components/Form";
-import { getEmpleadoId } from "../../actions";
+import { Formulario } from "../../components/Form";
+import { getProductoById } from "../../actions";
 import NoAcceso from "@/components/noAccess";
 
 export default async function Edit({ params }: { params: { id: string } }) {
@@ -12,14 +12,14 @@ export default async function Edit({ params }: { params: { id: string } }) {
 
   const permisos = await getSessionPermisos();
 
-  if (!permisos?.includes("editar_empleado")) {
+  if (!permisos?.includes("editar_producto")) {
     return <NoAcceso />;
   }
 
   // Obtener el cliente por su ID
-  const empleado = await getEmpleadoId(params.id);
-  if (!empleado) {
-    redirect("/empleados"); // Redirige si no se encuentra el cliente
+  const producto = await getProductoById(params.id);
+  if (!producto) {
+    redirect("/productos"); // Redirige si no se encuentra el cliente
   }
 
 
@@ -27,12 +27,12 @@ export default async function Edit({ params }: { params: { id: string } }) {
     <div>
       <HeaderComponent
         Icon={Pencil}
-        description="En este apartado podrá editar un empleado"
-        screenName="Editar Empleado"
+        description="En este apartado podrá editar un producto"
+        screenName="Editar producto"
       />
-      <EmpleadoFormulario
+      <Formulario
         isUpdate={true}
-        initialData={empleado} // Pasamos los datos del cliente al formulario
+        initialData={producto} // Pasamos los datos del cliente al formulario
       />
     </div>
   );
