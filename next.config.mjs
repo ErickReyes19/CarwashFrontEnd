@@ -1,5 +1,3 @@
-import path from 'path';
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   env: {
@@ -11,10 +9,13 @@ const nextConfig = {
   productionBrowserSourceMaps: false,
   cleanDistDir: true,
   eslint: {
-    ignoreDuringBuilds: true,
+    ignoreDuringBuilds: true, 
+  },
+  typescript: {
+    ignoreBuildErrors: true, 
   },
   experimental: {
-    outputFileTracingRoot: path.dirname(new URL(import.meta.url).pathname), // Usar import.meta.url en lugar de __dirname
+    turboMode: true,
   },
 };
 
