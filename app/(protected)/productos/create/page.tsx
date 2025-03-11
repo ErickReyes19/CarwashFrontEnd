@@ -1,7 +1,6 @@
 import HeaderComponent from "@/components/HeaderComponent";
 import { PlusCircle } from "lucide-react";
-import { getSession, getSessionPermisos } from "@/auth";
-import { redirect } from "next/navigation";
+import {getSessionPermisos } from "@/auth";
 import NoAcceso from "@/components/noAccess";
 import { Formulario } from "../components/Form";
 

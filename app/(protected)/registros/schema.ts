@@ -2,6 +2,7 @@ import { z } from "zod";
 
 export const CarwashSchema = z
   .object({
+    descripcion: z.string().default("").nullable(),
     registroServicioId: z.string().default("").nullable(),
     clienteId: z.string().uuid({ message: "Cliente inválido" }),
     estadoServicioId: z.string().uuid({ message: "Estado de servicio inválido" }),
@@ -21,6 +22,21 @@ export const CarwashSchema = z
                   .coerce
                   .number({ invalid_type_error: "El precio debe ser un número" })
                   .min(0, "El precio no puede ser negativo"),
+                productos: z
+                  .array(
+                    z.object({
+                      productoId: z.string().uuid({ message: "Producto inválido" }),
+                      cantidad: z
+                        .coerce
+                        .number({ invalid_type_error: "La cantidad debe ser un número" })
+                        .min(1, "La cantidad debe ser al menos 1"),
+                      precio: z
+                        .coerce
+                        .number({ invalid_type_error: "El precio debe ser un número" })
+                        .min(0, "El precio no puede ser negativo"),
+                    })
+                  )
+                  .min(1, "Se debe agregar al menos un producto por servicio"),
               })
             )
             .min(1, "Se debe agregar al menos un servicio por vehículo"),
@@ -39,26 +55,33 @@ export const CarwashSchema = z
   })
   .refine(
     (data) => {
-      // Calcula el total de servicios sumando el precio de cada servicio en cada vehículo
+      // Suma total de servicios: para cada vehículo, se suman:
+      //   - El precio del servicio.
+      //   - El total de cada producto (ya calculado en el campo "precio" de cada producto)
       const totalServicios = data.vehiculos.reduce((accVehiculo, vehiculo) => {
         return (
           accVehiculo +
           vehiculo.servicios.reduce((accServicio, servicio) => {
-            return accServicio + servicio.precio;
+            const productosTotal = servicio.productos.reduce(
+              (accProducto, producto) => accProducto + Number(producto.precio),
+              0
+            );
+            return accServicio + Number(servicio.precio) + productosTotal;
           }, 0)
         );
       }, 0);
 
-      // Calcula el total de pagos sumando los montos de cada pago
-      const totalPagos = data.pagos.reduce((accPago, pago) => accPago + pago.monto, 0);
+      // Total de pagos
+      const totalPagos = data.pagos.reduce(
+        (accPago, pago) => accPago + Number(pago.monto),
+        0
+      );
 
-      // Para evitar problemas con números en coma flotante puedes usar tolerancia, por ejemplo:
-      // return Math.abs(totalServicios - totalPagos) < 0.01;
       return totalServicios === totalPagos;
     },
     {
       message: "El total de servicios debe ser igual al total de pagos",
-      path: ["pagos"], // Asocia el error al campo "pagos"
+      path: ["pagos"],
     }
   );
 

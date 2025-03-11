@@ -1,12 +1,23 @@
 "use server";
 
-import { Producto, EstadoServicioRegistro } from "@/lib/Types";
+import { Producto, EstadoServicioRegistro, ProductoSelect } from "@/lib/Types";
 import apiService from "../../../lib/server";
+import { ProductoRegistro } from "../registros/components/types";
 // import { ClienteElementSchema } from "./schema";
 
 export async function getProductos() {
   try {
     const response = await apiService.get<Producto[]>("/Producto");
+    return response.data;
+  } catch (error) {
+    console.error("Error al obtener los Producto:", error);
+    return [];
+  }
+}
+
+export async function getProductosSelect() {
+  try {
+    const response = await apiService.get<ProductoRegistro[]>("/Producto/select");
     return response.data;
   } catch (error) {
     console.error("Error al obtener los Producto:", error);

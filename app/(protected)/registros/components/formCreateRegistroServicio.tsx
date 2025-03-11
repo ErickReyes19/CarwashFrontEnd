@@ -32,6 +32,7 @@ import {
   PagoPost,
   ServicioRegistro,
   VehiculoRegistro,
+  ProductoRegistro, // Importamos el tipo de producto
 } from "./types";
 import { VehiculoItem } from "./vehiculoForm";
 import { obtenerVehiculoPorCliente } from "../../vehiculos/actions";
@@ -48,6 +49,7 @@ interface CarwashFormProps {
   estados: EstadoRegistro[];
   empleados: EmpleadoRegistro[];
   servicios: ServicioRegistro[];
+  productos: ProductoRegistro[];
 }
 
 export function CarwashForm({
@@ -57,24 +59,29 @@ export function CarwashForm({
   estados,
   empleados,
   servicios,
+  productos
 }: CarwashFormProps) {
   const router = useRouter();
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof CarwashSchema>>({
+
     resolver: zodResolver(CarwashSchema),
     defaultValues: initialData
       ? { ...initialData, pagos: initialData.pagos || [] }
       : {
-        clienteId: "",
-        estadoServicioId: "",
-        empleados: [],
-        vehiculos: [],
-        pagos: [],
-      },
+          clienteId: "",
+          estadoServicioId: "",
+          empleados: [],
+          vehiculos: [],
+          pagos: [],
+        },
   });
 
   const [vehiculos, setVehiculos] = useState<VehiculoRegistro[]>([]);
+
+  // Definimos una lista de productos (puede venir de una API o ser estática)
+
 
   // Observamos el valor del campo "clienteId"
   const selectedClientId = form.watch("clienteId");
@@ -106,7 +113,7 @@ export function CarwashForm({
     name: "vehiculos",
   });
 
-  // Dentro del componente CarwashForm, después de la sección de vehículos:
+  // Field array para pagos
   const {
     fields: pagosFields,
     append: appendPago,
@@ -115,13 +122,13 @@ export function CarwashForm({
     control: form.control,
     name: "pagos",
   });
-
+  const { formState } = form;
+  // forma de saber si un form esta valido o no
+  const isValid = formState.errors;
   async function onSubmit(data: z.infer<typeof CarwashSchema>) {
     try {
-
       console.log("Errores de validación:", form.formState.errors);
       if (isUpdate) {
-        // Si es actualización, llamamos a la acción PUT
         await putRegistroServicio({ data });
         toast({
           title: "Actualización Exitosa",
@@ -134,8 +141,7 @@ export function CarwashForm({
           description: "El registro ha sido creado.",
         });
       }
-
-      router.push("/registros"); // Redirige después de la acción
+      router.push("/registros");
       router.refresh();
     } catch (error) {
       console.error("Error en la operación:", error);
@@ -226,9 +232,7 @@ export function CarwashForm({
                     <CheckboxEmpleados
                       empleados={empleados}
                       selectedEmpleados={field.value || []}
-                      onChange={(selectedIds: string[]) =>
-                        field.onChange(selectedIds)
-                      }
+                      onChange={(selectedIds: string[]) => field.onChange(selectedIds)}
                     />
                   </FormControl>
                   <FormDescription>
@@ -253,6 +257,7 @@ export function CarwashForm({
                 vehiculo={vehiculoField}
                 vehiculos={vehiculos} // Lista de vehículos disponibles según el cliente
                 servicios={servicios}
+                productos={productos} // Se pasa la lista de productos
                 removeVehiculo={removeVehiculo}
               />
             ))}
@@ -283,7 +288,6 @@ export function CarwashForm({
               Agregar Pago
             </Button>
           </div>
-          {/* Muestra el mensaje de error asociado al total de pagos */}
           {form.formState.errors.pagos && (
             <p className="text-red-600 text-sm">
               {form.formState.errors.pagos.message}
@@ -291,18 +295,18 @@ export function CarwashForm({
           )}
           <PaymentSummaryCard />
           <div className="flex justify-end gap-4">
-          <Button type="submit" disabled={form.formState.isSubmitting}>
-            {form.formState.isSubmitting ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Cargando...
-              </>
-            ) : isUpdate ? (
-              "Actualizar"
-            ) : (
-              "Crear"
-            )}
-          </Button>
+            <Button type="submit" disabled={form.formState.isSubmitting}>
+              {form.formState.isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Cargando...
+                </>
+              ) : isUpdate ? (
+                "Actualizar"
+              ) : (
+                "Crear"
+              )}
+            </Button>
           </div>
         </form>
       </Form>

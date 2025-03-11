@@ -18,8 +18,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { ServicioRegistro, VehiculoRegistro } from "./types";
+import { ServicioRegistro, VehiculoRegistro, ProductoRegistro } from "./types";
 import { Input } from "@/components/ui/input";
+import { ProductoItem } from "./productoForm";
 
 interface VehiculoItemProps {
   control: any;
@@ -27,6 +28,7 @@ interface VehiculoItemProps {
   vehiculo: { id: string; vehiculoId: string; servicios: any[] };
   vehiculos: VehiculoRegistro[];
   servicios: ServicioRegistro[];
+  productos: ProductoRegistro[];
   removeVehiculo: (index: number) => void;
 }
 
@@ -36,12 +38,13 @@ export const VehiculoItem: React.FC<VehiculoItemProps> = ({
   vehiculo,
   vehiculos,
   servicios,
+  productos,
   removeVehiculo,
 }) => {
-  // Usamos useFormContext para obtener setValue
+  // Obtenemos setValue desde el contexto del formulario
   const { setValue } = useFormContext();
 
-  // Extraemos el field array para los servicios del vehículo
+  // Field array para los servicios del vehículo
   const {
     fields: serviciosFields,
     append: appendServicio,
@@ -52,21 +55,21 @@ export const VehiculoItem: React.FC<VehiculoItemProps> = ({
   });
 
   return (
-    <div className="border p-4 rounded-lg mb-6 shadow-lg">
+    <div className="border p-4 rounded-lg mb-6 shadow-lg w-full">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         {/* Selección del Vehículo */}
         <FormField
           control={control}
           name={`vehiculos.${index}.vehiculoId`}
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="w-full">
               <FormLabel>Vehículo</FormLabel>
-              <FormControl>
+              <FormControl className="w-full">
                 <Select onValueChange={field.onChange} value={field.value}>
-                  <SelectTrigger>
+                  <SelectTrigger className="w-full">
                     <SelectValue placeholder="Selecciona un vehículo" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="w-full">
                     {vehiculos.map((v) => (
                       <SelectItem key={v.id} value={v.id}>
                         {v.nombre}
@@ -82,38 +85,39 @@ export const VehiculoItem: React.FC<VehiculoItemProps> = ({
         />
 
         {/* Botón para eliminar el vehículo */}
-        <div className="flex justify-end">
-          <Button variant="destructive" onClick={() => removeVehiculo(index)}>
+        <div className="flex justify-end w-full">
+          <Button
+            variant="destructive"
+            onClick={() => removeVehiculo(index)}
+            className="w-full sm:w-auto"
+          >
             Eliminar Vehículo
           </Button>
         </div>
       </div>
 
       {/* Servicios para este vehículo */}
-      <div className="mt-6">
+      <div className="mt-6 w-full">
         <h4 className="text-lg font-semibold mb-4">Servicios</h4>
         {serviciosFields.map((servicioField, servicioIndex) => (
           <div
             key={servicioField.id}
-            className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4 items-end"
+            className="w-full grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4 items-end"
           >
             {/* Selección del Servicio */}
             <FormField
               control={control}
               name={`vehiculos.${index}.servicios.${servicioIndex}.servicioId`}
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="w-full">
                   <FormLabel>Servicio</FormLabel>
-                  <FormControl>
+                  <FormControl className="w-full">
                     <Select
                       onValueChange={(value) => {
-                        // Actualizamos el valor del servicio seleccionado
                         field.onChange(value);
-                        // Buscamos el servicio seleccionado en la lista de servicios
                         const selectedService = servicios.find(
                           (s) => s.id === value
                         );
-                        // Si se encuentra, actualizamos el precio usando setValue
                         if (selectedService) {
                           setValue(
                             `vehiculos.${index}.servicios.${servicioIndex}.precio`,
@@ -123,10 +127,10 @@ export const VehiculoItem: React.FC<VehiculoItemProps> = ({
                       }}
                       value={field.value}
                     >
-                      <SelectTrigger>
+                      <SelectTrigger className="w-full">
                         <SelectValue placeholder="Selecciona un servicio" />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="w-full">
                         {servicios.map((s) => (
                           <SelectItem key={s.id} value={s.id}>
                             {s.nombre}
@@ -146,14 +150,15 @@ export const VehiculoItem: React.FC<VehiculoItemProps> = ({
               control={control}
               name={`vehiculos.${index}.servicios.${servicioIndex}.precio`}
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="w-full">
                   <FormLabel>Precio</FormLabel>
-                  <FormControl>
+                  <FormControl className="w-full">
                     <Input
                       type="number"
                       step="0.01"
                       placeholder="Precio"
                       {...field}
+                      className="w-full"
                     />
                   </FormControl>
                   <FormDescription>
@@ -165,21 +170,35 @@ export const VehiculoItem: React.FC<VehiculoItemProps> = ({
             />
 
             {/* Botón para eliminar el servicio */}
-            <div className="flex justify-end">
+            <div className="flex justify-end w-full">
               <Button
                 variant="destructive"
                 onClick={() => removeServicio(servicioIndex)}
+                className="w-full sm:w-auto"
               >
                 Eliminar Servicio
               </Button>
             </div>
+
+            {/* Sección de productos dentro de este servicio */}
+            <div className="col-span-3">
+              <ProductoItem
+                control={control}
+                servicioIndex={servicioIndex}
+                vehiculoIndex={index}
+                productos={productos}
+              />
+            </div>
           </div>
         ))}
 
-        <div className="flex justify-start">
+        <div className="flex justify-start w-full">
           <Button
             type="button"
-            onClick={() => appendServicio({ servicioId: "", precio: 0 })}
+            onClick={() =>
+              appendServicio({ servicioId: "", precio: 0, productos: [] })
+            }
+            className="w-full sm:w-auto"
           >
             Agregar Servicio
           </Button>

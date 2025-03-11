@@ -7,16 +7,6 @@ const nextConfig = {
   swcMinify: true,
   output: "standalone",
   productionBrowserSourceMaps: false,
-  cleanDistDir: true,
-  eslint: {
-    ignoreDuringBuilds: true, 
-  },
-  typescript: {
-    ignoreBuildErrors: true, 
-  },
-  experimental: {
-    turboMode: true,
-  },
 };
 
 export default nextConfig;

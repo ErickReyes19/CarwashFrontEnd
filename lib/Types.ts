@@ -190,4 +190,9 @@ export type Producto = {
   activo:      boolean;
   precio:      number;
 }
+export type ProductoSelect = {
+  id?:          string;
+  nombre:      string;
+  precio:      number;
+}
 

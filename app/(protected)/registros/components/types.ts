@@ -90,6 +90,12 @@ export type ClienteRegistro = {
     nombre: string;
     precio: string;
   };
+
+  export type ProductoRegistro = {
+    id: string;
+    nombre: string;
+    precio: string;
+  };
   
 
 
