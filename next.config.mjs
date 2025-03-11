@@ -1,3 +1,5 @@
+import path from 'path';
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   env: {
@@ -7,12 +9,12 @@ const nextConfig = {
   swcMinify: true,
   output: "standalone",
   productionBrowserSourceMaps: false,
-  cleanDistDir: true, // Limpia la carpeta .next antes de compilar
+  cleanDistDir: true,
   eslint: {
-    ignoreDuringBuilds: true, // Evita errores de ESLint en producción
+    ignoreDuringBuilds: true,
   },
   experimental: {
-    outputFileTracingRoot: __dirname, // Mejora la trazabilidad en despliegues
+    outputFileTracingRoot: path.dirname(new URL(import.meta.url).pathname), // Usar import.meta.url en lugar de __dirname
   },
 };
 
