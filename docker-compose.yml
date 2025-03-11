@@ -1,20 +1,24 @@
+
 services:
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+      # Si necesitas forzar una compilación limpia, puedes agregar argumentos o usar la opción --no-cache en el build
     container_name: carwashfrontend-app
     ports:
       - "0.0.0.0:8082:3000"
-
     environment:
       - URLLOGIN=http://3.147.193.70:8081/api/Login
       - URLBASE=http://3.147.193.70:8081/api
       - NEXT_PUBLIC_SIGNALR_URL=http://3.147.193.70:8081
-      # - URLLOGIN=http://localhost:8081/api/Login
-      # - URLBASE=http://localhost:8081/api
-      # - URLLOGIN=http://host.docker.internal:8081/api/Login
-      # - URLBASE=http://host.docker.internal:8081/api
       - AUTH_SECRET=YHLQMDLGzZ4pW9t2uFj8XQ1kNz5yJmD8L
       - RESEND_API_KEY=re_VJcbJ8tV_MQjvz15tPZYLxKkhacAKYTv2
+    deploy:
+      resources:
+        limits:
+          memory: 512M   # Limita la memoria a 512 MB (nota: esta sección se aplica en modo swarm)
+    restart: always      # Reinicia el contenedor automáticamente en caso de fallo
     networks:
       - carwash-network
 
