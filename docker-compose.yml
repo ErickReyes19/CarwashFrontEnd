@@ -6,12 +6,13 @@ services:
       - "0.0.0.0:8082:3000"
 
     environment:
-      # - URLLOGIN=http://18.190.176.188:8081/api/Login
-      # - URLBASE=http://18.190.176.188:8081/api
+      - URLLOGIN=http://3.147.193.70:8081/api/Login
+      - URLBASE=http://3.147.193.70:8081/api
+      - NEXT_PUBLIC_SIGNALR_URL=http://3.147.193.70:8081
       # - URLLOGIN=http://localhost:8081/api/Login
       # - URLBASE=http://localhost:8081/api
-      - URLLOGIN=http://host.docker.internal:8081/api/Login
-      - URLBASE=http://host.docker.internal:8081/api
+      # - URLLOGIN=http://host.docker.internal:8081/api/Login
+      # - URLBASE=http://host.docker.internal:8081/api
       - AUTH_SECRET=YHLQMDLGzZ4pW9t2uFj8XQ1kNz5yJmD8L
       - RESEND_API_KEY=re_VJcbJ8tV_MQjvz15tPZYLxKkhacAKYTv2
     networks:
