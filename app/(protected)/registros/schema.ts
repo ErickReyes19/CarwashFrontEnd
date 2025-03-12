@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const CarwashSchema = z
   .object({
-    descripcion: z.string().default("").nullable(),
+    descripcion: z.string().default(""),
     registroServicioId: z.string().default("").nullable(),
     clienteId: z.string().uuid({ message: "Cliente inválido" }),
     estadoServicioId: z.string().uuid({ message: "Estado de servicio inválido" }),

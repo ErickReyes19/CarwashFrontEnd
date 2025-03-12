@@ -70,12 +70,13 @@ export function CarwashForm({
     defaultValues: initialData
       ? { ...initialData, pagos: initialData.pagos || [] }
       : {
-          clienteId: "",
-          estadoServicioId: "",
-          empleados: [],
-          vehiculos: [],
-          pagos: [],
-        },
+        clienteId: "",
+        descripcion: "",
+        estadoServicioId: "",
+        empleados: [],
+        vehiculos: [],
+        pagos: [],
+      },
   });
 
   const [vehiculos, setVehiculos] = useState<VehiculoRegistro[]>([]);
@@ -245,7 +246,23 @@ export function CarwashForm({
               )}
             />
           </div>
-
+          {/* Nombre */}
+          <FormField
+            control={form.control}
+            name="descripcion"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Descripción</FormLabel>
+                <FormControl>
+                  <Input placeholder="Ingresa una descripción" {...field} />
+                </FormControl>
+                <FormDescription>
+                  Por favor ingrese una descripción.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           {/* Vehículos y sus Servicios */}
           <div className="space-y-6">
             <h3 className="text-lg font-semibold">Vehículos</h3>

@@ -122,6 +122,7 @@ export type ClienteRegistro = {
   // Tipo para el DTO que será enviado con la acción
   export type RegistroServicioPost = {
     clienteId: string;
+    descripcion: string;
     estadoServicioId: string;
     UsuarioId: string | null;
     empleados: string[]; // ID de los empleados seleccionados
