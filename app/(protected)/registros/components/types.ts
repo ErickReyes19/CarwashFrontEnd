@@ -141,6 +141,7 @@ export type ClienteRegistro = {
 
 
 export type RegistroServicioEdit = {
+  descripcion: string;
   registroServicioId: string;
   clienteId: string;
   estadoServicioId: string;
