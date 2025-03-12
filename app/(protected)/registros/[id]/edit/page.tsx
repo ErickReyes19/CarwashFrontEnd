@@ -8,6 +8,7 @@ import { getServiciosActivos } from "@/app/(protected)/servicios/actions";
 import { getSession, getSessionPermisos } from "@/auth";
 import { redirect } from "next/navigation";
 import NoAcceso from "@/components/noAccess";
+import { getProductos, getProductosSelect } from "@/app/(protected)/productos/actions";
 
 export default async function EditCarwashPage({ params }: { params: { id: string } }) {
   try {
@@ -22,6 +23,7 @@ export default async function EditCarwashPage({ params }: { params: { id: string
       const estados     = await getEstadoServiciosActivos();
       const empleados   = await getEmpeleadosActivos();
       const servicios   = await getServiciosActivos();
+      const productos = await getProductosSelect();
       const initialData = await getRegistroServicioIdGet(params.id);
 
 
@@ -40,6 +42,7 @@ export default async function EditCarwashPage({ params }: { params: { id: string
           isUpdate={true}
           initialData={{
             ...initialData,
+            descripcion: initialData.descripcion || "",
             vehiculos: initialData.vehiculos.map((vehiculo: any) => ({
               ...vehiculo,
               servicios: vehiculo.servicios.map((servicio: any) => ({
@@ -52,6 +55,7 @@ export default async function EditCarwashPage({ params }: { params: { id: string
           estados={estados}
           empleados={empleados}
           servicios={servicios}
+          productos={productos}
         />
       </div>
     );
