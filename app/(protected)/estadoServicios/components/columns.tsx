@@ -1,6 +1,6 @@
 "use client";
 import { ArrowUpDown, CheckCircleIcon } from "lucide-react";
-import { Producto } from "@/lib/Types";
+import { EstadoServicio, Producto } from "@/lib/Types";
 // import { FormateadorFecha } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal, CheckCircle, XCircleIcon } from "lucide-react";
@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
 
-export const columns: ColumnDef<Producto>[] = [
+export const columns: ColumnDef<EstadoServicio>[] = [
 
   {
     accessorKey: "nombre",
