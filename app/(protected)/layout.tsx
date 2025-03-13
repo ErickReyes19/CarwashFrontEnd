@@ -4,6 +4,9 @@ import { Toaster } from "@/components/ui/toaster";
 import { getSession } from "@/auth";
 import { redirect } from "next/navigation";
 import { SignalRProvider } from "@/providers/signalProvider";
+import { Analytics } from "@vercel/analytics/react"
+
+
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
 
@@ -23,6 +26,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
           <SidebarTrigger />
           {children}
           <Toaster />
+          <Analytics />
         </main>
       </SidebarProvider>
     </SignalRProvider>

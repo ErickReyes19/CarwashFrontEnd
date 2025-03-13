@@ -6,7 +6,7 @@ export type RegistroServicioView = {
     fecha:          Date;
     vehiculos:      VehiculoElement[];
     empleados:      Empleado[];
-    pagos:           Pagos[];
+    pagos:          Pagos[];
     descripcion:    string;
 }
 
