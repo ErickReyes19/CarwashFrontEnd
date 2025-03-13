@@ -6,6 +6,7 @@ import { DataTable } from "./componets/data-table";
 import { columns } from "./componets/columns";
 import HeaderComponent from "@/components/HeaderComponent";
 import NoAcceso from "@/components/noAccess";
+import CierreListMobile from "./componets/cierre-list-mobile";
 // import ClientListMobile from "./components/client-list-mobile
 
 export default async function Clientes() {
@@ -30,9 +31,9 @@ export default async function Clientes() {
       <div className="hidden md:block">
         <DataTable columns={columns} data={data} />
       </div>
-      {/* <div className="block md:hidden">
-        <ClientListMobile clientes={data} />
-      </div> */}
+      <div className="block md:hidden">
+        <CierreListMobile cierres={data} />
+      </div>
     </div>
   );
 }

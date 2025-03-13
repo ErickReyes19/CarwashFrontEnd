@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Separator } from "@/components/ui/separator"
 import { RegistroServicioView } from "./types"
-import {sendInvoice} from "../actions";
+import { sendInvoice } from "../actions";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { formatLempiras } from "@/lib/utils";
@@ -19,38 +19,77 @@ const getInitials = (name: string) => {
 }
 
 // Lista de servicios
-const ServiciosList: React.FC<{ servicios: Array<{ id: string; servicioNombre: string; precio: number }> }> = ({
-  servicios,
-}) => {
-  const total = servicios.reduce((sum, servicio) => sum + servicio.precio, 0);
+const ServiciosList: React.FC<{ 
+  servicios: Array<{ 
+    id: string; 
+    servicioNombre: string; 
+    precio: number; 
+    producto: Array<{ 
+      productoId: string; 
+      cantidad: number; 
+      precio: number; 
+      nombre: string; 
+    }>;
+  }> 
+}> = ({ servicios }) => {
+  const total = servicios.reduce((sum, servicio) => {
+    const totalProductos = servicio.producto.reduce((acc, prod) => acc + (prod.precio * prod.cantidad), 0);
+    return sum + servicio.precio + totalProductos;
+  }, 0);
 
   return (
     <div>
       <ul className="space-y-1">
-        {servicios.map((servicio) => (
-          <li key={servicio.id} className="flex justify-between">
-            <span>{servicio.servicioNombre}</span>
-            <span className="font-semibold"> {formatLempiras(Number(servicio.precio))}</span>
-          </li>
-        ))}
+        {servicios.map((servicio) => {
+          const totalProductos = servicio.producto.reduce((sum, prod) => sum + (prod.precio * prod.cantidad), 0);
+          return (
+            <li key={servicio.id} className="flex flex-col border-b pb-2">
+              <div className="flex justify-between">
+                <span>{servicio.servicioNombre}</span>
+                <span className="font-semibold">{formatLempiras(servicio.precio)}</span>
+              </div>
+
+              {/* Productos asociados al servicio */}
+              {servicio.producto.length > 0 && (
+                <ul className="mt-1 pl-4 text-sm text-gray-700">
+                  {servicio.producto.map((producto) => (
+                    <li key={producto.productoId} className="flex justify-between">
+                      <span>{producto.nombre} (x{producto.cantidad})</span>
+                      <span>{formatLempiras(producto.precio * producto.cantidad)}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+
+              {/* Total del servicio incluyendo productos */}
+              <div className="mt-1 flex justify-between font-bold text-green-600">
+                <span>Total Servicio:</span>
+                <span>{formatLempiras(servicio.precio + totalProductos)}</span>
+              </div>
+            </li>
+          );
+        })}
       </ul>
-      <div className="mt-2 border-t pt-2 flex justify-between font-bold">
-        <span>Total:</span>
-        <span> {formatLempiras(Number(total))}</span>
+
+      {/* Total General */}
+      <div className="mt-2 border-t pt-2 flex justify-between font-bold text-lg text-green-600">
+        <span>Total General:</span>
+        <span>{formatLempiras(total)}</span>
       </div>
     </div>
   );
 };
 
-// Tarjeta de totales de servicios
+
 const TotalesServiciosCard: React.FC<{ registro: RegistroServicioView }> = ({ registro }) => {
-  // Agrupar los servicios y calcular el total por tipo de servicio
   const totalesPorServicio = registro.vehiculos.flatMap((vehiculo) => vehiculo.servicios).reduce((acc, servicio) => {
-    acc[servicio.servicioNombre] = (acc[servicio.servicioNombre] || 0) + servicio.precio;
+    const totalProductos = servicio.producto.reduce((sum, prod) => sum + (prod.precio * prod.cantidad), 0);
+    const totalServicio = servicio.precio + totalProductos;
+
+    acc[servicio.servicioNombre] = (acc[servicio.servicioNombre] || 0) + totalServicio;
     return acc;
   }, {} as Record<string, number>);
 
-  // Calcular el total general
   const totalGeneral = Object.values(totalesPorServicio).reduce((sum, total) => sum + total, 0);
 
   return (
@@ -64,21 +103,20 @@ const TotalesServiciosCard: React.FC<{ registro: RegistroServicioView }> = ({ re
           {Object.entries(totalesPorServicio).map(([servicio, total]) => (
             <li key={servicio} className="flex justify-between">
               <span>{servicio}</span>
-              <span className="font-semibold"> {formatLempiras(total)}</span>
+              <span className="font-semibold">{formatLempiras(total)}</span>
             </li>
           ))}
         </ul>
         <Separator className="my-2" />
         <div className="flex justify-between font-bold">
           <span>Total General:</span>
-          <span className="text-green-600"> {formatLempiras(totalGeneral)}</span>
+          <span className="text-green-600">{formatLempiras(totalGeneral)}</span>
         </div>
       </CardContent>
     </Card>
   );
 };
 
-// Tarjeta de vehículo y servicios
 const VehiculoCard: React.FC<{ vehiculo: RegistroServicioView["vehiculos"][0] }> = ({ vehiculo }) => (
   <Card>
     <CardHeader>
@@ -96,16 +134,14 @@ const VehiculoCard: React.FC<{ vehiculo: RegistroServicioView["vehiculos"][0] }>
   </Card>
 )
 
-// Componente principal
 const RegistroServicioCard: React.FC<{ registro: RegistroServicioView }> = ({ registro }) => {
   const { toast } = useToast();
   const handleEnviarCorreo = async () => {
     try {
-      // Enviar el correo a la dirección del cliente
       await sendInvoice(registro, registro.cliente.correo);
       toast({
         title: "Correo enviado con exito",
-        description:   `Se envio correctamente al correo ${registro.cliente.correo.substring(0,5)}****.`,
+        description: `Se envio correctamente al correo ${registro.cliente.correo.substring(0, 5)}****.`,
       });
     } catch (error) {
       console.error("Error al enviar el correo:", error);
@@ -129,7 +165,6 @@ const RegistroServicioCard: React.FC<{ registro: RegistroServicioView }> = ({ re
           <CardDescription>ID: {registro.id}</CardDescription>
         </CardHeader>
         <CardContent>
-          {/* Usamos grid con clases responsivas */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <h3 className="font-semibold text-lg">Cliente</h3>
@@ -144,35 +179,31 @@ const RegistroServicioCard: React.FC<{ registro: RegistroServicioView }> = ({ re
               <p className="text-sm text-muted-foreground mt-1">{registro.estadoServicio.descripcion}</p>
             </div>
           </div>
+          <div>
+            <p className="font-bold">Descripción</p>
+            <p>{registro.descripcion}</p>
+          </div>
         </CardContent>
       </Card>
-
-
-
-
-      {/* Vehículos */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {registro.vehiculos.map((vehiculo) => (
           <VehiculoCard key={vehiculo.id} vehiculo={vehiculo} />
         ))}
       </div>
       <Card className="border p-4">
-      <CardHeader>
-        <h3 className="text-lg font-bold">Detalles de Pagos</h3>
-      </CardHeader>
-      <CardContent>
-        {registro.pagos.map((pago, index) => (
-          <div key={index} className="flex justify-between border-b py-2">
-            <span className="font-bold">{pago.metodo_pago}</span>
-            <span className="font-bold">{formatLempiras(pago.monto)}</span>
-          </div>
-        ))}
-      </CardContent>
-    </Card>
-      {/* Totales de Servicios */}
+        <CardHeader>
+          <h3 className="text-lg font-bold">Detalles de Pagos</h3>
+        </CardHeader>
+        <CardContent>
+          {registro.pagos.map((pago, index) => (
+            <div key={index} className="flex justify-between border-b py-2">
+              <span className="font-bold">{pago.metodo_pago}</span>
+              <span className="font-bold">{formatLempiras(pago.monto)}</span>
+            </div>
+          ))}
+        </CardContent>
+      </Card>
       <TotalesServiciosCard registro={registro} />
-      {/* Empleados */}
-      {/* Empleados */}
       <Card>
         <CardHeader>
           <CardTitle>Empleados Asignados</CardTitle>

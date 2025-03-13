@@ -7,6 +7,7 @@ export type RegistroServicioView = {
     vehiculos:      VehiculoElement[];
     empleados:      Empleado[];
     pagos:           Pagos[];
+    descripcion:    string;
 }
 
 export type Pagos = {
@@ -46,9 +47,16 @@ export type VehiculoElement = {
 }
 
 export type Servicio = {
-    id:             string;
-    servicioNombre: string;
-    precio:         number;
+  id:             string;
+  servicioNombre: string;
+  precio:         number;
+  producto:       Producto[];
+}
+export type Producto = {
+  productoId: string;
+  cantidad:   number;
+  precio:     number;
+  nombre:     string;
 }
 
 export type VehiculoVehiculo = {
@@ -159,6 +167,13 @@ export type VehiculoEdit = {
 export type ServicioEdit = {
   servicioId: string;
   precio: string;
+  productos:  ProductoEdit[];
 };
 
+
+export type ProductoEdit = {
+  productoId: string;
+  cantidad:   number;
+  total:   number;
+}
 
