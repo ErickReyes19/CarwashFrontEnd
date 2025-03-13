@@ -9,6 +9,8 @@ import { sendInvoice } from "../actions";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { formatLempiras } from "@/lib/utils";
+import { useState } from "react";
+import { Loader, Loader2 } from "lucide-react";
 // Helper para obtener iniciales
 const getInitials = (name: string) => {
   return name
@@ -19,18 +21,18 @@ const getInitials = (name: string) => {
 }
 
 // Lista de servicios
-const ServiciosList: React.FC<{ 
-  servicios: Array<{ 
-    id: string; 
-    servicioNombre: string; 
-    precio: number; 
-    producto: Array<{ 
-      productoId: string; 
-      cantidad: number; 
-      precio: number; 
-      nombre: string; 
+const ServiciosList: React.FC<{
+  servicios: Array<{
+    id: string;
+    servicioNombre: string;
+    precio: number;
+    producto: Array<{
+      productoId: string;
+      cantidad: number;
+      precio: number;
+      nombre: string;
     }>;
-  }> 
+  }>
 }> = ({ servicios }) => {
   const total = servicios.reduce((sum, servicio) => {
     const totalProductos = servicio.producto.reduce((acc, prod) => acc + (prod.precio * prod.cantidad), 0);
@@ -136,12 +138,14 @@ const VehiculoCard: React.FC<{ vehiculo: RegistroServicioView["vehiculos"][0] }>
 
 const RegistroServicioCard: React.FC<{ registro: RegistroServicioView }> = ({ registro }) => {
   const { toast } = useToast();
+  const [loading, setLoading] = useState(false);
   const handleEnviarCorreo = async () => {
+    setLoading(true);
     try {
       await sendInvoice(registro, registro.cliente.correo);
       toast({
-        title: "Correo enviado con exito",
-        description: `Se envio correctamente al correo ${registro.cliente.correo.substring(0, 5)}****.`,
+        title: "Correo enviado con éxito",
+        description: `Se envió correctamente al correo ${registro.cliente.correo.substring(0, 5)}****.`,
       });
     } catch (error) {
       console.error("Error al enviar el correo:", error);
@@ -149,14 +153,28 @@ const RegistroServicioCard: React.FC<{ registro: RegistroServicioView }> = ({ re
         title: "Error al enviar el correo",
         description: "Ocurrió un error al enviar el correo, por favor intenta de nuevo.",
       });
+    } finally {
+      setLoading(false);
     }
   };
+
 
   return (
     <div className="space-y-6">
       <div className="mt-4">
-        <Button onClick={handleEnviarCorreo} className="btn btn-primary">
-          Enviar Factura por Correo
+        <Button
+          onClick={handleEnviarCorreo}
+          className="btn btn-primary flex items-center space-x-2"
+          disabled={loading}
+        >
+          {loading ? (
+            <>
+              <span>Enviando...</span> 
+              <Loader2 className="animate-spin h-5 w-5 }" />
+            </>
+          ) : (
+            <span>Enviar Factura por Correo</span>
+          )}
         </Button>
       </div>
       <Card>

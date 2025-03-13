@@ -9,11 +9,11 @@ services:
     ports:
       - "0.0.0.0:8082:3000"
     environment:
-      - URLLOGIN=http://3.147.193.70:8081/api/Login
-      - URLBASE=http://3.147.193.70:8081/api
-      - NEXT_PUBLIC_SIGNALR_URL=http://3.147.193.70:8081
-      - AUTH_SECRET=YHLQMDLGzZ4pW9t2uFj8XQ1kNz5yJmD8L
-      - RESEND_API_KEY=re_VJcbJ8tV_MQjvz15tPZYLxKkhacAKYTv2
+      - URLLOGIN=${URLLOGIN}
+      - URLBASE=${URLBASE}
+      - NEXT_PUBLIC_SIGNALR_URL=${NEXT_PUBLIC_SIGNALR_URL}
+      - AUTH_SECRET=${AUTH_SECRET}
+      - RESEND_API_KEY=${RESEND_API_KEY}
     deploy:
       resources:
         limits:
