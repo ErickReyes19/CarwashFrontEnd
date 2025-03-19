@@ -80,6 +80,9 @@ export function Formulario({
     idVehiculo: string;
   } | null>(null);
 
+  // Ref para evitar ejecución múltiple de useEffect
+  const hasMounted = useRef(false);
+
   async function onSubmit(data: z.infer<typeof VehiculoSchema>) {
     const vehiculodata = {
       vehiculoCreate: data,
@@ -129,6 +132,15 @@ export function Formulario({
     }
   }
 
+  useEffect(() => {
+    if (clienteSeleccionado && !hasMounted.current) {
+      form.setValue("clientes", [
+        { id: clienteSeleccionado.id, nombre: clienteSeleccionado.nombre },
+      ]);
+      hasMounted.current = true;
+    }
+  }, [clienteSeleccionado, form]);
+
   return (
     <div>
       <Form {...form}>
@@ -161,15 +173,6 @@ export function Formulario({
               control={form.control}
               name="clientes"
               render={({ field }) => {
-                const hasMounted = useRef(false);
-
-                useEffect(() => {
-                  if (clienteSeleccionado && !hasMounted.current) {
-                    field.onChange([{ id: clienteSeleccionado.id, nombre: clienteSeleccionado.nombre }]);
-                    hasMounted.current = true;
-                  }
-                }, [clienteSeleccionado, field]);
-
                 const clientesIniciales = clienteSeleccionado
                   ? [{ id: clienteSeleccionado.id, nombre: clienteSeleccionado.nombre }]
                   : clientes;
@@ -384,29 +387,22 @@ export function Formulario({
             />
           )}
 
-          <div className="flex justify-end gap-4">
-            <Button type="submit" disabled={form.formState.isSubmitting}>
-              {form.formState.isSubmitting ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Cargando...
-                </>
-              ) : isUpdate ? (
-                "Actualizar"
-              ) : (
-                "Crear"
-              )}
+          <div className="flex justify-end">
+            <Button type="submit" className="w-full sm:w-auto">
+              {isUpdate ? "Actualizar" : "Crear"} Vehículo
             </Button>
           </div>
         </form>
       </Form>
 
-      <ErrorDialog
-        isOpen={open}
-        onClose={() => setOpen(false)}
-        errorData={errorData}
-        clientes={form.getValues("clientes") || ""}
-      />
+      {errorData && (
+        <ErrorDialog
+          isOpen={open}          // Propiedad isOpen controlada desde el estado
+          onClose={() => setOpen(false)}  // Función que cambia el estado a false para cerrar el diálogo
+          errorData={errorData}
+          clientes={form.getValues("clientes") || ""}
+        />
+      )}
     </div>
   );
 }
