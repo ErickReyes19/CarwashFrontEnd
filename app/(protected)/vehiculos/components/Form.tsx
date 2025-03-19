@@ -51,8 +51,8 @@ interface FormularioProps {
   marcas: Marca[];
   colores: Color[];
   clientes: ClienteVehiculo[];
-  clienteSeleccionado?: ClienteVehiculo; // Cliente que ya fue seleccionado (si existe)
-  onSuccess?: (newVehiculo: any) => void; // Callback que se ejecuta cuando el vehículo se crea/actualiza correctamente
+  clienteSeleccionado?: ClienteVehiculo;
+  onSuccess?: (newVehiculo: any) => void;
 }
 
 export function Formulario({
@@ -72,7 +72,6 @@ export function Formulario({
     defaultValues: initialData || {},
   });
 
-  // Hooks para manejar error (por ejemplo, conflicto 409)
   const [open, setOpen] = useState(false);
   const [errorData, setErrorData] = useState<{
     message: string;
@@ -82,7 +81,6 @@ export function Formulario({
   } | null>(null);
 
   async function onSubmit(data: z.infer<typeof VehiculoSchema>) {
-    console.log("Errores de validación:", form.formState.errors);
     const vehiculodata = {
       vehiculoCreate: data,
     };
@@ -104,13 +102,11 @@ export function Formulario({
         });
 
         if (onSuccess) {
-          console.log(response)
           onSuccess(response);
         } else {
           router.push("/vehiculos");
           router.refresh();
         }
-
       } else if (response.status === 409) {
         setErrorData({
           message: response.data.message,
@@ -124,11 +120,8 @@ export function Formulario({
           title: "Error",
           description: "Hubo un problema inesperado.",
         });
-
-
       }
     } catch (error) {
-      console.error("Error en la operación:", error);
       toast({
         title: "Error",
         description: "Hubo un problema.",
@@ -163,22 +156,20 @@ export function Formulario({
               )}
             />
 
-
+            {/* Cliente */}
             <FormField
               control={form.control}
               name="clientes"
               render={({ field }) => {
-                const hasMounted = useRef(false); // Referencia para verificar si el componente se ha montado
+                const hasMounted = useRef(false);
 
                 useEffect(() => {
-                  // Solo ejecutar el useEffect cuando el componente se monte por primera vez
                   if (clienteSeleccionado && !hasMounted.current) {
                     field.onChange([{ id: clienteSeleccionado.id, nombre: clienteSeleccionado.nombre }]);
-                    hasMounted.current = true; // Marcamos que el componente ya ha sido montado
+                    hasMounted.current = true;
                   }
                 }, [clienteSeleccionado, field]);
 
-                // Cuando no hay un cliente seleccionado, mostrar la lista completa de clientes
                 const clientesIniciales = clienteSeleccionado
                   ? [{ id: clienteSeleccionado.id, nombre: clienteSeleccionado.nombre }]
                   : clientes;
@@ -188,10 +179,8 @@ export function Formulario({
                     <FormLabel>Selecciona Clientes</FormLabel>
                     <FormControl>
                       {clienteSeleccionado ? (
-                        // Mostrar el cliente seleccionado en un input deshabilitado
                         <Input value={clienteSeleccionado.nombre} disabled />
                       ) : (
-                        // Si no hay cliente seleccionado, permitir seleccionar con CheckboxClientes
                         <CheckboxClientes
                           clientes={clientesIniciales}
                           selectedClientes={field.value?.map((cliente) => cliente.id) || []}
@@ -209,10 +198,6 @@ export function Formulario({
               }}
             />
 
-
-
-
-
             {/* Marca */}
             <FormField
               control={form.control}
@@ -226,14 +211,10 @@ export function Formulario({
                         <Button
                           variant="outline"
                           role="combobox"
-                          className={cn(
-                            "w-full justify-between",
-                            !field.value && "text-muted-foreground"
-                          )}
+                          className={cn("w-full justify-between", !field.value && "text-muted-foreground")}
                         >
                           {field.value
-                            ? marcas.find((marca) => marca.id === field.value)
-                              ?.nombre
+                            ? marcas.find((marca) => marca.id === field.value)?.nombre
                             : "Selecciona una marca"}
                           <ChevronsUpDown className="opacity-50" />
                         </Button>
@@ -241,10 +222,7 @@ export function Formulario({
                     </PopoverTrigger>
                     <PopoverContent className="w-full p-0">
                       <Command>
-                        <CommandInput
-                          placeholder="Buscar marca..."
-                          className="h-9"
-                        />
+                        <CommandInput placeholder="Buscar marca..." className="h-9" />
                         <CommandList>
                           <CommandEmpty>No se encontró marca.</CommandEmpty>
                           <CommandGroup>
@@ -259,12 +237,7 @@ export function Formulario({
                               >
                                 {marca.nombre}
                                 <Check
-                                  className={cn(
-                                    "ml-auto",
-                                    marca.id === field.value
-                                      ? "opacity-100"
-                                      : "opacity-0"
-                                  )}
+                                  className={cn("ml-auto", marca.id === field.value ? "opacity-100" : "opacity-0")}
                                 />
                               </CommandItem>
                             ))}
@@ -273,9 +246,7 @@ export function Formulario({
                       </Command>
                     </PopoverContent>
                   </Popover>
-                  <FormDescription>
-                    Selecciona la marca del vehículo.
-                  </FormDescription>
+                  <FormDescription>Selecciona la marca del vehículo.</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -286,11 +257,8 @@ export function Formulario({
               control={form.control}
               name="modelo"
               render={({ field }) => {
-                // Obtén la marca seleccionada usando `watch`
                 const selectedMarcaId = form.watch("marca");
-                const modelos =
-                  marcas.find((marca) => marca.id === selectedMarcaId)
-                    ?.modelos || [];
+                const modelos = marcas.find((marca) => marca.id === selectedMarcaId)?.modelos || [];
 
                 return (
                   <FormItem className="col-span-1 sm:col-span-1 flex flex-col">
@@ -301,10 +269,7 @@ export function Formulario({
                           <Button
                             variant="outline"
                             role="combobox"
-                            className={cn(
-                              "w-full justify-between",
-                              !field.value && "text-muted-foreground"
-                            )}
+                            className={cn("w-full justify-between", !field.value && "text-muted-foreground")}
                           >
                             {field.value || "Selecciona un modelo"}
                             <ChevronsUpDown className="opacity-50" />
@@ -313,10 +278,7 @@ export function Formulario({
                       </PopoverTrigger>
                       <PopoverContent className="w-full p-0">
                         <Command>
-                          <CommandInput
-                            placeholder="Buscar modelo..."
-                            className="h-9"
-                          />
+                          <CommandInput placeholder="Buscar modelo..." className="h-9" />
                           <CommandList>
                             <CommandEmpty>No se encontró modelo.</CommandEmpty>
                             <CommandGroup>
@@ -324,18 +286,11 @@ export function Formulario({
                                 <CommandItem
                                   value={modelo.id}
                                   key={modelo.id}
-                                  onSelect={() =>
-                                    form.setValue("modelo", modelo.nombre)
-                                  }
+                                  onSelect={() => form.setValue("modelo", modelo.nombre)}
                                 >
                                   {modelo.nombre}
                                   <Check
-                                    className={cn(
-                                      "ml-auto",
-                                      modelo.nombre === field.value
-                                        ? "opacity-100"
-                                        : "opacity-0"
-                                    )}
+                                    className={cn("ml-auto", modelo.nombre === field.value ? "opacity-100" : "opacity-0")}
                                   />
                                 </CommandItem>
                               ))}
@@ -344,9 +299,7 @@ export function Formulario({
                         </Command>
                       </PopoverContent>
                     </Popover>
-                    <FormDescription>
-                      Selecciona el modelo del vehículo.
-                    </FormDescription>
+                    <FormDescription>Selecciona el modelo del vehículo.</FormDescription>
                     <FormMessage />
                   </FormItem>
                 );
@@ -366,15 +319,10 @@ export function Formulario({
                         <Button
                           variant="outline"
                           role="combobox"
-                          className={cn(
-                            "w-full justify-between",
-                            !field.value && "text-muted-foreground"
-                          )}
+                          className={cn("w-full justify-between", !field.value && "text-muted-foreground")}
                         >
                           {field.value
-                            ? colores.find(
-                              (color) => color.nombre === field.value
-                            )?.nombre
+                            ? colores.find((color) => color.nombre === field.value)?.nombre
                             : "Selecciona un color"}
                           <ChevronsUpDown className="opacity-50" />
                         </Button>
@@ -382,10 +330,7 @@ export function Formulario({
                     </PopoverTrigger>
                     <PopoverContent className="w-full p-0">
                       <Command>
-                        <CommandInput
-                          placeholder="Buscar color..."
-                          className="h-9"
-                        />
+                        <CommandInput placeholder="Buscar color..." className="h-9" />
                         <CommandList>
                           <CommandEmpty>No se encontró color.</CommandEmpty>
                           <CommandGroup>
@@ -393,18 +338,11 @@ export function Formulario({
                               <CommandItem
                                 value={color.nombre}
                                 key={color.id}
-                                onSelect={() => {
-                                  form.setValue("color", color.nombre);
-                                }}
+                                onSelect={() => form.setValue("color", color.nombre)}
                               >
                                 {color.nombre}
                                 <Check
-                                  className={cn(
-                                    "ml-auto",
-                                    color.nombre === field.value
-                                      ? "opacity-100"
-                                      : "opacity-0"
-                                  )}
+                                  className={cn("ml-auto", color.nombre === field.value ? "opacity-100" : "opacity-0")}
                                 />
                               </CommandItem>
                             ))}
@@ -413,14 +351,13 @@ export function Formulario({
                       </Command>
                     </PopoverContent>
                   </Popover>
-                  <FormDescription>
-                    Selecciona el color del vehículo.
-                  </FormDescription>
+                  <FormDescription>Selecciona el color del vehículo.</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
           </div>
+
           {isUpdate && (
             <FormField
               control={form.control}
@@ -430,9 +367,7 @@ export function Formulario({
                   <FormLabel>Estado</FormLabel>
                   <FormControl>
                     <Select
-                      onValueChange={(value) =>
-                        field.onChange(value === "true")
-                      }
+                      onValueChange={(value) => field.onChange(value === "true")}
                       defaultValue={field.value ? "true" : "false"}
                     >
                       <SelectTrigger>
@@ -448,6 +383,7 @@ export function Formulario({
               )}
             />
           )}
+
           <div className="flex justify-end gap-4">
             <Button type="submit" disabled={form.formState.isSubmitting}>
               {form.formState.isSubmitting ? (
@@ -464,6 +400,7 @@ export function Formulario({
           </div>
         </form>
       </Form>
+
       <ErrorDialog
         isOpen={open}
         onClose={() => setOpen(false)}
