@@ -26,6 +26,8 @@ import {
 import ToggleThemeButton from "./button-theme";
 import Link from "next/link";
 import { NavUser } from "./nav-user";
+import { BookTextIcon } from "./ui/book-text";
+import { UsersIcon } from "./ui/users";
 
 // Menu items con permisos necesarios
 const items = [
@@ -50,19 +52,19 @@ const items = [
   {
     title: "Clientes",
     url: "/clientes",
-    icon: Users2,
+    icon: UsersIcon,
     permiso: "ver_clientes",
   },
   {
     title: "Empleados",
     url: "/empleados",
-    icon: Users2,
+    icon: UsersIcon,
     permiso: "ver_empleados",
   },
   {
     title: "Servicios",
     url: "/servicios",
-    icon: NotebookText,
+    icon: BookTextIcon,
     permiso: "ver_servicios",
   },
   {
@@ -116,6 +118,7 @@ export async function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupLabel className="flex justify-between items-center">
             <span>Sistema Carwash</span>
+            
             <ToggleThemeButton />
           </SidebarGroupLabel>
 
