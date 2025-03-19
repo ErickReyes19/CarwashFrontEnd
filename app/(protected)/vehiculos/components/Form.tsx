@@ -32,8 +32,7 @@ import {
   CommandEmpty,
   CommandGroup,
 } from "@/components/ui/command";
-import { ChevronsUpDown, Loader2 } from "lucide-react";
-import { Check } from "lucide-react";
+import { ChevronsUpDown, Loader2, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   Select,
@@ -42,10 +41,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ErrorDialog from "./dialog";
 import { CheckboxClientes } from "./ComboBox";
+
+interface FormularioProps {
+  isUpdate: boolean;
+  initialData?: z.infer<typeof VehiculoSchema>;
+  marcas: Marca[];
+  colores: Color[];
+  clientes: ClienteVehiculo[];
+  clienteSeleccionado?: ClienteVehiculo; // Cliente que ya fue seleccionado (si existe)
+  onSuccess?: (newVehiculo: any) => void; // Callback que se ejecuta cuando el vehículo se crea/actualiza correctamente
+}
 
 export function Formulario({
   isUpdate,
@@ -53,13 +61,9 @@ export function Formulario({
   marcas,
   colores,
   clientes,
-}: {
-  isUpdate: boolean;
-  initialData?: z.infer<typeof VehiculoSchema>;
-  marcas: Marca[];
-  colores: Color[];
-  clientes: ClienteVehiculo[];
-}) {
+  clienteSeleccionado,
+  onSuccess,
+}: FormularioProps) {
   const { toast } = useToast();
   const router = useRouter();
 
@@ -68,7 +72,7 @@ export function Formulario({
     defaultValues: initialData || {},
   });
 
-  // Mover estos hooks fuera de onSubmit
+  // Hooks para manejar error (por ejemplo, conflicto 409)
   const [open, setOpen] = useState(false);
   const [errorData, setErrorData] = useState<{
     message: string;
@@ -99,8 +103,14 @@ export function Formulario({
             : "El vehículo ha sido creado.",
         });
 
-        router.push("/vehiculos");
-        router.refresh();
+        if (onSuccess) {
+          console.log(response)
+          onSuccess(response);
+        } else {
+          router.push("/vehiculos");
+          router.refresh();
+        }
+
       } else if (response.status === 409) {
         setErrorData({
           message: response.data.message,
@@ -114,6 +124,8 @@ export function Formulario({
           title: "Error",
           description: "Hubo un problema inesperado.",
         });
+
+
       }
     } catch (error) {
       console.error("Error en la operación:", error);
@@ -132,8 +144,7 @@ export function Formulario({
           className="space-y-8 border rounded-md p-4"
         >
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {/* Cliente */}
-
+            {/* Placa */}
             <FormField
               control={form.control}
               name="placa"
@@ -146,41 +157,61 @@ export function Formulario({
                       placeholder="Ingresa la placa del vehículo"
                     />
                   </FormControl>
-                  <FormDescription>
-                    Ingresa la placa del vehículo.
-                  </FormDescription>
+                  <FormDescription>Ingresa la placa del vehículo.</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
+
+
             <FormField
               control={form.control}
               name="clientes"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Selecciona Clientes</FormLabel>
-                  <FormControl>
-                    <CheckboxClientes
-                      clientes={clientes} // Lista de clientes [{ id: "1", nombre: "Juan" }, ...]
-                  selectedClientes={
-                    field.value?.map((cliente: ClienteVehiculo) => cliente.id) || []
-                  } // Solo pasamos los IDs de los permisos
-                      onChange={(selected) => {
-                        // Convertir los IDs seleccionados a objetos completos
-                        const selectedClientes = clientes.filter(
-                          (c) => selected.includes(c.id) // Usamos solo el ID para encontrar el cliente
-                        );
-                        field.onChange(selectedClientes); // Guardar los objetos completos en el formulario
-                      }}
-                    />
-                  </FormControl>
-                  <FormDescription>
-                    Selecciona los clientes que deseas asignar.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
+              render={({ field }) => {
+                const hasMounted = useRef(false); // Referencia para verificar si el componente se ha montado
+
+                useEffect(() => {
+                  // Solo ejecutar el useEffect cuando el componente se monte por primera vez
+                  if (clienteSeleccionado && !hasMounted.current) {
+                    field.onChange([{ id: clienteSeleccionado.id, nombre: clienteSeleccionado.nombre }]);
+                    hasMounted.current = true; // Marcamos que el componente ya ha sido montado
+                  }
+                }, [clienteSeleccionado, field]);
+
+                // Cuando no hay un cliente seleccionado, mostrar la lista completa de clientes
+                const clientesIniciales = clienteSeleccionado
+                  ? [{ id: clienteSeleccionado.id, nombre: clienteSeleccionado.nombre }]
+                  : clientes;
+
+                return (
+                  <FormItem>
+                    <FormLabel>Selecciona Clientes</FormLabel>
+                    <FormControl>
+                      {clienteSeleccionado ? (
+                        // Mostrar el cliente seleccionado en un input deshabilitado
+                        <Input value={clienteSeleccionado.nombre} disabled />
+                      ) : (
+                        // Si no hay cliente seleccionado, permitir seleccionar con CheckboxClientes
+                        <CheckboxClientes
+                          clientes={clientesIniciales}
+                          selectedClientes={field.value?.map((cliente) => cliente.id) || []}
+                          onChange={(selected) => {
+                            const selectedClientes = clientes.filter((c) => selected.includes(c.id));
+                            field.onChange(selectedClientes);
+                          }}
+                        />
+                      )}
+                    </FormControl>
+                    <FormDescription>Selecciona los clientes que deseas asignar.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
             />
+
+
+
+
 
             {/* Marca */}
             <FormField
@@ -202,7 +233,7 @@ export function Formulario({
                         >
                           {field.value
                             ? marcas.find((marca) => marca.id === field.value)
-                                ?.nombre
+                              ?.nombre
                             : "Selecciona una marca"}
                           <ChevronsUpDown className="opacity-50" />
                         </Button>
@@ -342,8 +373,8 @@ export function Formulario({
                         >
                           {field.value
                             ? colores.find(
-                                (color) => color.nombre === field.value
-                              )?.nombre
+                              (color) => color.nombre === field.value
+                            )?.nombre
                             : "Selecciona un color"}
                           <ChevronsUpDown className="opacity-50" />
                         </Button>
@@ -418,18 +449,18 @@ export function Formulario({
             />
           )}
           <div className="flex justify-end gap-4">
-          <Button type="submit" disabled={form.formState.isSubmitting}>
-            {form.formState.isSubmitting ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Cargando...
-              </>
-            ) : isUpdate ? (
-              "Actualizar"
-            ) : (
-              "Crear"
-            )}
-          </Button>
+            <Button type="submit" disabled={form.formState.isSubmitting}>
+              {form.formState.isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Cargando...
+                </>
+              ) : isUpdate ? (
+                "Actualizar"
+              ) : (
+                "Crear"
+              )}
+            </Button>
           </div>
         </form>
       </Form>

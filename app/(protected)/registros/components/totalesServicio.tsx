@@ -12,14 +12,17 @@ export function PaymentSummaryCard() {
 
   // Calcula el total de servicios, sumando el precio del servicio y el total de sus productos
   const totalServicios = vehiculos.reduce((acc: number, vehiculo) => {
-    const serviciosTotal = vehiculo.servicios.reduce((sum: number, servicio) => {
-      const productosTotal = servicio.productos
-        ? servicio.productos.reduce((pSum: number, producto: any) => pSum + Number(producto.precio), 0)
-        : 0;
+    const serviciosTotal = (vehiculo.servicios || []).reduce((sum: number, servicio) => {
+      const productosTotal = (servicio.productos || []).reduce(
+        (pSum: number, producto: any) => pSum + Number(producto.precio),
+        0
+      );
       return sum + Number(servicio.precio) + productosTotal;
     }, 0);
+
     return acc + serviciosTotal;
   }, 0);
+
 
   // Calcula el total de pagos forzando la conversión a número
   const totalPagos = pagos.reduce(

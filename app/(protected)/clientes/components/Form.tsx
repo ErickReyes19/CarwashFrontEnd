@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form"; // Importamos useForm
 import { zodResolver } from "@hookform/resolvers/zod"; // Usamos el resolutor de Zod
 import { z } from "zod";
-import {  ClienteSchema } from "../schema"; // Tu esquema de Zod
+import { ClienteSchema } from "../schema"; // Tu esquema de Zod
 import { postCliente, putCliente } from "../actions"; // Tu función para enviar datos
 import {
   Form,
@@ -27,13 +27,14 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
 
-export function Formulario({
-  isUpdate,
-  initialData,
-}: {
+interface FormularioProps {
   isUpdate: boolean;
   initialData?: z.infer<typeof ClienteSchema>;
-}) {
+  // Callback opcional que se llamará cuando el cliente se cree o actualice exitosamente.
+  onSuccess?: (newClient: any) => void;
+}
+
+export function Formulario({ isUpdate, initialData, onSuccess }: FormularioProps) {
   const { toast } = useToast();
   const router = useRouter();
 
@@ -44,15 +45,14 @@ export function Formulario({
   });
 
   async function onSubmit(data: z.infer<typeof ClienteSchema>) {
-    const clienteData = {
-      cliente: data,
-    };
+    const clienteData = { cliente: data };
 
     try {
+      let result;
       if (isUpdate) {
-        await putCliente(clienteData);
+        result = await putCliente(clienteData);
       } else {
-        await postCliente(clienteData); 
+        result = await postCliente(clienteData); 
       }
 
       // Notificación de éxito
@@ -63,14 +63,19 @@ export function Formulario({
           : "El cliente ha sido creado.",
       });
 
-      router.push("/clientes"); // Redirige después de la acción
-      router.refresh();
+      // Si se pasó el callback onSuccess, lo usamos en lugar de redireccionar
+      if (onSuccess) {
+        onSuccess(result);
+      } else {
+        router.push("/clientes"); // Redirige después de la acción
+        router.refresh();
+      }
     } catch (error) {
       // Manejo de error
       console.error("Error en la operación:", error);
       toast({
         title: "Error",
-        description: `Hubo un problema:`,
+        description: "Hubo un problema:",
       });
     }
   }
@@ -78,7 +83,10 @@ export function Formulario({
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={(e) => {
+          e.preventDefault(); 
+          form.handleSubmit(onSubmit)(e); 
+        }}
         className="space-y-8 border rounded-md p-4"
       >
         {/* Nombre */}
@@ -197,7 +205,7 @@ export function Formulario({
 
         {/* Enviar */}
         <div className="flex justify-end">
-          <Button type="submit" disabled={form.formState.isSubmitting}>
+        <Button type="submit" disabled={form.formState.isSubmitting}>
             {form.formState.isSubmitting ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />

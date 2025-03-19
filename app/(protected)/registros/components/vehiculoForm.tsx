@@ -20,9 +20,15 @@ import {
 import { Button } from "@/components/ui/button";
 import { ServicioRegistro, VehiculoRegistro, ProductoRegistro } from "./types";
 import { Input } from "@/components/ui/input";
+import { ClienteVehiculo } from "@/lib/Types";
 import { ProductoItem } from "./productoForm";
+import { NuevoVehiculoDialog } from "./DialogCreateVehiculo";
+import { obtenerVehiculoPorCliente } from "../../vehiculos/actions";
+
+// Importa el dialog para agregar vehículos (ajusta la ruta según tu estructura)
 
 interface VehiculoItemProps {
+  clienteSeleccionado?: ClienteVehiculo;
   control: any;
   index: number;
   vehiculo: { id: string; vehiculoId: string; servicios: any[] };
@@ -30,9 +36,12 @@ interface VehiculoItemProps {
   servicios: ServicioRegistro[];
   productos: ProductoRegistro[];
   removeVehiculo: (index: number) => void;
+  // Opcional: callback para actualizar la lista de vehículos en el padre
+  onNewVehiculo?: (newVehiculo: VehiculoRegistro) => void;
 }
 
 export const VehiculoItem: React.FC<VehiculoItemProps> = ({
+  clienteSeleccionado,
   control,
   index,
   vehiculo,
@@ -40,6 +49,7 @@ export const VehiculoItem: React.FC<VehiculoItemProps> = ({
   servicios,
   productos,
   removeVehiculo,
+  onNewVehiculo,
 }) => {
   // Obtenemos setValue desde el contexto del formulario
   const { setValue } = useFormContext();
@@ -64,20 +74,41 @@ export const VehiculoItem: React.FC<VehiculoItemProps> = ({
           render={({ field }) => (
             <FormItem className="w-full">
               <FormLabel>Vehículo</FormLabel>
-              <FormControl className="w-full">
-                <Select onValueChange={field.onChange} value={field.value}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Selecciona un vehículo" />
-                  </SelectTrigger>
-                  <SelectContent className="w-full">
-                    {vehiculos.map((v) => (
-                      <SelectItem key={v.id} value={v.id}>
-                        {v.nombre}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </FormControl>
+              <div className="flex items-center gap-2">
+                <FormControl className="w-full">
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Selecciona un vehículo" />
+                    </SelectTrigger>
+                    <SelectContent className="w-full">
+                      {vehiculos.map((v) => (
+                        <SelectItem key={v.id} value={v.id}>
+                          {v.nombre}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <NuevoVehiculoDialog
+                  clienteSeleccionado={clienteSeleccionado}
+                  onNewVehiculo={(newVehiculoResponse) => {
+                    const data = newVehiculoResponse.data;
+                    const newVehicleData: VehiculoRegistro = {
+                      id: data.id,
+                      nombre: `${data.marca} - ${data.modelo} - ${data.color}`,
+                    };
+
+                    // Llama al callback del padre para actualizar la lista
+                    if (onNewVehiculo) {
+                      onNewVehiculo(newVehicleData);
+                    }
+
+                    // Actualiza el campo de selección (vehiculoId) en este componente
+                    field.onChange(newVehicleData.id);
+                  }}
+                />
+
+              </div>
               <FormDescription>Selecciona el vehículo.</FormDescription>
               <FormMessage />
             </FormItem>
