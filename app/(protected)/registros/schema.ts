@@ -35,8 +35,7 @@ export const CarwashSchema = z
                         .number({ invalid_type_error: "El precio debe ser un número" })
                         .min(0, "El precio no puede ser negativo"),
                     })
-                  )
-                  .min(1, "Se debe agregar al menos un producto por servicio"),
+                  ),
               })
             )
             .min(1, "Se debe agregar al menos un servicio por vehículo"),
