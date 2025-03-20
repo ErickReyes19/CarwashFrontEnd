@@ -28,25 +28,31 @@ import Link from "next/link";
 import { NavUser } from "./nav-user";
 import { BookTextIcon } from "./ui/book-text";
 import { UsersIcon } from "./ui/users";
+import { ChartSplineIcon } from "./ui/chart-spline";
+import { BoxesIcon } from "./ui/boxes";
+import { UserIcon } from "./ui/user";
+import { LayersIcon } from "./ui/layers";
+import { PlayIcon } from "./ui/play";
+import { TornadoIcon } from "./ui/tornado";
 
 // Menu items con permisos necesarios
 const items = [
   {
     title: "Dashboard",
     url: "/dashboard",
-    icon: Home,
+    icon: ChartSplineIcon,
     permiso: "ver_dashboard", // Ejemplo de permiso
   },
   {
     title: "Cierres",
     url: "/cierre",
-    icon: ListChecks,
+    icon: TornadoIcon,
     permiso: "ver_cierres",
   },
   {
     title: "Registros",
     url: "/registros",
-    icon: List,
+    icon: TornadoIcon,
     permiso: "ver_registros",
   },
   {
@@ -70,25 +76,25 @@ const items = [
   {
     title: "Estado Servicio",
     url: "/estadoServicios",
-    icon: StepForward,
+    icon: PlayIcon,
     permiso: "ver_estados_servicios",
   },
   {
     title: "Permisos",
     url: "/permisos",
-    icon: ListCheck,
+    icon: LayersIcon,
     permiso: "ver_permisos",
   },
   {
     title: "Roles",
     url: "/roles",
-    icon: ListCheck,
+    icon: LayersIcon,
     permiso: "ver_roles",
   },
   {
     title: "Usuarios",
     url: "/usuarios",
-    icon: User,
+    icon: UserIcon,
     permiso: "ver_usuarios",
   },
   {
@@ -100,7 +106,7 @@ const items = [
   {
     title: "Productos",
     url: "/productos",
-    icon: Package,
+    icon: BoxesIcon,
     permiso: "ver_productos",
   },
 ];
@@ -128,7 +134,7 @@ export async function AppSidebar() {
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <Link href={item.url}>
-                      <item.icon />
+                      <item.icon size={16} className="p-0"/>
                       {item.title}
                     </Link>
                   </SidebarMenuButton>
