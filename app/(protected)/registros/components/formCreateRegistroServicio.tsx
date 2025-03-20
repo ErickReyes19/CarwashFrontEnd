@@ -78,19 +78,20 @@ export function CarwashForm({
 }: CarwashFormProps) {
   const router = useRouter();
   const { toast } = useToast();
+  const [value, setValue] = useState("");
   const [clientesList, setClientesList] = useState<ClienteRegistro[]>(clientes);
   const form = useForm<z.infer<typeof CarwashSchema>>({
     resolver: zodResolver(CarwashSchema),
     defaultValues: initialData
       ? { ...initialData, pagos: initialData.pagos || [] }
       : {
-          clienteId: "",
-          descripcion: "",
-          estadoServicioId: "",
-          empleados: [],
-          vehiculos: [],
-          pagos: [],
-        },
+        clienteId: "",
+        descripcion: "",
+        estadoServicioId: "",
+        empleados: [],
+        vehiculos: [],
+        pagos: [],
+      },
   });
 
   const handleNewVehiculo = (newVehiculoData: VehiculoRegistro) => {
@@ -173,11 +174,12 @@ export function CarwashForm({
   const handleNewClient = (newClient: ClienteRegistro) => {
     // Actualizamos la lista (también podrías reconsultar la API)
     setClientesList((prev) => [...prev, newClient]);
-    // Establecemos el nuevo cliente como seleccionado en el select
+    // Actualizamos el formulario
     form.setValue("clienteId", newClient.id);
+    // Establecemos el nuevo cliente como seleccionado en el select
+    setValue(newClient.id);
   };
   const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState("");
 
   return (
     <div>
@@ -208,8 +210,8 @@ export function CarwashForm({
                           >
                             {value
                               ? clientesList.find(
-                                  (cliente) => cliente.id === value
-                                )?.nombre
+                                (cliente) => cliente.id === value
+                              )?.nombre
                               : "Selecciona un cliente..."}
                             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                           </Button>
@@ -225,27 +227,21 @@ export function CarwashForm({
                                 {clientesList.map((cliente) => (
                                   <CommandItem
                                     key={cliente.id}
-                                    value={cliente.id}
-                                    onSelect={(currentValue) => {
-                                      setValue(
-                                        currentValue === value
-                                          ? ""
-                                          : currentValue
-                                      );
+                                    value={cliente.nombre} // Utilizamos el nombre para filtrar
+                                    onSelect={() => {
+                                      setValue(cliente.id); // Guardamos el id en el estado
                                       setOpen(false);
-                                      field.onChange(currentValue); // Actualiza el valor en el formulario
+                                      field.onChange(cliente.id); // Actualizamos el formulario con el id
                                     }}
                                   >
                                     <Check
-                                      className={`mr-2 h-4 w-4 ${
-                                        value === cliente.id
-                                          ? "opacity-100"
-                                          : "opacity-0"
-                                      }`}
+                                      className={`mr-2 h-4 w-4 ${value === cliente.id ? "opacity-100" : "opacity-0"
+                                        }`}
                                     />
                                     {cliente.nombre}
                                   </CommandItem>
                                 ))}
+
                               </CommandGroup>
                             </CommandList>
                           </Command>
