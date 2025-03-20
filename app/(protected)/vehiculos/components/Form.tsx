@@ -145,11 +145,11 @@ export function Formulario({
     <div>
       <Form {...form}>
         <form
-        onSubmit={(e) => {
-          e.preventDefault(); 
-          e.stopPropagation(); 
-          form.handleSubmit(onSubmit)(e);
-        }}
+          onSubmit={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            form.handleSubmit(onSubmit)(e);
+          }}
           className="space-y-8 border rounded-md p-4"
         >
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -164,6 +164,8 @@ export function Formulario({
                     <Input
                       {...field}
                       placeholder="Ingresa la placa del vehículo"
+                      style={{ textTransform: 'uppercase' }}
+                      maxLength={7}
                     />
                   </FormControl>
                   <FormDescription>Ingresa la placa del vehículo.</FormDescription>
@@ -171,6 +173,8 @@ export function Formulario({
                 </FormItem>
               )}
             />
+
+
 
             {/* Cliente */}
             <FormField
