@@ -5,6 +5,8 @@ import { DataTable } from "./components/data-table";
 import HeaderComponent from "@/components/HeaderComponent";
 import NoAcceso from "@/components/noAccess";
 import { columns } from "./components/columns";
+import ProductListMobile from "./components/product-list-mobile";
+import { da } from "date-fns/locale";
 // import EstadoServicioListMobile from "./components/estado-servicio-list-mobile";
 
 export default async function EstadoServicio() {
@@ -28,7 +30,7 @@ export default async function EstadoServicio() {
                 <DataTable columns={columns} data={data} />
             </div>
             <div className="block md:hidden">
-                {/* <EstadoServicioListMobile estadosServicio={data} /> */}
+                <ProductListMobile productos={data} />
             </div>
         </div>
     );

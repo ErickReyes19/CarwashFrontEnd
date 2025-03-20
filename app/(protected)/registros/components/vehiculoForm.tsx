@@ -73,9 +73,9 @@ export const VehiculoItem: React.FC<VehiculoItemProps> = ({
           name={`vehiculos.${index}.vehiculoId`}
           render={({ field }) => (
             <FormItem className="w-full">
-              <FormLabel>Vehículo</FormLabel>
-              <div className="flex items-center gap-2">
-                <FormControl className="w-full">
+              {/* <FormLabel>Vehículo</FormLabel> */}
+              <div className="flex flex-wrap items-center gap-2">
+                <FormControl className="flex-grow min-w-0">
                   <Select onValueChange={field.onChange} value={field.value}>
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder="Selecciona un vehículo" />
@@ -107,7 +107,6 @@ export const VehiculoItem: React.FC<VehiculoItemProps> = ({
                     field.onChange(newVehicleData.id);
                   }}
                 />
-
               </div>
               <FormDescription>Selecciona el vehículo.</FormDescription>
               <FormMessage />

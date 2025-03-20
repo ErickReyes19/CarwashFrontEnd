@@ -85,7 +85,8 @@ export function Formulario({ isUpdate, initialData, onSuccess }: FormularioProps
       <form
         onSubmit={(e) => {
           e.preventDefault(); 
-          form.handleSubmit(onSubmit)(e); 
+          e.stopPropagation(); 
+          form.handleSubmit(onSubmit)(e);
         }}
         className="space-y-8 border rounded-md p-4"
       >

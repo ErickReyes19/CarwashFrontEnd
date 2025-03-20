@@ -145,7 +145,11 @@ export function Formulario({
     <div>
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={(e) => {
+          e.preventDefault(); 
+          e.stopPropagation(); 
+          form.handleSubmit(onSubmit)(e);
+        }}
           className="space-y-8 border rounded-md p-4"
         >
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

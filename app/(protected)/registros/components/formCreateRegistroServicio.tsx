@@ -42,8 +42,19 @@ import { PagoItem } from "./selectPagot";
 import { PaymentSummaryCard } from "./totalesServicio";
 import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
 import { NuevoClienteDialog } from "./DialogCreateCliente";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
 import { ClienteSchema } from "../../clientes/schema";
 
 interface CarwashFormProps {
@@ -63,24 +74,23 @@ export function CarwashForm({
   estados,
   empleados,
   servicios,
-  productos
+  productos,
 }: CarwashFormProps) {
   const router = useRouter();
   const { toast } = useToast();
   const [clientesList, setClientesList] = useState<ClienteRegistro[]>(clientes);
   const form = useForm<z.infer<typeof CarwashSchema>>({
-
     resolver: zodResolver(CarwashSchema),
     defaultValues: initialData
       ? { ...initialData, pagos: initialData.pagos || [] }
       : {
-        clienteId: "",
-        descripcion: "",
-        estadoServicioId: "",
-        empleados: [],
-        vehiculos: [],
-        pagos: [],
-      },
+          clienteId: "",
+          descripcion: "",
+          estadoServicioId: "",
+          empleados: [],
+          vehiculos: [],
+          pagos: [],
+        },
   });
 
   const handleNewVehiculo = (newVehiculoData: VehiculoRegistro) => {
@@ -90,7 +100,6 @@ export function CarwashForm({
   const [vehiculos, setVehiculos] = useState<VehiculoRegistro[]>([]);
 
   // Definimos una lista de productos (puede venir de una API o ser estática)
-
 
   // Observamos el valor del campo "clienteId"
   const selectedClientId = form.watch("clienteId");
@@ -186,42 +195,53 @@ export function CarwashForm({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Cliente</FormLabel>
-                  <div className="flex items-center gap-2">
-                    <FormControl>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <FormControl className="flex-grow min-w-0">
                       <Popover open={open} onOpenChange={setOpen}>
                         <PopoverTrigger asChild>
                           <Button
                             variant="outline"
                             role="combobox"
                             aria-expanded={open}
-                            className="w-[200px] justify-between"
+                            className="w-full sm:w-[200px] justify-between"
                             onClick={() => setOpen(!open)}
                           >
                             {value
-                              ? clientesList.find((cliente) => cliente.id === value)?.nombre
+                              ? clientesList.find(
+                                  (cliente) => cliente.id === value
+                                )?.nombre
                               : "Selecciona un cliente..."}
                             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                           </Button>
                         </PopoverTrigger>
-                        <PopoverContent className="w-[200px] p-0">
+                        <PopoverContent className="w-full sm:w-[200px] max-w-xs p-0">
                           <Command>
                             <CommandInput placeholder="Buscar cliente..." />
                             <CommandList>
-                              <CommandEmpty>No se encontró cliente.</CommandEmpty>
+                              <CommandEmpty>
+                                No se encontró cliente.
+                              </CommandEmpty>
                               <CommandGroup>
                                 {clientesList.map((cliente) => (
                                   <CommandItem
                                     key={cliente.id}
                                     value={cliente.id}
                                     onSelect={(currentValue) => {
-                                      setValue(currentValue === value ? "" : currentValue);
+                                      setValue(
+                                        currentValue === value
+                                          ? ""
+                                          : currentValue
+                                      );
                                       setOpen(false);
                                       field.onChange(currentValue); // Actualiza el valor en el formulario
                                     }}
                                   >
                                     <Check
-                                      className={`mr-2 h-4 w-4 ${value === cliente.id ? "opacity-100" : "opacity-0"
-                                        }`}
+                                      className={`mr-2 h-4 w-4 ${
+                                        value === cliente.id
+                                          ? "opacity-100"
+                                          : "opacity-0"
+                                      }`}
                                     />
                                     {cliente.nombre}
                                   </CommandItem>
@@ -232,8 +252,9 @@ export function CarwashForm({
                         </PopoverContent>
                       </Popover>
                     </FormControl>
-                  <NuevoClienteDialog onNewClient={handleNewClient} />
+                    <NuevoClienteDialog onNewClient={handleNewClient} />
                   </div>
+
                   <FormDescription>Selecciona el cliente.</FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -279,7 +300,9 @@ export function CarwashForm({
                     <CheckboxEmpleados
                       empleados={empleados}
                       selectedEmpleados={field.value || []}
-                      onChange={(selectedIds: string[]) => field.onChange(selectedIds)}
+                      onChange={(selectedIds: string[]) =>
+                        field.onChange(selectedIds)
+                      }
                     />
                   </FormControl>
                   <FormDescription>
@@ -314,7 +337,9 @@ export function CarwashForm({
             <h3 className="text-lg font-semibold">Vehículos</h3>
             {vehiculosFields.map((vehiculoField, vehiculoIndex) => (
               <VehiculoItem
-                clienteSeleccionado={clientesList.find((cliente) => cliente.id === selectedClientId)}
+                clienteSeleccionado={clientesList.find(
+                  (cliente) => cliente.id === selectedClientId
+                )}
                 key={vehiculoField.id}
                 control={form.control}
                 index={vehiculoIndex}
@@ -328,6 +353,7 @@ export function CarwashForm({
             ))}
 
             <Button
+              disabled={!selectedClientId}
               type="button"
               onClick={() => appendVehiculo({ vehiculoId: "", servicios: [] })}
             >

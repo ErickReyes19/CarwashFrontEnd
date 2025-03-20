@@ -22,8 +22,12 @@ export default async function Clientes({
     return <NoAcceso />;
   }
 
-  const from = searchParams.from || new Date().toISOString().split("T")[0];
-  const to = searchParams.to || from;
+  const now = new Date();
+  now.setHours(now.getHours() - 6);
+  const today = now.toISOString().split("T")[0];
+  
+  const from = searchParams.from ?? today;
+  const to = searchParams.to ?? today;
 
   const data = await getRegistros(from, to);
 
