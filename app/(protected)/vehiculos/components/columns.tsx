@@ -31,7 +31,9 @@ export const columns: ColumnDef<Vehiculo>[] = [
         <ArrowUpDown className="ml-2 h-4 w-4" />
       </Button>
     ),
+    cell: ({ row }) => <span className="uppercase">{row.getValue("placa")}</span>,
   },
+  
   {
     accessorKey: "marca",
     header: ({ column }) => (
