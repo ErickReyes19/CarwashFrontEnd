@@ -172,7 +172,7 @@ export default function ClientInfoComponent({
                       <div className="flex flex-col sm:flex-row justify-center md:justify-start gap-3 text-gray-600 text-sm">
                         <div className="flex items-center gap-1">
                           <span className="font-medium">Placa:</span>{" "}
-                          {vehicle.placa}
+                          {vehicle.placa.toUpperCase()}
                         </div>
                         <div className="flex items-center gap-1">
                           <span className="font-medium">Color:</span>{" "}

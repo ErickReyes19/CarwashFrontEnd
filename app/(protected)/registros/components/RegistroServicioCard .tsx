@@ -125,7 +125,7 @@ const VehiculoCard: React.FC<{ vehiculo: RegistroServicioView["vehiculos"][0] }>
       <CardTitle>
         {vehiculo.vehiculo.marca} {vehiculo.vehiculo.modelo}
       </CardTitle>
-      <CardDescription>Placa: {vehiculo.vehiculo.placa}</CardDescription>
+      <CardDescription>Placa: {vehiculo.vehiculo.placa.toUpperCase()}</CardDescription>
     </CardHeader>
     <CardContent>
       <p>Color: {vehiculo.vehiculo.color}</p>

@@ -85,7 +85,7 @@ export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({
                       {vehiculo.vehiculo.marca} {vehiculo.vehiculo.modelo}
                     </strong>
                     <span style={{ fontSize: '13px', color: '#777', marginLeft: '10px' }}>
-                      - Placa: {vehiculo.vehiculo.placa}
+                      - Placa: {vehiculo.vehiculo.placa.toUpperCase()}
                     </span>
                   </td>
                 </tr>
